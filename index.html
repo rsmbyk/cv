@@ -6,19 +6,72 @@
   <title>Lorna Alvarado — Marketing Manager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <link id="cv-fonts" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     /*
       Layout + type locked to Canva PDF (595.5 × 842.25 pt A4).
-      Montserrat Medium/SemiBold/Bold/Regular/MediumItalic.
+      Type/padding tokens are editable via the settings drawer.
     */
     :root {
       --accent: #608abf;
       --ink: #636466;
-      --sidebar-bg: #f7f7f7;
+      --bg-sidebar: #f7f7f7;
+      --bg-main: #ffffff;
+      --photo-ring-color: #ffffff;
       --page-w: 210mm;
       --page-h: 297mm;
       --sidebar-w: 35%;
+      --drawer-w: 340px;
+
+      --cv-font: "Montserrat", sans-serif;
+      --size-name: 30;
+      --size-job: 12;
+      --size-section: 15;
+      --size-body: 8.5;
+      --size-item-title: 10;
+      --size-item-sub: 9;
+      --color-name: #608abf;
+      --color-job: #636466;
+      --color-section: #636466;
+      --color-body: #636466;
+      --color-item-title: #636466;
+      --color-item-sub: #636466;
+      --pad-sidebar-top: 0;
+      --pad-sidebar-right: 25;
+      --pad-sidebar-bottom: 18;
+      --pad-sidebar-left: 25;
+      --pad-profile-top: 30;
+      --pad-profile-bottom: 31;
+      --pad-main-top: 50;
+      --pad-main-right: 37;
+      --pad-main-bottom: 30;
+      --pad-main-left: 32;
+      --gap-photo-name: 15;
+      --gap-side-section: 28;
+      --gap-main-section: 20;
+      --gap-timeline-items: 18;
+      --gap-list-items: 10;
+      --gap-icon-title: 8;
+      --gap-icon-contact: 8;
+      --gap-title-line: 9;
+      --gap-underline-content: 16;
+      --gap-title-subtitle: 1;
+      --gap-subtitle-content: 4;
+      --gap-title-content: 4;
+      --line-height-body: 1.55;
+      --text-align-body: left;
+      --size-icon-title: 14;
+      --size-icon-contact: 15;
+      --triangle-deg: 45;
+      --photo-size: 141;
+      --photo-ring: 5;
+      --timeline-dot: 6.6;
+      --timeline-line: 0.75;
+      --pad-cont-main-top: 40;
+      --pad-cont-main-right: 34;
+      --pad-cont-main-bottom: 30;
+      --pad-cont-main-left: 34;
+      --pages-stack-h: 297mm;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,35 +85,95 @@
       justify-content: center;
       padding: 2rem 1rem;
       -webkit-font-smoothing: antialiased;
+      transition: padding-left 0.28s ease;
+      --cv-zoom: 1;
+    }
+
+    body.drawer-open {
+      padding-left: calc(var(--drawer-w) + 1.25rem);
+    }
+
+    .pages {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      transform: scale(var(--cv-zoom));
+      transform-origin: top center;
+      margin-bottom: calc((var(--cv-zoom) - 1) * var(--pages-stack-h));
     }
 
     .page {
       width: var(--page-w);
       height: var(--page-h);
-      background: #fff;
+      background: var(--bg-main);
       display: grid;
       grid-template-columns: var(--sidebar-w) 1fr;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
       overflow: hidden;
+      font-family: var(--cv-font);
+      color: var(--color-body);
+      flex: 0 0 auto;
+    }
+
+    /* Main-only continuation (main overflow with no sidebar column). */
+    .page-continued {
+      display: block;
+    }
+
+    .page-continued .main {
+      width: 100%;
+      height: 100%;
+      padding:
+        calc(var(--pad-cont-main-top) * 1pt)
+        calc(var(--pad-cont-main-right) * 1pt)
+        calc(var(--pad-cont-main-bottom) * 1pt)
+        calc(var(--pad-cont-main-left) * 1pt);
+    }
+
+    .page-continued .main > section {
+      margin-top: calc(var(--gap-main-section) * 1pt);
+    }
+
+    .page-continued .main > section:first-child {
+      margin-top: 0;
+    }
+
+    /* Full continuation (sidebar overflow): same two-column chrome as page 1.
+       Profile/photo stays on page 1 only — sidebar sections continue here.
+       Accent triangle stays on the true first page only. */
+    .page-full-cont {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+    }
+
+    .page-full-cont .sidebar::before {
+      display: none;
     }
 
     /* —— Sidebar —— */
     .sidebar {
-      background: var(--sidebar-bg);
+      background: var(--bg-sidebar);
       position: relative;
-      padding: 0 25pt 18pt;
+      padding:
+        calc(var(--pad-sidebar-top) * 1pt)
+        calc(var(--pad-sidebar-right) * 1pt)
+        calc(var(--pad-sidebar-bottom) * 1pt)
+        calc(var(--pad-sidebar-left) * 1pt);
       display: flex;
       flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
     }
 
-    /* Blue corner: true 45° right triangle (equal legs) */
+    /* Blue corner: angle from horizontal controlled by --triangle-deg */
     .sidebar::before {
       content: "";
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: calc(1 / tan(var(--triangle-deg) * 1deg));
       background: var(--accent);
       clip-path: polygon(0 0, 100% 0, 0 100%);
       z-index: 0;
@@ -73,17 +186,16 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      /* photo top ≈ 30pt */
-      padding-top: 30pt;
+      padding-top: calc(var(--pad-profile-top) * 1pt);
+      padding-bottom: calc(var(--pad-profile-bottom) * 1pt);
       margin-bottom: 0;
     }
 
     .avatar {
-      /* PDF white circle 141 × 141 pt */
-      width: 141pt;
-      height: 141pt;
+      width: calc(var(--photo-size) * 1pt);
+      height: calc(var(--photo-size) * 1pt);
       border-radius: 50%;
-      border: 5pt solid #fff;
+      border: calc(var(--photo-ring) * 1pt) solid var(--photo-ring-color);
       object-fit: cover;
       object-position: center 15%;
       background: #ddd;
@@ -91,224 +203,426 @@
     }
 
     .name {
-      margin-top: 15pt; /* photo bottom ~171 → Lorna 186 */
-      font-size: 30pt;
+      margin-top: calc(var(--gap-photo-name) * 1pt);
+      font-size: calc(var(--size-name) * 1pt);
       font-weight: 500;
-      color: var(--accent);
-      line-height: 30pt;
+      color: var(--color-name);
+      line-height: 1;
       letter-spacing: -0.01em;
     }
 
     .title {
-      margin-top: 1pt; /* Alvarado ends ~252.5, title 253.5 */
-      font-size: 12pt;
+      margin-top: 1pt;
+      font-size: calc(var(--size-job) * 1pt);
       font-weight: 400;
-      color: var(--ink);
+      color: var(--color-job);
       line-height: 1.2;
+    }
+
+    .title.is-empty {
+      display: none;
+      margin: 0;
+      padding: 0;
+      height: 0;
+      overflow: hidden;
     }
 
     .side-section {
       position: relative;
       z-index: 1;
+      margin-top: calc(var(--gap-side-section) * 1pt);
     }
 
-    .side-section.contact { margin-top: 31pt; } /* title end 268 → Contact 299 */
-    .side-section.about { margin-top: 28pt; }
-    .side-section.skills { margin-top: 28pt; }
+    .side-section:first-of-type {
+      /* Profile → first sidebar section gap lives on --pad-profile-bottom. */
+      margin-top: 0;
+    }
 
     .side-heading {
       display: flex;
       align-items: center;
-      gap: 7pt;
-      font-size: 15pt;
+      gap: calc(var(--gap-icon-title) * 1pt);
+      font-size: calc(var(--size-section) * 1pt);
       font-weight: 600;
-      color: var(--ink);
-      line-height: 18pt;
-      padding-bottom: 9.6pt;
+      color: var(--color-section);
+      line-height: 1.2;
+      padding-bottom: calc(var(--gap-title-line) * 1pt);
       border-bottom: 0.75pt solid var(--accent);
-      margin-bottom: 18pt;
+      margin-bottom: calc(var(--gap-underline-content) * 1pt);
     }
 
-    .side-heading .ico {
-      width: 13pt;
-      height: 13pt;
+    .side-heading .ico,
+    .main-section-heading .ico {
+      width: calc(var(--size-icon-title) * 1pt);
+      height: calc(var(--size-icon-title) * 1pt);
       flex-shrink: 0;
-      color: var(--ink);
+      color: var(--color-section);
+    }
+
+    /* Continuation marker (placement B): dots after section icon, before title. */
+    .icon-pair {
+      display: inline-flex;
+      align-items: center;
+      gap: 2pt;
+      flex-shrink: 0;
+    }
+
+    .side-heading .ico-cont,
+    .main-section-heading .ico-cont {
+      width: calc(var(--size-icon-title) * 0.75pt);
+      height: calc(var(--size-icon-title) * 0.75pt);
+      flex-shrink: 0;
+      color: var(--accent);
+      opacity: 0.85;
     }
 
     .contact-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10pt;
+      gap: calc(var(--gap-list-items) * 1pt);
     }
 
     .contact-list li {
       display: flex;
-      align-items: flex-start;
-      gap: 8pt;
-      font-size: 8pt;
+      align-items: center;
+      gap: calc(var(--gap-icon-contact) * 1pt);
+      font-size: calc(var(--size-body) * 1pt);
       font-weight: 400;
       line-height: 1.35;
-      color: var(--ink);
+      color: var(--color-body);
+    }
+
+    .contact-list li.is-hidden,
+    .page [data-section].is-hidden {
+      display: none;
     }
 
     .contact-list .ico {
-      width: 15pt;
-      height: 15pt;
+      width: calc(var(--size-icon-contact) * 1pt);
+      height: calc(var(--size-icon-contact) * 1pt);
       flex-shrink: 0;
       color: var(--accent);
+      display: block;
+    }
+
+    .contact-list span,
+    .contact-list a {
+      display: block;
+      line-height: 1.35;
+      color: inherit;
+      text-decoration: none;
+    }
+    .contact-list a:hover {
+      text-decoration: underline;
+    }
+
+    .prefixed-input {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .prefixed-input:focus-within {
+      outline: 2px solid rgba(96, 138, 191, 0.45);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+    .prefixed-input .prefix {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 0 0.45rem;
+      background: #f3f5f7;
+      border-right: 1px solid #e4e7eb;
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #6b7076;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .prefixed-input input {
+      border: none !important;
+      border-radius: 0 !important;
+      outline: none !important;
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .about-text {
-      font-size: 9pt;
+      font-size: calc(var(--size-body) * 1pt + 0.5pt);
       font-weight: 400;
-      line-height: 15pt;
-      color: var(--ink);
-      text-align: left;
+      line-height: var(--line-height-body);
+      color: var(--color-body);
+      text-align: var(--text-align-body);
     }
 
     .skills-list {
       list-style: none;
       display: flex;
       flex-direction: column;
+      gap: calc(var(--gap-list-items) * 1pt);
     }
 
     .skills-list li {
-      font-size: 10pt;
+      font-size: calc(var(--size-body) * 1pt + 1.5pt);
       font-weight: 500;
-      color: var(--ink);
+      color: var(--color-body);
       padding-left: 14pt;
       position: relative;
-      line-height: 24.8pt;
+      line-height: 1.35;
     }
 
     .skills-list li::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 10.5pt;
+      top: 0.55em;
       width: 3pt;
       height: 3pt;
       border-radius: 50%;
-      background: var(--ink);
+      background: var(--color-body);
     }
 
     /* —— Main —— */
     .main {
-      /* PDF: text x278–558.5 → ~32pt left into main + ~37pt right */
-      padding: 50pt 37pt 30pt 32pt;
+      padding:
+        calc(var(--pad-main-top) * 1pt)
+        calc(var(--pad-main-right) * 1pt)
+        calc(var(--pad-main-bottom) * 1pt)
+        calc(var(--pad-main-left) * 1pt);
       display: flex;
       flex-direction: column;
       min-width: 0;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .main > section {
       min-width: 0;
+      margin-top: calc(var(--gap-main-section) * 1pt);
     }
 
-    .main > section.experience { margin-top: 20pt; }
-    .main > section.section-references { margin-top: 18pt; }
+    .main > section:first-child {
+      margin-top: 0;
+    }
 
     .main-section-heading {
       display: flex;
       align-items: center;
-      gap: 8pt;
-      font-size: 15pt;
+      gap: calc(var(--gap-icon-title) * 1pt);
+      font-size: calc(var(--size-section) * 1pt);
       font-weight: 600;
-      color: var(--ink);
-      line-height: 18pt;
-      padding-bottom: 8pt;
+      color: var(--color-section);
+      line-height: 1.2;
+      padding-bottom: calc(var(--gap-title-line) * 1pt);
       border-bottom: 0.75pt solid var(--accent);
-      margin-bottom: 14pt;
-    }
-
-    .main-section-heading .ico {
-      width: 16pt;
-      height: 16pt;
-      flex-shrink: 0;
-      color: var(--ink);
+      margin-bottom: calc(var(--gap-underline-content) * 1pt);
     }
 
     .timeline {
+      /* Center of section title .ico — shared x-axis for line + dots. */
+      --timeline-center: calc(var(--size-icon-title) * 0.5pt);
+      /* Match section title text start (icon width + icon→title gap). */
+      --timeline-gutter: calc(
+        var(--size-icon-title) * 1pt + var(--gap-icon-title) * 1pt
+      );
       position: relative;
-      /* text at 278, dots at 262 → 16pt from content start; content start is padding-left */
-      padding-left: 16pt;
+      padding-left: var(--timeline-gutter);
       display: flex;
       flex-direction: column;
-      /* edu entry pitch ~94pt total; gap between blocks ~20pt after 4-line desc */
-      gap: 20pt;
-    }
-
-    .timeline.experience-timeline {
-      /* exp pitches ~78–99pt; 3-line desc → gap ~16pt */
-      gap: 16pt;
+      gap: calc(var(--gap-timeline-items) * 1pt);
     }
 
     .timeline::before {
       content: "";
       position: absolute;
-      left: 3pt;
-      top: 5pt;
-      bottom: 5pt;
-      width: 0.75pt;
+      left: calc(var(--timeline-center) - var(--timeline-line) * 0.5pt);
+      top: calc(var(--timeline-dot) * 0.45pt);
+      bottom: calc(var(--timeline-dot) * 0.45pt);
+      width: calc(var(--timeline-line) * 1pt);
       background: var(--accent);
     }
 
     .entry { position: relative; }
 
-    .entry::before {
+    .timeline .entry::before {
       content: "";
       position: absolute;
-      left: -16pt;
-      top: 3pt;
-      width: 6.6pt;
-      height: 6.6pt;
+      /* Entry is inside the gutter; offset back so the dot centers on --timeline-center. */
+      left: calc(
+        var(--timeline-center) - var(--timeline-gutter) - var(--timeline-dot) * 0.5pt
+      );
+      top: calc((1.15em - var(--timeline-dot) * 1pt) / 2);
+      width: calc(var(--timeline-dot) * 1pt);
+      height: calc(var(--timeline-dot) * 1pt);
       border-radius: 50%;
       background: var(--accent);
       box-shadow: 0 0 0 2pt #fff;
     }
 
-    .entry-title {
-      font-size: 10pt;
-      font-weight: 500;
-      color: var(--ink);
-      line-height: 1.2;
-      overflow-wrap: anywhere;
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--gap-list-items) * 1pt);
     }
 
-    .entry-meta {
+    .entry-org a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .entry-org a:hover {
+      text-decoration: underline;
+    }
+
+    .entry-title {
+      font-size: calc(var(--size-item-title) * 1pt);
+      font-weight: 500;
+      color: var(--color-item-title);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+      min-width: 0;
+    }
+
+    .entry-title-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 12pt;
-      margin-top: 1pt;
-      margin-bottom: 4pt;
       min-width: 0;
     }
 
+    .entry-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: calc(var(--gap-title-subtitle) * 1pt);
+      margin-bottom: calc(var(--gap-subtitle-content) * 1pt);
+      min-width: 0;
+    }
+
+    .entry.no-subtitle .entry-desc,
+    .entry.no-subtitle .entry-bullets {
+      margin-top: calc(var(--gap-title-content) * 1pt);
+    }
+
     .entry-org {
-      font-size: 9pt;
+      display: block;
+      font-size: calc(var(--size-item-sub) * 1pt);
       font-weight: 500;
       font-style: italic;
-      color: var(--ink);
+      color: var(--color-item-sub);
+      min-width: 0;
+      margin-bottom: 0.5pt;
+    }
+
+    .entry-meta-row .entry-org {
+      margin-bottom: 0;
+    }
+
+    .entry-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12pt;
+      min-width: 0;
+    }
+
+    .entry-location,
+    .entry-date {
+      font-size: calc(var(--size-item-sub) * 1pt - 1pt);
+      font-weight: 400;
+      font-style: normal;
+      color: var(--color-item-sub);
+    }
+
+    .entry-location {
       min-width: 0;
     }
 
     .entry-date {
-      font-size: 8pt;
-      font-weight: 400;
-      color: var(--ink);
       white-space: nowrap;
       flex-shrink: 0;
+      margin-left: auto;
     }
 
     .entry-desc {
-      font-size: 8pt;
+      font-size: calc(var(--size-body) * 1pt - 0.5pt);
       font-weight: 400;
-      line-height: 12pt;
-      color: var(--ink);
+      line-height: var(--line-height-body);
+      color: var(--color-body);
+      text-align: var(--text-align-body);
       overflow-wrap: break-word;
+    }
+
+    .entry-bullets {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: calc(var(--size-body) * 1pt - 0.5pt);
+      font-weight: 400;
+      line-height: var(--line-height-body);
+      color: var(--color-body);
+      text-align: var(--text-align-body);
+    }
+
+    .entry-bullets li {
+      position: relative;
+      padding-left: 10pt;
+      margin-top: 2pt;
+      overflow-wrap: break-word;
+    }
+
+    .entry-bullets li:first-child {
+      margin-top: 0;
+    }
+
+    .entry-bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 2.5pt;
+      height: 2.5pt;
+      border-radius: 50%;
+      background: var(--color-body);
+    }
+
+    .timeline.is-single::before,
+    .timeline.is-single .entry::before {
+      display: none;
+    }
+
+    .timeline.is-single {
+      padding-left: 0;
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem 0.55rem;
+    }
+    .date-grid .field label {
+      font-size: 0.58rem;
+    }
+    .present-row {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.15rem;
+    }
+    .present-row label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #6b7076;
+    }
+    .present-row input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--accent);
     }
 
     .ref-grid {
@@ -323,31 +637,31 @@
     }
 
     .ref-name {
-      font-size: 12pt;
+      font-size: calc(var(--size-item-title) * 1pt + 2pt);
       font-weight: 700;
-      color: var(--ink);
+      color: var(--color-item-title);
       margin-bottom: 4pt;
     }
 
     .ref-role {
-      font-size: 10pt;
+      font-size: calc(var(--size-item-title) * 1pt);
       font-weight: 400;
-      color: var(--ink);
+      color: var(--color-item-sub);
       margin-bottom: 8pt;
     }
 
     .ref-meta {
-      font-size: 8pt;
+      font-size: calc(var(--size-body) * 1pt - 0.5pt);
       font-weight: 400;
-      line-height: 14pt;
-      color: var(--ink);
+      line-height: 1.75;
+      color: var(--color-body);
       overflow-wrap: anywhere;
     }
 
     .ref-meta strong {
-      font-size: 7pt;
+      font-size: calc(var(--size-body) * 1pt - 1.5pt);
       font-weight: 700;
-      color: var(--ink);
+      color: var(--color-body);
     }
 
     /* Tabler Icons — filled headers, outline contact rows */
@@ -362,12 +676,17 @@
 
     @media screen and (max-width: 720px) {
       body { padding: 0; background: #fff; }
+      .pages { transform: none; margin-bottom: 0; gap: 0; }
       .page {
         width: 100%;
         height: auto;
         grid-template-columns: 1fr;
         box-shadow: none;
+        overflow: visible;
       }
+      .page-continued .main,
+      .main,
+      .sidebar { overflow: visible; }
       .sidebar::before {
         width: 70%;
       }
@@ -376,61 +695,1258 @@
 
     @page { size: A4; margin: 0; }
 
+    /* —— Settings drawer (screen only) —— */
+    .screen-chrome {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: left 0.28s ease;
+    }
+    body.drawer-open .screen-chrome {
+      left: calc(var(--drawer-w) + 0.75rem);
+    }
+    .drawer-toggle,
+    .zoom-controls button {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 10px;
+      padding: 0.55rem 0.9rem;
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    .drawer-toggle:hover,
+    .zoom-controls button:hover { background: #f3f5f7; }
+    .zoom-controls {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.2rem;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid #cfd4da;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: left 0.28s ease;
+    }
+    body.drawer-open .zoom-controls {
+      left: calc(var(--drawer-w) + 0.75rem);
+    }
+    .zoom-controls button {
+      box-shadow: none;
+      border: none;
+      border-radius: 7px;
+      padding: 0.4rem 0.55rem;
+      min-width: 2rem;
+    }
+    .zoom-controls button.is-active {
+      background: #e8eef5;
+      color: #3a5470;
+    }
+    .zoom-controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .zoom-controls .zoom-label {
+      min-width: 3.1rem;
+      text-align: center;
+      font-family: "Montserrat", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #3a3d40;
+      user-select: none;
+    }
+    .zoom-controls .zoom-sep {
+      width: 1px;
+      height: 1.1rem;
+      background: #d5dae0;
+      margin: 0 0.15rem;
+      flex-shrink: 0;
+    }
+
+    .settings-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1050;
+      width: var(--drawer-w);
+      height: 100vh;
+      background: #fbfbfc;
+      border-right: 1px solid #d8dde3;
+      box-shadow: 8px 0 28px rgba(0, 0, 0, 0.08);
+      transform: translateX(-100%);
+      transition: transform 0.28s ease;
+      display: flex;
+      flex-direction: column;
+      font-family: "Montserrat", sans-serif;
+      color: #3a3d40;
+    }
+    body.drawer-open .settings-drawer {
+      transform: translateX(0);
+    }
+
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1040;
+      background: rgba(0, 0, 0, 0.28);
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .drawer-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1rem 1rem 0.85rem;
+      border-bottom: 1px solid #e4e7eb;
+      background: #fff;
+    }
+    .drawer-header h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1f2225;
+      margin-bottom: 0.2rem;
+    }
+    .drawer-header p {
+      font-size: 0.7rem;
+      line-height: 1.35;
+      color: #6b7076;
+      max-width: 14rem;
+    }
+    .drawer-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .drawer-actions button {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 7px;
+      padding: 0.35rem 0.65rem;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .drawer-actions button:hover { background: #f3f5f7; }
+    .drawer-actions .primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .drawer-actions .primary:hover { filter: brightness(0.95); }
+
+    .drawer-tabs {
+      flex: 0 0 auto;
+      display: flex;
+      gap: 0.3rem;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid #e4e7eb;
+      background: #fff;
+    }
+    .drawer-tab {
+      appearance: none;
+      flex: 1 1 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.35rem;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      color: #6b7076;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .drawer-tab:hover {
+      background: #f3f5f7;
+      color: #3a3d40;
+    }
+    .drawer-tab[aria-selected="true"] {
+      background: #e8eef5;
+      border-color: #c5d4e4;
+      color: #3a5470;
+    }
+    .drawer-tab svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      display: block;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .drawer-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 0.75rem 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer-panel {
+      display: none;
+      flex-direction: column;
+    }
+    .drawer-panel.is-active {
+      display: flex;
+    }
+    .drawer-subgroup-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin: 0.35rem 0 0.65rem;
+    }
+    .drawer-group {
+      margin-bottom: 1.1rem;
+      padding-bottom: 1rem;
+      border: none;
+      border-bottom: 1px solid #e8ebef;
+      min-inline-size: 0;
+    }
+    .drawer-panel > .drawer-group:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .drawer-group > legend,
+    .drawer-group > h3 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 0.65rem;
+    }
+    .drawer-subgroup {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.7rem;
+      background: #fff;
+      border: 1px solid #e4e7eb;
+      border-radius: 8px;
+      position: relative;
+    }
+    .drawer-subgroup.dragging {
+      opacity: 0.55;
+      border-color: var(--accent);
+    }
+    .drawer-subgroup.drag-over {
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
+    .item-head {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+    .item-head h4 {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #6b7076;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+    .drag-handle {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: #9aa1a8;
+      cursor: grab;
+      padding: 0.15rem 0.2rem;
+      font-size: 0.85rem;
+      line-height: 1;
+      border-radius: 4px;
+    }
+    .drag-handle:active { cursor: grabbing; }
+    .drag-handle:hover { color: var(--accent); background: #eef3f9; }
+    .item-actions {
+      display: flex;
+      gap: 0.25rem;
+    }
+    .item-actions button,
+    .add-item-btn {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 6px;
+      padding: 0.22rem 0.45rem;
+      font: inherit;
+      font-size: 0.62rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .item-actions button:hover,
+    .add-item-btn:hover { background: #f3f5f7; }
+    .item-actions button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .item-actions .danger:hover {
+      background: #fdeeee;
+      border-color: #e2b4b4;
+      color: #9b2c2c;
+    }
+    .add-item-btn {
+      width: 100%;
+      margin-top: 0.65rem;
+      padding: 0.45rem 0.65rem;
+      border-style: dashed;
+      color: var(--accent);
+      border-color: #b7c9df;
+      background: #f7fafc;
+    }
+    .add-item-btn:hover {
+      background: #eef3f9;
+    }
+    .list-empty {
+      font-size: 0.68rem;
+      color: #8a9096;
+      padding: 0.5rem 0.15rem;
+    }
+    .skill-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.15rem;
+    }
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .skill-row input {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .skill-row .item-actions {
+      flex: 0 0 auto;
+    }
+    .add-skill-btn {
+      width: 100%;
+      margin-top: 0.45rem;
+      appearance: none;
+      border: 1px dashed #c5ccd4;
+      background: #fafbfc;
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 0.3rem 0.45rem;
+      font: inherit;
+      font-size: 0.62rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-skill-btn:hover {
+      background: #eef3f9;
+      border-color: #b7c9df;
+    }
+    .drawer-subgroup h4 {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #6b7076;
+      margin-bottom: 0.5rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 0.55rem;
+    }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #6b7076;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      padding: 0.4rem 0.5rem;
+      font: inherit;
+      font-size: 0.75rem;
+      color: #1f2225;
+      background: #fff;
+      resize: vertical;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      outline: 2px solid rgba(96, 138, 191, 0.45);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+    .field textarea { min-height: 4.5rem; line-height: 1.4; }
+    .field textarea.tall { min-height: 5.5rem; }
+    .field select {
+      width: 100%;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      padding: 0.4rem 0.5rem;
+      font: inherit;
+      font-size: 0.75rem;
+      color: #1f2225;
+      background: #fff;
+    }
+    .field select:focus {
+      outline: 2px solid rgba(96, 138, 191, 0.45);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+    .type-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 0.4rem;
+      align-items: end;
+      margin-bottom: 0.55rem;
+    }
+    .type-row .field { margin-bottom: 0; }
+    .type-row .size-field { width: 4.2rem; }
+    .type-row .color-field { width: 2.6rem; }
+    .type-row input[type="number"] {
+      width: 100%;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      padding: 0.4rem 0.35rem;
+      font: inherit;
+      font-size: 0.75rem;
+      color: #1f2225;
+      background: #fff;
+    }
+    .type-row input[type="color"] {
+      width: 100%;
+      height: 2rem;
+      padding: 0.15rem;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .type-row input[type="number"]:focus,
+    .type-row input[type="color"]:focus {
+      outline: 2px solid rgba(96, 138, 191, 0.45);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+    .pad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.55rem 0.5rem;
+    }
+    .pad-grid .field { margin-bottom: 0; }
+    .contact-field {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.4rem;
+      align-items: end;
+      margin-bottom: 0.55rem;
+    }
+    .contact-field .field { margin-bottom: 0; }
+    .visibility-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      align-items: center;
+      min-width: 3.2rem;
+    }
+    .visibility-toggle label {
+      font-size: 0.58rem;
+      font-weight: 600;
+      color: #6b7076;
+    }
+    .visibility-toggle input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .section-order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .section-order-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.55rem;
+      background: #fff;
+      border: 1px solid #e4e7eb;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #3a3d40;
+    }
+    .section-order-item span { flex: 1 1 auto; min-width: 0; }
+    .section-order-item .visibility-toggle {
+      flex: 0 0 auto;
+      margin-right: 0.05rem;
+    }
+    .section-order-item button {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      border-radius: 6px;
+      padding: 0.2rem 0.35rem;
+      font: inherit;
+      font-size: 0.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .section-order-item button:hover { background: #f3f5f7; }
+    .section-order-item button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .section-order-item.is-section-hidden span {
+      opacity: 0.45;
+    }
+    .photo-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .photo-row img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px #d0d5db;
+    }
+    .photo-row button {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      border-radius: 6px;
+      padding: 0.35rem 0.6rem;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .photo-row button:hover { background: #f3f5f7; }
+
+    @media screen and (max-width: 900px) {
+      body.drawer-open { padding-left: 1rem; }
+      body.drawer-open .screen-chrome,
+      body.drawer-open .zoom-controls {
+        left: 1rem;
+        z-index: 1030;
+      }
+      body.drawer-open .drawer-backdrop {
+        display: block;
+      }
+      .settings-drawer {
+        width: min(var(--drawer-w), 92vw);
+        z-index: 1050;
+      }
+    }
+
     @media print {
-      body { background: none; padding: 0; }
+      html, body, .page {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      body { background: none; padding: 0 !important; }
+      .pages {
+        transform: none !important;
+        margin-bottom: 0 !important;
+        gap: 0;
+        display: block;
+      }
       .page {
         box-shadow: none;
         width: 210mm;
         height: 297mm;
+        break-after: page;
+        page-break-after: always;
       }
+      .page:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      .screen-chrome,
+      .zoom-controls,
+      .drawer-backdrop,
+      .settings-drawer { display: none !important; }
     }
   </style>
 </head>
 <body>
-  <article class="page">
+  <div class="screen-chrome">
+    <button type="button" class="drawer-toggle" id="drawer-toggle" aria-expanded="false" aria-controls="settings-drawer">
+      Edit CV
+    </button>
+  </div>
+  <div class="zoom-controls" role="group" aria-label="CV view controls">
+    <button type="button" id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+    <span class="zoom-label" id="zoom-label">100%</span>
+    <button type="button" id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
+    <button type="button" id="zoom-reset" title="Reset zoom to 100%" aria-label="Reset zoom to 100%">⟲</button>
+    <span class="zoom-sep" aria-hidden="true"></span>
+    <button type="button" id="zoom-fit-height" title="Fit height" aria-label="Fit height" aria-pressed="false">↕</button>
+    <button type="button" id="zoom-fit-width" title="Fit width" aria-label="Fit width" aria-pressed="false">↔</button>
+    <span class="zoom-sep" aria-hidden="true"></span>
+    <button type="button" id="export-pdf" title="Export PDF" aria-label="Export PDF">PDF</button>
+  </div>
+  <button type="button" class="drawer-backdrop" id="drawer-backdrop" aria-label="Close settings" tabindex="-1" hidden></button>
+
+  <aside class="settings-drawer" id="settings-drawer" aria-label="CV settings" inert>
+    <div class="drawer-header">
+      <div>
+        <h2>CV settings</h2>
+        <p>Edits update the resume live and auto-save in this browser.</p>
+      </div>
+      <div class="drawer-actions">
+        <button type="button" class="primary" id="drawer-close">Collapse</button>
+        <button type="button" id="edit-reset">Reset sample</button>
+      </div>
+    </div>
+    <div class="drawer-tabs" role="tablist" aria-label="Settings categories">
+      <button type="button" class="drawer-tab" role="tab" id="tab-content" data-tab="content" aria-controls="panel-content" aria-selected="true" title="CV content">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+        </svg>
+        <span class="visually-hidden">CV content</span>
+      </button>
+      <button type="button" class="drawer-tab" role="tab" id="tab-type" data-tab="type" aria-controls="panel-type" aria-selected="false" title="Typography and icons" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 20l3 -3" />
+          <path d="M14 4l6 6" />
+          <path d="M12.5 6.5l-8.5 8.5l-1 4l4 -1l8.5 -8.5" />
+          <path d="M16 5l3 3" />
+        </svg>
+        <span class="visually-hidden">Typography and icons</span>
+      </button>
+      <button type="button" class="drawer-tab" role="tab" id="tab-spacing" data-tab="spacing" aria-controls="panel-spacing" aria-selected="false" title="Paddings and gaps" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16" />
+          <path d="M4 17h16" />
+          <path d="M9 7v10" />
+          <path d="M15 7v10" />
+        </svg>
+        <span class="visually-hidden">Paddings and gaps</span>
+      </button>
+      <button type="button" class="drawer-tab" role="tab" id="tab-sections" data-tab="sections" aria-controls="panel-sections" aria-selected="false" title="Sections" tabindex="-1">
+        <!-- tabler:list-filled — filled to match “sections” -->
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M9 6a1 1 0 0 1 .117 1.993L9 8H5a1 1 0 0 1-.117-1.993L5 6h4zm10 0a1 1 0 0 1 .117 1.993L19 8h-8a1 1 0 0 1-.117-1.993L11 6h8zM9 12a1 1 0 0 1 .117 1.993L9 14H5a1 1 0 0 1-.117-1.993L5 12h4zm10 0a1 1 0 0 1 .117 1.993L19 14h-8a1 1 0 0 1-.117-1.993L11 12h8zM9 18a1 1 0 0 1 .117 1.993L9 20H5a1 1 0 0 1-.117-1.993L5 18h4zm10 0a1 1 0 0 1 .117 1.993L19 20h-8a1 1 0 0 1-.117-1.993L11 18h8z" />
+        </svg>
+        <span class="visually-hidden">Section order</span>
+      </button>
+    </div>
+    <form class="drawer-body" id="settings-form" autocomplete="off">
+      <div class="drawer-panel is-active" role="tabpanel" id="panel-content" data-panel="content" aria-labelledby="tab-content">
+        <fieldset class="drawer-group">
+          <legend>Profile</legend>
+          <div class="field">
+            <label for="f-name-line1">Name line 1</label>
+            <input id="f-name-line1" name="nameLine1" type="text" />
+          </div>
+          <div class="field">
+            <label for="f-name-line2">Name line 2</label>
+            <input id="f-name-line2" name="nameLine2" type="text" />
+          </div>
+          <div class="field">
+            <label for="f-title">Job title</label>
+            <input id="f-title" name="title" type="text" data-bind="title" />
+          </div>
+          <div class="field">
+            <label>Photo</label>
+            <div class="photo-row">
+              <img id="photo-preview" src="photo.jpg" alt="" />
+              <button type="button" id="photo-pick">Change photo</button>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Contacts</legend>
+          <div class="contact-field">
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <div class="prefixed-input">
+                <span class="prefix">+62</span>
+                <input id="f-phone" name="phone" type="text" data-bind="phone" placeholder="81234567890" inputmode="numeric" autocomplete="tel-national" />
+              </div>
+            </div>
+            <div class="visibility-toggle">
+              <label for="v-phone">Show</label>
+              <input id="v-phone" type="checkbox" data-visible="phone" checked />
+            </div>
+          </div>
+          <div class="contact-field">
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="text" data-bind="email" />
+            </div>
+            <div class="visibility-toggle">
+              <label for="v-email">Show</label>
+              <input id="v-email" type="checkbox" data-visible="email" checked />
+            </div>
+          </div>
+          <div class="contact-field">
+            <div class="field">
+              <label for="f-address">Address</label>
+              <input id="f-address" name="address" type="text" data-bind="address" />
+            </div>
+            <div class="visibility-toggle">
+              <label for="v-address">Show</label>
+              <input id="v-address" type="checkbox" data-visible="address" checked />
+            </div>
+          </div>
+          <div class="contact-field">
+            <div class="field">
+              <label for="f-linkedin">LinkedIn username</label>
+              <div class="prefixed-input">
+                <span class="prefix">linkedin.com/in/</span>
+                <input id="f-linkedin" name="linkedin" type="text" data-bind="linkedin" placeholder="username" autocomplete="off" />
+              </div>
+            </div>
+            <div class="visibility-toggle">
+              <label for="v-linkedin">Show</label>
+              <input id="v-linkedin" type="checkbox" data-visible="linkedin" checked />
+            </div>
+          </div>
+          <div class="contact-field">
+            <div class="field">
+              <label for="f-github">GitHub username</label>
+              <div class="prefixed-input">
+                <span class="prefix">github.com/</span>
+                <input id="f-github" name="github" type="text" data-bind="github" placeholder="username" autocomplete="off" />
+              </div>
+            </div>
+            <div class="visibility-toggle">
+              <label for="v-github">Show</label>
+              <input id="v-github" type="checkbox" data-visible="github" checked />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>About Me</legend>
+          <div class="field">
+            <label for="f-about">Bio</label>
+            <textarea id="f-about" name="about" class="tall" data-bind="about"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="languages">
+          <legend>Languages</legend>
+          <div class="list-editor" id="languages-editor"></div>
+          <button type="button" class="add-item-btn" data-add="languages">+ Add language</button>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="experience">
+          <legend>Work Experiences</legend>
+          <div class="list-editor" id="experience-editor"></div>
+          <button type="button" class="add-item-btn" data-add="experience">+ Add experience</button>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="education">
+          <legend>Educations</legend>
+          <div class="list-editor" id="education-editor"></div>
+          <button type="button" class="add-item-btn" data-add="education">+ Add education</button>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="projects">
+          <legend>Projects</legend>
+          <div class="list-editor" id="projects-editor"></div>
+          <button type="button" class="add-item-btn" data-add="projects">+ Add project</button>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="skills">
+          <legend>Skills</legend>
+          <div class="list-editor" id="skills-editor"></div>
+          <button type="button" class="add-item-btn" data-add="skills">+ Add category</button>
+        </fieldset>
+
+        <fieldset class="drawer-group" data-list-section="references">
+          <legend>References</legend>
+          <div class="list-editor" id="references-editor"></div>
+          <button type="button" class="add-item-btn" data-add="references">+ Add reference</button>
+        </fieldset>
+      </div>
+
+      <div class="drawer-panel" role="tabpanel" id="panel-type" data-panel="type" aria-labelledby="tab-type" hidden>
+        <fieldset class="drawer-group">
+          <legend>Profile</legend>
+          <div class="field">
+            <label for="t-font">Font family</label>
+            <select id="t-font" data-type="font">
+              <option value="Montserrat">Montserrat</option>
+              <option value="Inter">Inter</option>
+              <option value="Lato">Lato</option>
+              <option value="Open Sans">Open Sans</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Source Sans 3">Source Sans 3</option>
+              <option value="Nunito Sans">Nunito Sans</option>
+              <option value="Work Sans">Work Sans</option>
+              <option value="IBM Plex Sans">IBM Plex Sans</option>
+              <option value="DM Sans">DM Sans</option>
+              <option value="Raleway">Raleway</option>
+              <option value="Carlito">Carlito</option>
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Merriweather">Merriweather</option>
+              <option value="EB Garamond">EB Garamond</option>
+              <option value="Libre Baskerville">Libre Baskerville</option>
+              <option value="Source Serif 4">Source Serif 4</option>
+            </select>
+          </div>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-name-size">Name</label>
+              <input id="t-name-size" type="number" min="12" max="48" step="0.5" data-type="size-name" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-name-color">Color</label>
+              <input id="t-name-color" type="color" data-type="color-name" />
+            </div>
+          </div>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-job-size">Job title</label>
+              <input id="t-job-size" type="number" min="8" max="24" step="0.5" data-type="size-job" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-job-color">Color</label>
+              <input id="t-job-color" type="color" data-type="color-job" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Sections</legend>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-section-size">Section title</label>
+              <input id="t-section-size" type="number" min="8" max="28" step="0.5" data-type="size-section" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-section-color">Color</label>
+              <input id="t-section-color" type="color" data-type="color-section" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Timeline items</legend>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-item-title-size">Item title</label>
+              <input id="t-item-title-size" type="number" min="6" max="20" step="0.5" data-type="size-item-title" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-item-title-color">Color</label>
+              <input id="t-item-title-color" type="color" data-type="color-item-title" />
+            </div>
+          </div>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-item-sub-size">Item subtitle</label>
+              <input id="t-item-sub-size" type="number" min="6" max="18" step="0.5" data-type="size-item-sub" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-item-sub-color">Color</label>
+              <input id="t-item-sub-color" type="color" data-type="color-item-sub" />
+            </div>
+          </div>
+          <p style="font-size:0.62rem;color:#6b7076;line-height:1.35;margin:-0.15rem 0 0">
+            Item title = degree / job. Subtitle = school/company, location, and dates.
+          </p>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Paragraphs</legend>
+          <div class="type-row">
+            <div class="field">
+              <label for="t-body-size">Content / body</label>
+              <input id="t-body-size" type="number" min="6" max="16" step="0.5" data-type="size-body" />
+            </div>
+            <div class="field size-field">
+              <label>&nbsp;</label>
+              <span style="display:block;font-size:0.68rem;color:#6b7076;padding:0.45rem 0">pt</span>
+            </div>
+            <div class="field color-field">
+              <label for="t-body-color">Color</label>
+              <input id="t-body-color" type="color" data-type="color-body" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="t-line-height-body">Paragraph line height</label>
+            <input id="t-line-height-body" type="number" min="1.1" max="2.4" step="0.05" data-type="line-height-body" value="1.55" />
+            <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">About Me and timeline descriptions (including bullets).</p>
+          </div>
+          <div class="field">
+            <label for="t-text-align-body">Paragraph align</label>
+            <select id="t-text-align-body" data-type="text-align-body">
+              <option value="left" selected>Left</option>
+              <option value="justify">Justify</option>
+            </select>
+            <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">About Me and timeline descriptions (including bullets).</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Icons</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-icon-title">Section icon (pt)</label>
+              <input id="t-icon-title" type="number" min="8" max="28" step="0.5" data-type="size-icon-title" value="14" />
+            </div>
+            <div class="field">
+              <label for="t-icon-contact">Contact icon (pt)</label>
+              <input id="t-icon-contact" type="number" min="8" max="28" step="0.5" data-type="size-icon-contact" value="15" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Decorations</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-triangle-deg">Triangle angle (°)</label>
+              <input id="t-triangle-deg" type="number" min="20" max="70" step="1" data-type="triangle-deg" value="45" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Photo</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-photo-size">Photo size (pt)</label>
+              <input id="t-photo-size" type="number" min="60" max="200" step="1" data-type="photo-size" value="141" />
+            </div>
+            <div class="field">
+              <label for="t-photo-ring">Photo ring (pt)</label>
+              <input id="t-photo-ring" type="number" min="0" max="16" step="0.5" data-type="photo-ring" value="5" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Timeline</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-timeline-dot">Timeline dot (pt)</label>
+              <input id="t-timeline-dot" type="number" min="3" max="14" step="0.1" data-type="timeline-dot" value="6.6" />
+            </div>
+            <div class="field">
+              <label for="t-timeline-line">Timeline line (pt)</label>
+              <input id="t-timeline-line" type="number" min="0.25" max="4" step="0.05" data-type="timeline-line" value="0.75" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Accent</legend>
+          <div class="field">
+            <label for="t-accent">Accent color</label>
+            <input id="t-accent" type="color" data-type="accent" value="#608abf" />
+          </div>
+          <div class="field">
+            <label for="t-bg-sidebar">Sidebar background</label>
+            <input id="t-bg-sidebar" type="color" data-type="bg-sidebar" value="#f7f7f7" />
+          </div>
+          <div class="field">
+            <label for="t-bg-main">Main background</label>
+            <input id="t-bg-main" type="color" data-type="bg-main" value="#ffffff" />
+          </div>
+          <div class="field">
+            <label for="t-photo-ring-color">Photo ring</label>
+            <input id="t-photo-ring-color" type="color" data-type="photo-ring-color" value="#ffffff" />
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="drawer-panel" role="tabpanel" id="panel-spacing" data-panel="spacing" aria-labelledby="tab-spacing" hidden>
+        <fieldset class="drawer-group">
+          <legend>Sidebar</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-pad-sidebar-top">Sidebar top (pt)</label>
+              <input id="t-pad-sidebar-top" type="number" min="0" max="48" step="1" data-type="pad-sidebar-top" value="0" />
+            </div>
+            <div class="field">
+              <label for="t-pad-sidebar-bottom">Sidebar bottom (pt)</label>
+              <input id="t-pad-sidebar-bottom" type="number" min="4" max="48" step="1" data-type="pad-sidebar-bottom" value="18" />
+            </div>
+            <div class="field">
+              <label for="t-pad-sidebar-left">Sidebar left (pt)</label>
+              <input id="t-pad-sidebar-left" type="number" min="8" max="48" step="1" data-type="pad-sidebar-left" value="25" />
+            </div>
+            <div class="field">
+              <label for="t-pad-sidebar-right">Sidebar right (pt)</label>
+              <input id="t-pad-sidebar-right" type="number" min="8" max="48" step="1" data-type="pad-sidebar-right" value="25" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Profile</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-pad-profile-top">Photo top (pt)</label>
+              <input id="t-pad-profile-top" type="number" min="8" max="60" step="1" data-type="pad-profile-top" value="30" />
+            </div>
+            <div class="field">
+              <label for="t-pad-profile-bottom">Profile bottom (pt)</label>
+              <input id="t-pad-profile-bottom" type="number" min="0" max="80" step="1" data-type="pad-profile-bottom" value="31" />
+            </div>
+            <div class="field">
+              <label for="t-gap-photo-name">Photo ↔ name (pt)</label>
+              <input id="t-gap-photo-name" type="number" min="0" max="48" step="1" data-type="gap-photo-name" value="15" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Contacts</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-gap-icon-contact">Contact icon → text</label>
+              <input id="t-gap-icon-contact" type="number" min="2" max="20" step="0.5" data-type="gap-icon-contact" value="8" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Sections</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-gap-side">Sidebar section gap</label>
+              <input id="t-gap-side" type="number" min="8" max="48" step="1" data-type="gap-side-section" value="28" />
+            </div>
+            <div class="field">
+              <label for="t-gap-main">Main section gap</label>
+              <input id="t-gap-main" type="number" min="8" max="48" step="1" data-type="gap-main-section" value="20" />
+            </div>
+            <div class="field">
+              <label for="t-gap-icon-title">Section icon → title</label>
+              <input id="t-gap-icon-title" type="number" min="2" max="20" step="0.5" data-type="gap-icon-title" value="8" />
+            </div>
+            <div class="field">
+              <label for="t-gap-title-line">Title → underline</label>
+              <input id="t-gap-title-line" type="number" min="2" max="24" step="0.5" data-type="gap-title-line" value="9" />
+            </div>
+            <div class="field">
+              <label for="t-gap-underline-content">Underline → content</label>
+              <input id="t-gap-underline-content" type="number" min="4" max="36" step="1" data-type="gap-underline-content" value="16" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>List items</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-gap-list-items">List item gap</label>
+              <input id="t-gap-list-items" type="number" min="2" max="28" step="0.5" data-type="gap-list-items" value="10" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Timeline items</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-gap-timeline-items">Timeline item gap</label>
+              <input id="t-gap-timeline-items" type="number" min="4" max="40" step="1" data-type="gap-timeline-items" value="18" />
+            </div>
+            <div class="field">
+              <label for="t-gap-title-subtitle">Item title → subtitle</label>
+              <input id="t-gap-title-subtitle" type="number" min="0" max="16" step="0.5" data-type="gap-title-subtitle" value="1" />
+            </div>
+            <div class="field">
+              <label for="t-gap-subtitle-content">Subtitle → content</label>
+              <input id="t-gap-subtitle-content" type="number" min="0" max="20" step="0.5" data-type="gap-subtitle-content" value="4" />
+            </div>
+            <div class="field">
+              <label for="t-gap-title-content">Title → content (no sub)</label>
+              <input id="t-gap-title-content" type="number" min="0" max="20" step="0.5" data-type="gap-title-content" value="4" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Main</legend>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-pad-main-top">Main top (pt)</label>
+              <input id="t-pad-main-top" type="number" min="16" max="80" step="1" data-type="pad-main-top" value="50" />
+            </div>
+            <div class="field">
+              <label for="t-pad-main-bottom">Main bottom (pt)</label>
+              <input id="t-pad-main-bottom" type="number" min="8" max="60" step="1" data-type="pad-main-bottom" value="30" />
+            </div>
+            <div class="field">
+              <label for="t-pad-main-left">Main left (pt)</label>
+              <input id="t-pad-main-left" type="number" min="12" max="56" step="1" data-type="pad-main-left" value="32" />
+            </div>
+            <div class="field">
+              <label for="t-pad-main-right">Main right (pt)</label>
+              <input id="t-pad-main-right" type="number" min="12" max="56" step="1" data-type="pad-main-right" value="37" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
+          <legend>Continuation pages</legend>
+          <p style="font-size:0.62rem;color:#6b7076;line-height:1.35;margin:0 0 0.55rem">
+            These paddings apply to main-only continuation pages (when main overflows). Sidebar overflow creates full two-column pages that reuse page-1 sidebar/main padding instead.
+          </p>
+          <div class="pad-grid">
+            <div class="field">
+              <label for="t-pad-cont-main-top">Cont. top (pt)</label>
+              <input id="t-pad-cont-main-top" type="number" min="8" max="80" step="1" data-type="pad-cont-main-top" value="40" />
+            </div>
+            <div class="field">
+              <label for="t-pad-cont-main-bottom">Cont. bottom (pt)</label>
+              <input id="t-pad-cont-main-bottom" type="number" min="8" max="60" step="1" data-type="pad-cont-main-bottom" value="30" />
+            </div>
+            <div class="field">
+              <label for="t-pad-cont-main-left">Cont. left (pt)</label>
+              <input id="t-pad-cont-main-left" type="number" min="12" max="56" step="1" data-type="pad-cont-main-left" value="34" />
+            </div>
+            <div class="field">
+              <label for="t-pad-cont-main-right">Cont. right (pt)</label>
+              <input id="t-pad-cont-main-right" type="number" min="12" max="56" step="1" data-type="pad-cont-main-right" value="34" />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="drawer-panel" role="tabpanel" id="panel-sections" data-panel="sections" aria-labelledby="tab-sections" hidden>
+        <fieldset class="drawer-group">
+          <legend>Sections</legend>
+          <p style="font-size:0.62rem;color:#6b7076;line-height:1.35;margin:0 0 0.55rem">
+            Sidebar is Contacts, About Me, and Languages (show/hide only). Main holds Skills and the rest — reorder with ↑↓ and use Show to hide. Sidebar overflow continues on full two-column pages; main-only pages are used when only the main column overflows.
+          </p>
+          <h3 style="font-size:0.68rem;font-weight:700;color:#6b7076;margin:0 0 0.4rem;text-transform:none;letter-spacing:0">Sidebar</h3>
+          <div class="section-order-list" id="order-sidebar"></div>
+          <h3 style="font-size:0.68rem;font-weight:700;color:#6b7076;margin:0.75rem 0 0.4rem;text-transform:none;letter-spacing:0">Main</h3>
+          <div class="section-order-list" id="order-main"></div>
+        </fieldset>
+      </div>
+    </form>
+  </aside>
+  <input type="file" id="photo-input" accept="image/*" hidden />
+
+  <div class="pages" id="cv-pages">
+  <article class="page" id="cv-page-1">
     <aside class="sidebar">
       <header class="profile">
-        <img class="avatar" src="photo.jpg" alt="Portrait of Lorna Alvarado" width="188" height="188" />
-        <h1 class="name">Lorna<br />Alvarado</h1>
-        <p class="title">Marketing Manager</p>
+        <img class="avatar" src="photo.jpg" alt="Portrait of Lorna Alvarado" width="188" height="188" data-photo />
+        <h1 class="name" data-edit="name" data-edit-html="true">Lorna<br />Alvarado</h1>
+        <p class="title" data-edit="title">Marketing Manager</p>
       </header>
 
-      <section class="side-section contact" aria-labelledby="contact-heading">
+      <section class="side-section contact" data-section="contact" aria-labelledby="contact-heading">
         <h2 id="contact-heading" class="side-heading">
           <!-- tabler:id-filled -->
           <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M18 3a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7q0-.053.005-.102A3.994 3.994 0 0 1 6 3zm-1 12H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2M9 7a2.995 2.995 0 0 0-2.995 2.898A1 1 0 0 0 6 10a3 3 0 1 0 3-3m8 4h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2m0-4h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2" />
           </svg>
-          Contact
+          Contacts
         </h2>
-        <ul class="contact-list">
-          <li>
-            <!-- tabler:phone -->
+        <ul class="contact-list" id="cv-contact-list">
+          <li data-contact="phone">
+            <!-- tabler:brand-whatsapp -->
             <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
+              <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+              <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" />
             </svg>
-            <span>+123-456-7890</span>
+            <a data-edit="phone" href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">+62 81234567890</a>
           </li>
-          <li>
-            <!-- tabler:at -->
+          <li data-contact="email">
+            <!-- tabler:mail -->
             <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0" />
-              <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-5.5 8.28" />
+              <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
+              <path d="M3 7l9 6l9 -6" />
             </svg>
-            <span>hello@reallygreatsite.com</span>
+            <a data-edit="email" href="mailto:hello@reallygreatsite.com">hello@reallygreatsite.com</a>
           </li>
-          <li>
+          <li data-contact="address">
             <!-- tabler:map-pin -->
             <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0-6 0" />
               <path d="M17.657 16.657L13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0" />
             </svg>
-            <span>123 Anywhere St., Any City, ST 12345</span>
+            <span data-edit="address">123 Anywhere St., Any City, ST 12345</span>
+          </li>
+          <li data-contact="linkedin">
+            <!-- tabler:brand-linkedin -->
+            <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 11v5m0-8v.01M12 16v-5m4 5v-3a2 2 0 1 0-4 0" />
+              <path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" />
+            </svg>
+            <a data-edit="linkedin" href="https://linkedin.com/in/username" target="_blank" rel="noopener noreferrer">linkedin.com/in/username</a>
+          </li>
+          <li data-contact="github">
+            <!-- tabler:brand-github -->
+            <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21" />
+            </svg>
+            <a data-edit="github" href="https://github.com/username" target="_blank" rel="noopener noreferrer">github.com/username</a>
           </li>
         </ul>
       </section>
 
-      <section class="side-section about" aria-labelledby="about-heading">
+      <section class="side-section about" data-section="about" aria-labelledby="about-heading">
         <h2 id="about-heading" class="side-heading">
           <!-- tabler:user-filled -->
           <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
@@ -438,7 +1954,7 @@
           </svg>
           About Me
         </h2>
-        <p class="about-text">
+        <p class="about-text" data-edit="about">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -446,126 +1962,72 @@
         </p>
       </section>
 
-      <section class="side-section skills" aria-labelledby="skills-heading">
-        <h2 id="skills-heading" class="side-heading">
+      <section class="side-section languages" data-section="languages" aria-labelledby="languages-heading">
+        <h2 id="languages-heading" class="side-heading">
+          <!-- tabler:world-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.165 16a10 10 0 0 1 -8.434 5.973a1 1 0 0 0 .617 -.444a18 18 0 0 0 2.28 -5.528z" />
+            <path d="M8.372 16a18 18 0 0 0 2.28 5.53a1 1 0 0 0 .616 .443a10 10 0 0 1 -8.433 -5.973z" />
+            <path d="M13.57 16a16 16 0 0 1 -1.57 3.884a16 16 0 0 1 -1.57 -3.884" />
+            <path d="M8.034 10a18 18 0 0 0 0 4h-5.832a10 10 0 0 1 -.002 -4z" />
+            <path d="M13.952 10a16 16 0 0 1 0 4h-3.904a16 16 0 0 1 0 -4z" />
+            <path d="M21.8 10a10.05 10.05 0 0 1 -.002 4h-5.832c.149 -1.329 .149 -2.67 0 -4z" />
+            <path d="M11.267 2.027a1 1 0 0 0 -.615 .444a18 18 0 0 0 -2.28 5.529h-5.54a10.01 10.01 0 0 1 8.334 -5.967z" />
+            <path d="M12 4.116a16 16 0 0 1 1.57 3.885h-3.14c.34 -1.317 .85 -2.6 1.53 -3.817z" />
+            <path d="M12.733 2.026a10.01 10.01 0 0 1 8.435 5.974h-5.54a18 18 0 0 0 -2.28 -5.53a1 1 0 0 0 -.517 -.414z" />
+          </svg>
+          Languages
+        </h2>
+        <ul class="skills-list" id="cv-languages"></ul>
+      </section>
+    </aside>
+
+    <div class="main">
+      <section data-section="skills" aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="main-section-heading">
           <!-- tabler:puzzle-filled -->
           <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M10 2a3 3 0 0 1 2.995 2.824L13 5v1h3a2 2 0 0 1 1.995 1.85L18 8v3h1a3 3 0 0 1 .176 5.995L19 17h-1v3a2 2 0 0 1-1.85 1.995L16 22h-3a2 2 0 0 1-1.995-1.85L11 20v-1a1 1 0 0 0-1.993-.117L9 19v1a2 2 0 0 1-1.85 1.995L7 22H4a2 2 0 0 1-1.995-1.85L2 20v-3a2 2 0 0 1 1.85-1.995L4 15h1a1 1 0 0 0 .117-1.993L5 13H4a2 2 0 0 1-1.995-1.85L2 11V8a2 2 0 0 1 1.85-1.995L4 6h3V5a3 3 0 0 1 3-3" />
           </svg>
           Skills
         </h2>
-        <ul class="skills-list">
-          <li>Management Skills</li>
-          <li>Creativity</li>
-          <li>Digital Marketing</li>
-          <li>Negotiation</li>
-          <li>Critical Thinking</li>
-          <li>Leadership</li>
-        </ul>
+        <ul class="skills-list" id="cv-skills"></ul>
       </section>
-    </aside>
 
-    <div class="main">
-      <section aria-labelledby="education-heading">
+      <section data-section="education" aria-labelledby="education-heading">
         <h2 id="education-heading" class="main-section-heading">
-          <!-- tabler:school (outline — no filled variant) -->
-          <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M22 9L12 5L2 9l10 4v6" />
-            <path d="M6 10.6V16a6 3 0 0 0 12 0v-5.4" />
+          <!-- tabler:school-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 13.431v2.569c0 2.398 -3.205 4 -7 4s-7 -1.602 -7 -4v-2.569l5.886 2.354a3 3 0 0 0 2.011 .078l.217 -.078zm2 -2.955l-8.629 3.452a1 1 0 0 1 -.742 0l-10 -4c-.839 -.335 -.839 -1.521 0 -1.856l10 -4a1 1 0 0 1 .245 -.064l.126 -.008l.126 .008a1 1 0 0 1 .245 .064l10.032 4.013l.108 .055l.099 .068l.088 .076l.075 .082l.035 .044l.073 .115l.052 .115l.034 .102l.025 .135l.006 .058l.002 6.065a1 1 0 0 1 -2 0z" />
           </svg>
-          Education
+          Educations
         </h2>
-        <div class="timeline">
-          <article class="entry">
-            <h3 class="entry-title">Bachelor of Business Management</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Borcelle University</span>
-              <span class="entry-date">2016 - 2020</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque. Sed leo nisl, semper ac
-              hendrerit a, sollicitudin in arcu.
-            </p>
-          </article>
-          <article class="entry">
-            <h3 class="entry-title">Bachelor of Business Management</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Borcelle University</span>
-              <span class="entry-date">2020 - 2023</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque. Sed leo nisl, semper ac
-              hendrerit a, sollicitudin in arcu.
-            </p>
-          </article>
-        </div>
+        <div class="timeline" id="cv-education"></div>
       </section>
 
-      <section class="experience" aria-labelledby="experience-heading">
+      <section class="experience" data-section="experience" aria-labelledby="experience-heading">
         <h2 id="experience-heading" class="main-section-heading">
           <!-- tabler:briefcase-filled -->
           <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M22 13.478V18a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-4.522l.553.277a21 21 0 0 0 18.897-.002zM14 2a3 3 0 0 1 3 3v1h2a3 3 0 0 1 3 3v2.242l-1.447.724a19 19 0 0 1-16.726.186l-.647-.32l-1.18-.59V9a3 3 0 0 1 3-3h2V5a3 3 0 0 1 3-3zm-2 8a1 1 0 0 0-1 1a1 1 0 1 0 2 .01c0-.562-.448-1.01-1-1.01m2-6h-4a1 1 0 0 0-1 1v1h6V5a1 1 0 0 0-1-1" />
           </svg>
-          Experience
+          Work Experiences
         </h2>
-        <div class="timeline experience-timeline">
-          <article class="entry">
-            <h3 class="entry-title">Product Design Manager</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Arowwai Industries</span>
-              <span class="entry-date">2016 - 2020</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque.
-            </p>
-          </article>
-          <article class="entry">
-            <h3 class="entry-title">Marketing Manager</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Arowwai Industries</span>
-              <span class="entry-date">2019 - 2020</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque.
-            </p>
-          </article>
-          <article class="entry">
-            <h3 class="entry-title">Marketing Manager</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Arowwai Industries</span>
-              <span class="entry-date">2017 - 2019</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque.
-            </p>
-          </article>
-          <article class="entry">
-            <h3 class="entry-title">Marketing Manager</h3>
-            <div class="entry-meta">
-              <span class="entry-org">Arowwai Industries</span>
-              <span class="entry-date">2016 - 2017</span>
-            </div>
-            <p class="entry-desc">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
-              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
-              quam eget, luctus sollicitudin neque.
-            </p>
-          </article>
-        </div>
+        <div class="timeline experience-timeline" id="cv-experience"></div>
       </section>
 
-      <section class="section-references" aria-labelledby="references-heading">
+      <section data-section="projects" aria-labelledby="projects-heading">
+        <h2 id="projects-heading" class="main-section-heading">
+          <!-- tabler:folder-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 4a1 1 0 0 1 .608 .206l.1 .087l1.892 1.892a1 1 0 0 0 .608 .206h6.792a3 3 0 0 1 2.995 2.824l.005 .176v8.615a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-11a3 3 0 0 1 2.824 -2.995l.176 -.005h4z" />
+          </svg>
+          Projects
+        </h2>
+        <div class="projects-list" id="cv-projects"></div>
+      </section>
+
+      <section class="section-references" data-section="references" aria-labelledby="references-heading">
         <h2 id="references-heading" class="main-section-heading">
           <!-- tabler:book-filled -->
           <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
@@ -573,26 +2035,2714 @@
           </svg>
           References
         </h2>
-        <div class="ref-grid">
-          <div>
-            <p class="ref-name">Harumi Kobayashi</p>
-            <p class="ref-role">Wardiere Inc. / CEO</p>
-            <p class="ref-meta">
-              <strong>Phone:</strong> 123-456-7890<br />
-              <strong>Email :</strong> hello@reallygreatsite.com
-            </p>
-          </div>
-          <div>
-            <p class="ref-name">Bailey Dupont</p>
-            <p class="ref-role">Wardiere Inc. / CEO</p>
-            <p class="ref-meta">
-              <strong>Phone:</strong> 123-456-7890<br />
-              <strong>Email :</strong> hello@reallygreatsite.com
-            </p>
-          </div>
-        </div>
+        <div class="ref-grid" id="cv-references"></div>
       </section>
     </div>
   </article>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "cv-live-edit-v5";
+      const PANEL_KEY = "cv-drawer-open-v1";
+      const ZOOM_KEY = "cv-zoom-v1";
+      const ZOOM_MODE_KEY = "cv-zoom-mode-v1";
+      const TAB_KEY = "cv-drawer-tab-v1";
+      const DEFAULT_PHOTO = "photo.jpg";
+      const ZOOM_STEPS = [0.5, 0.6, 0.75, 0.85, 1, 1.15, 1.25, 1.5, 1.75, 2];
+      const ZOOM_MIN = ZOOM_STEPS[0];
+      const ZOOM_MAX = ZOOM_STEPS[ZOOM_STEPS.length - 1];
+      const DEFAULT_ZOOM = 1;
+      const FIT_PAD = 16;
+      const LOREM =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.";
+
+      const TYPE_DEFAULTS = {
+        font: "Montserrat",
+        "size-name": "30",
+        "size-job": "12",
+        "size-section": "15",
+        "size-body": "8.5",
+        "size-item-title": "10",
+        "size-item-sub": "9",
+        "line-height-body": "1.55",
+        "text-align-body": "left",
+        "color-name": "#608abf",
+        "color-job": "#636466",
+        "color-section": "#636466",
+        "color-body": "#636466",
+        "color-item-title": "#636466",
+        "color-item-sub": "#636466",
+        accent: "#608abf",
+        "bg-sidebar": "#f7f7f7",
+        "bg-main": "#ffffff",
+        "photo-ring-color": "#ffffff",
+        "triangle-deg": "45",
+        "photo-size": "141",
+        "photo-ring": "5",
+        "size-icon-title": "14",
+        "size-icon-contact": "15",
+        "timeline-dot": "6.6",
+        "timeline-line": "0.75",
+        "pad-sidebar-top": "0",
+        "pad-sidebar-right": "25",
+        "pad-sidebar-bottom": "18",
+        "pad-sidebar-left": "25",
+        "pad-profile-top": "30",
+        "pad-profile-bottom": "31",
+        "pad-main-top": "50",
+        "pad-main-right": "37",
+        "pad-main-bottom": "30",
+        "pad-main-left": "32",
+        "gap-photo-name": "15",
+        "gap-side-section": "28",
+        "gap-main-section": "20",
+        "gap-timeline-items": "18",
+        "gap-list-items": "10",
+        "gap-icon-title": "8",
+        "gap-icon-contact": "8",
+        "gap-title-line": "9",
+        "gap-underline-content": "16",
+        "gap-title-subtitle": "1",
+        "gap-subtitle-content": "4",
+        "gap-title-content": "4",
+        "pad-cont-main-top": "40",
+        "pad-cont-main-right": "34",
+        "pad-cont-main-bottom": "30",
+        "pad-cont-main-left": "34",
+      };
+
+      const CSS_VAR_MAP = {
+        font: "--cv-font",
+        "size-name": "--size-name",
+        "size-job": "--size-job",
+        "size-section": "--size-section",
+        "size-body": "--size-body",
+        "size-item-title": "--size-item-title",
+        "size-item-sub": "--size-item-sub",
+        "line-height-body": "--line-height-body",
+        "text-align-body": "--text-align-body",
+        "color-name": "--color-name",
+        "color-job": "--color-job",
+        "color-section": "--color-section",
+        "color-body": "--color-body",
+        "color-item-title": "--color-item-title",
+        "color-item-sub": "--color-item-sub",
+        accent: "--accent",
+        "bg-sidebar": "--bg-sidebar",
+        "bg-main": "--bg-main",
+        "photo-ring-color": "--photo-ring-color",
+        "triangle-deg": "--triangle-deg",
+        "photo-size": "--photo-size",
+        "photo-ring": "--photo-ring",
+        "size-icon-title": "--size-icon-title",
+        "size-icon-contact": "--size-icon-contact",
+        "timeline-dot": "--timeline-dot",
+        "timeline-line": "--timeline-line",
+        "pad-sidebar-top": "--pad-sidebar-top",
+        "pad-sidebar-right": "--pad-sidebar-right",
+        "pad-sidebar-bottom": "--pad-sidebar-bottom",
+        "pad-sidebar-left": "--pad-sidebar-left",
+        "pad-profile-top": "--pad-profile-top",
+        "pad-profile-bottom": "--pad-profile-bottom",
+        "pad-main-top": "--pad-main-top",
+        "pad-main-right": "--pad-main-right",
+        "pad-main-bottom": "--pad-main-bottom",
+        "pad-main-left": "--pad-main-left",
+        "gap-photo-name": "--gap-photo-name",
+        "gap-side-section": "--gap-side-section",
+        "gap-main-section": "--gap-main-section",
+        "gap-timeline-items": "--gap-timeline-items",
+        "gap-list-items": "--gap-list-items",
+        "gap-icon-title": "--gap-icon-title",
+        "gap-icon-contact": "--gap-icon-contact",
+        "gap-title-line": "--gap-title-line",
+        "gap-underline-content": "--gap-underline-content",
+        "gap-title-subtitle": "--gap-title-subtitle",
+        "gap-subtitle-content": "--gap-subtitle-content",
+        "gap-title-content": "--gap-title-content",
+        "pad-cont-main-top": "--pad-cont-main-top",
+        "pad-cont-main-right": "--pad-cont-main-right",
+        "pad-cont-main-bottom": "--pad-cont-main-bottom",
+        "pad-cont-main-left": "--pad-cont-main-left",
+      };
+
+      const CONTACT_KEYS = ["phone", "email", "address", "linkedin", "github"];
+
+      const CONTACT_VISIBILITY_DEFAULTS = {
+        phone: true,
+        email: true,
+        address: true,
+        linkedin: true,
+        github: true,
+      };
+
+      const SECTION_ORDER_DEFAULTS = {
+        sidebar: ["contact", "about", "languages"],
+        main: ["skills", "education", "experience", "projects", "references"],
+      };
+
+      const SECTION_VISIBILITY_DEFAULTS = {
+        contact: true,
+        about: true,
+        languages: true,
+        skills: true,
+        education: true,
+        experience: true,
+        projects: true,
+        references: true,
+      };
+
+      const DRAWER_TABS = ["content", "type", "spacing", "sections"];
+
+      const SECTION_LABELS = {
+        contact: "Contacts",
+        about: "About Me",
+        languages: "Languages",
+        skills: "Skills",
+        education: "Educations",
+        experience: "Work Experiences",
+        projects: "Projects",
+        references: "References",
+      };
+
+      const MONTH_OPTIONS = [
+        ["", "—"],
+        ["1", "Jan"],
+        ["2", "Feb"],
+        ["3", "Mar"],
+        ["4", "Apr"],
+        ["5", "May"],
+        ["6", "Jun"],
+        ["7", "Jul"],
+        ["8", "Aug"],
+        ["9", "Sep"],
+        ["10", "Oct"],
+        ["11", "Nov"],
+        ["12", "Dec"],
+      ];
+
+      const SAMPLE_LISTS = {
+        skills: [
+          {
+            name: "",
+            skills: [
+              "Management Skills",
+              "Creativity",
+              "Digital Marketing",
+              "Negotiation",
+              "Critical Thinking",
+              "Leadership",
+            ],
+          },
+        ],
+        languages: ["English", "Spanish", "French"],
+        education: [
+          {
+            title: "Bachelor of Business Management",
+            org: "Borcelle University",
+            location: "Any City, ST",
+            startYear: "2016",
+            startMonth: "",
+            endYear: "2020",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM + " Sed leo nisl, semper ac hendrerit a, sollicitudin in arcu.",
+          },
+          {
+            title: "Bachelor of Business Management",
+            org: "Borcelle University",
+            location: "Any City, ST",
+            startYear: "2020",
+            startMonth: "",
+            endYear: "2023",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM + " Sed leo nisl, semper ac hendrerit a, sollicitudin in arcu.",
+          },
+        ],
+        experience: [
+          {
+            title: "Product Design Manager",
+            org: "Arowwai Industries",
+            location: "Any City, ST",
+            startYear: "2016",
+            startMonth: "",
+            endYear: "2020",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM,
+          },
+          {
+            title: "Marketing Manager",
+            org: "Arowwai Industries",
+            location: "Any City, ST",
+            startYear: "2019",
+            startMonth: "",
+            endYear: "2020",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM,
+          },
+          {
+            title: "Marketing Manager",
+            org: "Arowwai Industries",
+            location: "Any City, ST",
+            startYear: "2017",
+            startMonth: "",
+            endYear: "2019",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM,
+          },
+          {
+            title: "Marketing Manager",
+            org: "Arowwai Industries",
+            location: "Any City, ST",
+            startYear: "2016",
+            startMonth: "",
+            endYear: "2017",
+            endMonth: "",
+            endPresent: false,
+            desc: LOREM,
+          },
+        ],
+        projects: [
+          {
+            title: "Brand Campaign Hub",
+            reference: "github.com/username/brand-hub",
+            referenceLink: true,
+            year: "2023",
+            desc: LOREM,
+            bullets: false,
+          },
+        ],
+        references: [
+          {
+            name: "Harumi Kobayashi",
+            role: "Wardiere Inc. / CEO",
+            phone: "123-456-7890",
+            email: "hello@reallygreatsite.com",
+          },
+          {
+            name: "Bailey Dupont",
+            role: "Wardiere Inc. / CEO",
+            phone: "123-456-7890",
+            email: "hello@reallygreatsite.com",
+          },
+        ],
+      };
+
+      const LIST_LABELS = {
+        skills: "Category",
+        languages: "Language",
+        education: "Education",
+        experience: "Experience",
+        projects: "Project",
+        references: "Reference",
+      };
+
+      const LINKEDIN_PREFIX = "linkedin.com/in/";
+      const GITHUB_PREFIX = "github.com/";
+      const LINKEDIN_URL_PREFIX = "https://linkedin.com/in/";
+      const GITHUB_URL_PREFIX = "https://github.com/";
+      const PHONE_COUNTRY_DIGITS = "62";
+      const PHONE_DISPLAY_PREFIX = "+62";
+
+      const toggleBtn = document.getElementById("drawer-toggle");
+      const closeBtn = document.getElementById("drawer-close");
+      const resetBtn = document.getElementById("edit-reset");
+      const drawer = document.getElementById("settings-drawer");
+      const drawerBackdrop = document.getElementById("drawer-backdrop");
+      const form = document.getElementById("settings-form");
+      const photoInput = document.getElementById("photo-input");
+      const photoPick = document.getElementById("photo-pick");
+      const photoPreview = document.getElementById("photo-preview");
+      const avatar = document.querySelector("[data-photo]");
+      const nameEl = document.querySelector('[data-edit="name"]');
+      const nameLine1 = document.getElementById("f-name-line1");
+      const nameLine2 = document.getElementById("f-name-line2");
+      const root = document.documentElement;
+      const zoomInBtn = document.getElementById("zoom-in");
+      const zoomOutBtn = document.getElementById("zoom-out");
+      const zoomResetBtn = document.getElementById("zoom-reset");
+      const zoomFitHeightBtn = document.getElementById("zoom-fit-height");
+      const zoomFitWidthBtn = document.getElementById("zoom-fit-width");
+      const exportPdfBtn = document.getElementById("export-pdf");
+      const zoomLabel = document.getElementById("zoom-label");
+      const pagesEl = document.getElementById("cv-pages");
+      const pageEl = document.getElementById("cv-page-1");
+
+      let zoom = DEFAULT_ZOOM;
+      let zoomMode = "manual"; // manual | height | width
+      let fitRaf = 0;
+      let paginateRaf = 0;
+
+      const editors = {
+        skills: document.getElementById("skills-editor"),
+        languages: document.getElementById("languages-editor"),
+        education: document.getElementById("education-editor"),
+        experience: document.getElementById("experience-editor"),
+        projects: document.getElementById("projects-editor"),
+        references: document.getElementById("references-editor"),
+      };
+      const cvTargets = {
+        skills: document.getElementById("cv-skills"),
+        languages: document.getElementById("cv-languages"),
+        education: document.getElementById("cv-education"),
+        experience: document.getElementById("cv-experience"),
+        projects: document.getElementById("cv-projects"),
+        references: document.getElementById("cv-references"),
+      };
+
+      let defaults = null;
+      let saveTimer = null;
+      let photoSrc = DEFAULT_PHOTO;
+      let lists = cloneLists(SAMPLE_LISTS);
+      let contactVisibility = { ...CONTACT_VISIBILITY_DEFAULTS };
+      let sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
+      let sectionOrder = {
+        sidebar: [...SECTION_ORDER_DEFAULTS.sidebar],
+        main: [...SECTION_ORDER_DEFAULTS.main],
+      };
+      let dragState = null;
+      let activeTab = "content";
+
+      const orderEditors = {
+        sidebar: document.getElementById("order-sidebar"),
+        main: document.getElementById("order-main"),
+      };
+      const drawerTabs = [...document.querySelectorAll(".drawer-tab")];
+      const drawerPanels = [...document.querySelectorAll(".drawer-panel")];
+
+      function getSidebarEl() {
+        return pageEl.querySelector(".sidebar");
+      }
+
+      function getMainEl() {
+        return pageEl.querySelector(".main");
+      }
+
+      function findPrimarySection(id) {
+        return pageEl.querySelector(`[data-section="${id}"]:not([data-continued])`)
+          || document.querySelector(`[data-section="${id}"]:not([data-continued])`);
+      }
+
+      function cloneLists(src) {
+        return {
+          skills: (src.skills || []).map(cloneSkillCategory),
+          languages: [...(src.languages || [])],
+          education: (src.education || []).map((e) => ({ ...e })),
+          experience: (src.experience || []).map((e) => ({ ...e })),
+          projects: (src.projects || []).map((e) => ({ ...e })),
+          references: (src.references || []).map((e) => ({ ...e })),
+        };
+      }
+
+      function cloneSkillCategory(item) {
+        if (typeof item === "string") {
+          return { name: "", skills: [item] };
+        }
+        return {
+          name: item && item.name != null ? String(item.name) : "",
+          skills: Array.isArray(item && item.skills)
+            ? item.skills.map((s) => String(s == null ? "" : s))
+            : [],
+        };
+      }
+
+      function isFlatSkillStringList(arr) {
+        return Array.isArray(arr) && arr.every((item) => typeof item === "string");
+      }
+
+      function formatSkillCategoryLine(cat) {
+        const name = String(cat.name || "").trim();
+        const skills = (cat.skills || [])
+          .map((s) => String(s || "").trim())
+          .filter(Boolean);
+        if (!skills.length) return null;
+        const joined = skills.join(", ");
+        if (!name) return escapeHtml(joined);
+        return `${escapeHtml(name)} — ${escapeHtml(joined)}`;
+      }
+
+      function normalizeTimelineItem(item) {
+        const next = {
+          title: item.title || "",
+          org: item.org || "",
+          location: item.location || "",
+          startYear: item.startYear || "",
+          startMonth: item.startMonth || "",
+          endYear: item.endYear || "",
+          endMonth: item.endMonth || "",
+          endPresent: !!item.endPresent,
+          desc: item.desc || "",
+          bullets: !!item.bullets,
+        };
+        if (!next.startYear && !next.endYear && item.date) {
+          const parsed = parseLegacyDate(item.date);
+          Object.assign(next, parsed);
+        }
+        return next;
+      }
+
+      function normalizeProjectItem(item) {
+        return {
+          title: item.title || "",
+          reference: item.reference || "",
+          referenceLink: !!item.referenceLink,
+          year: item.year || "",
+          desc: item.desc || "",
+          bullets: !!item.bullets,
+        };
+      }
+
+      function normalizeHref(raw) {
+        let value = String(raw || "").trim();
+        if (!value) return "";
+        if (/^(https?:|mailto:|tel:)/i.test(value)) return value;
+        if (value.startsWith("//")) return `https:${value}`;
+        return `https://${value}`;
+      }
+
+      function parseLegacyDate(raw) {
+        const text = String(raw || "").trim();
+        const present = /present|current|now/i.test(text);
+        const years = [...text.matchAll(/\b(19|20)\d{2}\b/g)].map((m) => m[0]);
+        const months = [];
+        const monthRe =
+          /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/gi;
+        let m;
+        while ((m = monthRe.exec(text))) {
+          const key = m[1].slice(0, 3).toLowerCase();
+          const map = {
+            jan: "1",
+            feb: "2",
+            mar: "3",
+            apr: "4",
+            may: "5",
+            jun: "6",
+            jul: "7",
+            aug: "8",
+            sep: "9",
+            oct: "10",
+            nov: "11",
+            dec: "12",
+          };
+          months.push(map[key] || "");
+        }
+        return {
+          startYear: years[0] || "",
+          startMonth: months[0] || "",
+          endYear: present ? "" : years[1] || years[0] || "",
+          endMonth: present ? "" : months[1] || "",
+          endPresent: present,
+        };
+      }
+
+      function monthLabel(value) {
+        const found = MONTH_OPTIONS.find(([v]) => v === String(value || ""));
+        return found ? found[1] : "";
+      }
+
+      function formatDatePart(year, month) {
+        const y = String(year || "").trim();
+        if (!y) return "";
+        const m = monthLabel(month);
+        return m && m !== "—" ? `${m} ${y}` : y;
+      }
+
+      function formatEntryDates(item) {
+        const start = formatDatePart(item.startYear, item.startMonth);
+        if (item.endPresent) {
+          return start ? `${start} – Present` : "Present";
+        }
+        const end = formatDatePart(item.endYear, item.endMonth);
+        if (start && end) return `${start} – ${end}`;
+        return start || end || "";
+      }
+
+      function monthSelectHtml(id, kind, index, field, value) {
+        const opts = MONTH_OPTIONS.map(
+          ([v, label]) =>
+            `<option value="${v}"${String(value || "") === v ? " selected" : ""}>${label}</option>`
+        ).join("");
+        return `<select id="${id}" data-list="${kind}" data-index="${index}" data-field="${field}">${opts}</select>`;
+      }
+
+      function dateFieldsHtml(prefix, kind, index, item) {
+        return `
+          <div class="date-grid">
+            <div class="field">
+              <label for="${prefix}-${index}-start-year">Start year</label>
+              <input id="${prefix}-${index}-start-year" type="number" min="1950" max="2100" step="1" data-list="${kind}" data-index="${index}" data-field="startYear" value="${escapeHtml(item.startYear || "")}" />
+            </div>
+            <div class="field">
+              <label for="${prefix}-${index}-start-month">Start month</label>
+              ${monthSelectHtml(`${prefix}-${index}-start-month`, kind, index, "startMonth", item.startMonth)}
+            </div>
+            <div class="field">
+              <label for="${prefix}-${index}-end-year">End year</label>
+              <input id="${prefix}-${index}-end-year" type="number" min="1950" max="2100" step="1" data-list="${kind}" data-index="${index}" data-field="endYear" value="${escapeHtml(item.endYear || "")}" ${item.endPresent ? "disabled" : ""} />
+            </div>
+            <div class="field">
+              <label for="${prefix}-${index}-end-month">End month</label>
+              ${monthSelectHtml(`${prefix}-${index}-end-month`, kind, index, "endMonth", item.endMonth).replace(
+                "<select ",
+                item.endPresent ? '<select disabled ' : "<select "
+              )}
+            </div>
+          </div>
+          <div class="present-row">
+            <input id="${prefix}-${index}-present" type="checkbox" data-list="${kind}" data-index="${index}" data-field="endPresent" ${item.endPresent ? "checked" : ""} />
+            <label for="${prefix}-${index}-present">Present / current</label>
+          </div>`;
+      }
+
+      function cloneOrder(src) {
+        return {
+          sidebar: [...src.sidebar],
+          main: [...src.main],
+        };
+      }
+
+      function boundInputs() {
+        return [...form.querySelectorAll("[data-bind]")];
+      }
+
+      function typeInputs() {
+        return [...form.querySelectorAll("[data-type]")];
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function fontStack(name) {
+        const serif = new Set([
+          "Playfair Display",
+          "Merriweather",
+          "EB Garamond",
+          "Libre Baskerville",
+          "Source Serif 4",
+        ]);
+        return serif.has(name) ? `"${name}", serif` : `"${name}", sans-serif`;
+      }
+
+      function readType() {
+        const type = {};
+        typeInputs().forEach((input) => {
+          type[input.getAttribute("data-type")] = input.value;
+        });
+        return type;
+      }
+
+      function applyType(type) {
+        if (!type) return;
+        const normalized = { ...type };
+        if (normalized["gap-heading-content"] != null && normalized["gap-underline-content"] == null) {
+          normalized["gap-underline-content"] = normalized["gap-heading-content"];
+        }
+        if (normalized["gap-items"] != null) {
+          if (normalized["gap-timeline-items"] == null) {
+            normalized["gap-timeline-items"] = normalized["gap-items"];
+          }
+          if (normalized["gap-list-items"] == null) {
+            const n = Number(normalized["gap-items"]);
+            normalized["gap-list-items"] = Number.isFinite(n)
+              ? String(Math.round(n * 0.55 * 10) / 10)
+              : TYPE_DEFAULTS["gap-list-items"];
+          }
+        }
+        if (normalized["pad-sidebar-x"] != null) {
+          if (normalized["pad-sidebar-left"] == null) {
+            normalized["pad-sidebar-left"] = normalized["pad-sidebar-x"];
+          }
+          if (normalized["pad-sidebar-right"] == null) {
+            normalized["pad-sidebar-right"] = normalized["pad-sidebar-x"];
+          }
+        }
+        if (normalized["pad-main-x"] != null) {
+          if (normalized["pad-main-left"] == null) {
+            normalized["pad-main-left"] = normalized["pad-main-x"];
+          }
+          if (normalized["pad-main-right"] == null) {
+            normalized["pad-main-right"] = normalized["pad-main-x"];
+          }
+        }
+        if (normalized["pad-cont-main-x"] != null) {
+          if (normalized["pad-cont-main-left"] == null) {
+            normalized["pad-cont-main-left"] = normalized["pad-cont-main-x"];
+          }
+          if (normalized["pad-cont-main-right"] == null) {
+            normalized["pad-cont-main-right"] = normalized["pad-cont-main-x"];
+          }
+        }
+        if (normalized["text-align-body"] !== "left" && normalized["text-align-body"] !== "justify") {
+          normalized["text-align-body"] = TYPE_DEFAULTS["text-align-body"];
+        }
+        Object.keys(CSS_VAR_MAP).forEach((key) => {
+          if (!(key in normalized)) return;
+          const cssVar = CSS_VAR_MAP[key];
+          const value = key === "font" ? fontStack(normalized[key]) : normalized[key];
+          root.style.setProperty(cssVar, value);
+        });
+      }
+
+      function fillTypeForm(type) {
+        const src = { ...TYPE_DEFAULTS, ...(type || {}) };
+        if (src["gap-heading-content"] != null && type && type["gap-underline-content"] == null) {
+          src["gap-underline-content"] = src["gap-heading-content"];
+        }
+        if (src["gap-items"] != null) {
+          if (type && type["gap-timeline-items"] == null) src["gap-timeline-items"] = src["gap-items"];
+          if (type && type["gap-list-items"] == null) {
+            const n = Number(src["gap-items"]);
+            src["gap-list-items"] = Number.isFinite(n)
+              ? String(Math.round(n * 0.55 * 10) / 10)
+              : TYPE_DEFAULTS["gap-list-items"];
+          }
+        }
+        if (src["pad-sidebar-x"] != null) {
+          if (type && type["pad-sidebar-left"] == null) src["pad-sidebar-left"] = src["pad-sidebar-x"];
+          if (type && type["pad-sidebar-right"] == null) src["pad-sidebar-right"] = src["pad-sidebar-x"];
+        }
+        if (src["pad-main-x"] != null) {
+          if (type && type["pad-main-left"] == null) src["pad-main-left"] = src["pad-main-x"];
+          if (type && type["pad-main-right"] == null) src["pad-main-right"] = src["pad-main-x"];
+        }
+        if (src["pad-cont-main-x"] != null) {
+          if (type && type["pad-cont-main-left"] == null) src["pad-cont-main-left"] = src["pad-cont-main-x"];
+          if (type && type["pad-cont-main-right"] == null) src["pad-cont-main-right"] = src["pad-cont-main-x"];
+        }
+        if (src["text-align-body"] !== "left" && src["text-align-body"] !== "justify") {
+          src["text-align-body"] = TYPE_DEFAULTS["text-align-body"];
+        }
+        typeInputs().forEach((input) => {
+          const key = input.getAttribute("data-type");
+          if (key in src) input.value = src[key];
+        });
+      }
+
+      function nameFromCv() {
+        const html = nameEl ? nameEl.innerHTML : "";
+        const parts = html.split(/<br\s*\/?>/i).map((p) =>
+          p.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim()
+        );
+        return { line1: parts[0] || "", line2: parts[1] || "" };
+      }
+
+      function setNameOnCv(line1, line2) {
+        if (!nameEl) return;
+        const a = escapeHtml((line1 || "").trim());
+        const b = escapeHtml((line2 || "").trim());
+        nameEl.innerHTML = b ? `${a}<br />${b}` : a;
+      }
+
+      function emptyItem(kind) {
+        if (kind === "skills") return { name: "", skills: [""] };
+        if (kind === "languages") return "";
+        if (kind === "references") {
+          return { name: "", role: "", phone: "", email: "" };
+        }
+        if (kind === "projects") {
+          return {
+            title: "",
+            reference: "",
+            referenceLink: false,
+            year: "",
+            desc: "",
+            bullets: false,
+          };
+        }
+        return {
+          title: "",
+          org: "",
+          location: "",
+          startYear: "",
+          startMonth: "",
+          endYear: "",
+          endMonth: "",
+          endPresent: false,
+          desc: "",
+          bullets: false,
+        };
+      }
+
+      function itemToolbar(kind, index, label, total) {
+        const atStart = index === 0;
+        const atEnd = index === total - 1;
+        return `
+          <div class="item-head">
+            <button type="button" class="drag-handle" draggable="true" data-drag="${kind}" data-index="${index}" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</button>
+            <h4>${label} ${index + 1}</h4>
+            <div class="item-actions">
+              <button type="button" data-move="${kind}" data-index="${index}" data-dir="-1" ${atStart ? "disabled" : ""} title="Move up">↑</button>
+              <button type="button" data-move="${kind}" data-index="${index}" data-dir="1" ${atEnd ? "disabled" : ""} title="Move down">↓</button>
+              <button type="button" class="danger" data-remove="${kind}" data-index="${index}">Remove</button>
+            </div>
+          </div>`;
+      }
+
+      function renderEditors() {
+        function simpleListEditor(kind, items, label, placeholder) {
+          editors[kind].innerHTML = items.length
+            ? items
+                .map(
+                  (value, i) => `
+          <div class="drawer-subgroup" data-kind="${kind}" data-index="${i}">
+            ${itemToolbar(kind, i, label, items.length)}
+            <div class="field">
+              <label for="${kind}-${i}">${label}</label>
+              <input id="${kind}-${i}" type="text" data-list="${kind}" data-index="${i}" data-field="value" value="${escapeHtml(value)}" placeholder="${placeholder}" />
+            </div>
+          </div>`
+                )
+                .join("")
+            : `<p class="list-empty">No ${kind} yet. Add one below.</p>`;
+        }
+
+        editors.skills.innerHTML = lists.skills.length
+          ? lists.skills
+              .map((cat, i) => {
+                const skillRows = (cat.skills || [])
+                  .map((skill, si) => {
+                    const atStart = si === 0;
+                    const atEnd = si === cat.skills.length - 1;
+                    return `
+            <div class="skill-row">
+              <input id="skills-${i}-skill-${si}" type="text" data-list="skills" data-index="${i}" data-field="skill" data-skill-index="${si}" value="${escapeHtml(skill)}" placeholder="Skill name" />
+              <div class="item-actions">
+                <button type="button" data-move-skill="${i}" data-skill-index="${si}" data-dir="-1" ${atStart ? "disabled" : ""} title="Move up">↑</button>
+                <button type="button" data-move-skill="${i}" data-skill-index="${si}" data-dir="1" ${atEnd ? "disabled" : ""} title="Move down">↓</button>
+                <button type="button" class="danger" data-remove-skill="${i}" data-skill-index="${si}">Remove</button>
+              </div>
+            </div>`;
+                  })
+                  .join("");
+                return `
+          <div class="drawer-subgroup" data-kind="skills" data-index="${i}">
+            ${itemToolbar("skills", i, LIST_LABELS.skills, lists.skills.length)}
+            <div class="field">
+              <label for="skills-${i}-name">Category name</label>
+              <input id="skills-${i}-name" type="text" data-list="skills" data-index="${i}" data-field="name" value="${escapeHtml(cat.name || "")}" placeholder="Optional (e.g. Technical)" />
+            </div>
+            <div class="field">
+              <label>Skills</label>
+              <div class="skill-rows">${skillRows || `<p class="list-empty">No skills in this category.</p>`}</div>
+              <button type="button" class="add-skill-btn" data-add-skill="${i}">+ Add skill</button>
+            </div>
+          </div>`;
+              })
+              .join("")
+          : `<p class="list-empty">No skill categories yet. Add one below.</p>`;
+
+        simpleListEditor("languages", lists.languages, LIST_LABELS.languages, "Language");
+
+        function timelineEditor(kind, items, prefix) {
+          editors[kind].innerHTML = items.length
+            ? items
+                .map((item, i) => {
+                  const bulletsToggle =
+                    kind === "experience"
+                      ? `<div class="present-row">
+              <input id="${prefix}-${i}-bullets" type="checkbox" data-list="${kind}" data-index="${i}" data-field="bullets" ${item.bullets ? "checked" : ""} />
+              <label for="${prefix}-${i}-bullets">Bulleted description</label>
+            </div>
+            <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0 0 0.35rem">${
+              item.bullets ? "One bullet per line." : "Plain paragraph text."
+            }</p>`
+                      : "";
+                  return `
+          <div class="drawer-subgroup" data-kind="${kind}" data-index="${i}">
+            ${itemToolbar(kind, i, LIST_LABELS[kind], items.length)}
+            <div class="field"><label for="${prefix}-${i}-title">Title</label><input id="${prefix}-${i}-title" type="text" data-list="${kind}" data-index="${i}" data-field="title" value="${escapeHtml(item.title)}" /></div>
+            <div class="field"><label for="${prefix}-${i}-org">Organization</label><input id="${prefix}-${i}-org" type="text" data-list="${kind}" data-index="${i}" data-field="org" value="${escapeHtml(item.org)}" /></div>
+            <div class="field"><label for="${prefix}-${i}-location">City / location</label><input id="${prefix}-${i}-location" type="text" data-list="${kind}" data-index="${i}" data-field="location" value="${escapeHtml(item.location || "")}" placeholder="Optional" /></div>
+            ${dateFieldsHtml(prefix, kind, i, item)}
+            ${bulletsToggle}
+            <div class="field"><label for="${prefix}-${i}-desc">Description</label><textarea id="${prefix}-${i}-desc" data-list="${kind}" data-index="${i}" data-field="desc">${escapeHtml(item.desc)}</textarea></div>
+          </div>`;
+                })
+                .join("")
+            : `<p class="list-empty">No ${kind} entries yet.</p>`;
+        }
+
+        timelineEditor("education", lists.education, "edu");
+        timelineEditor("experience", lists.experience, "exp");
+
+        editors.projects.innerHTML = lists.projects.length
+          ? lists.projects
+              .map((item, i) => {
+                const bulletsHint = item.bullets
+                  ? "One bullet per line."
+                  : "Plain paragraph text.";
+                return `
+          <div class="drawer-subgroup" data-kind="projects" data-index="${i}">
+            ${itemToolbar("projects", i, LIST_LABELS.projects, lists.projects.length)}
+            <div class="field"><label for="proj-${i}-title">Title</label><input id="proj-${i}-title" type="text" data-list="projects" data-index="${i}" data-field="title" value="${escapeHtml(item.title)}" /></div>
+            <div class="field"><label for="proj-${i}-reference">Reference</label><input id="proj-${i}-reference" type="text" data-list="projects" data-index="${i}" data-field="reference" value="${escapeHtml(item.reference)}" placeholder="URL or label" /></div>
+            <div class="present-row">
+              <input id="proj-${i}-referenceLink" type="checkbox" data-list="projects" data-index="${i}" data-field="referenceLink" ${item.referenceLink ? "checked" : ""} />
+              <label for="proj-${i}-referenceLink">Reference is a link</label>
+            </div>
+            <div class="field"><label for="proj-${i}-year">Year</label><input id="proj-${i}-year" type="text" data-list="projects" data-index="${i}" data-field="year" value="${escapeHtml(item.year)}" placeholder="Optional" /></div>
+            <div class="present-row">
+              <input id="proj-${i}-bullets" type="checkbox" data-list="projects" data-index="${i}" data-field="bullets" ${item.bullets ? "checked" : ""} />
+              <label for="proj-${i}-bullets">Bulleted description</label>
+            </div>
+            <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0 0 0.35rem">${bulletsHint}</p>
+            <div class="field"><label for="proj-${i}-desc">Description</label><textarea id="proj-${i}-desc" data-list="projects" data-index="${i}" data-field="desc">${escapeHtml(item.desc)}</textarea></div>
+          </div>`;
+              })
+              .join("")
+          : `<p class="list-empty">No project entries yet.</p>`;
+
+        editors.references.innerHTML = lists.references.length
+          ? lists.references
+              .map(
+                (item, i) => `
+          <div class="drawer-subgroup" data-kind="references" data-index="${i}">
+            ${itemToolbar("references", i, LIST_LABELS.references, lists.references.length)}
+            <div class="field"><label for="ref-${i}-name">Name</label><input id="ref-${i}-name" type="text" data-list="references" data-index="${i}" data-field="name" value="${escapeHtml(item.name)}" /></div>
+            <div class="field"><label for="ref-${i}-role">Role</label><input id="ref-${i}-role" type="text" data-list="references" data-index="${i}" data-field="role" value="${escapeHtml(item.role)}" /></div>
+            <div class="field"><label for="ref-${i}-phone">Phone</label><input id="ref-${i}-phone" type="text" data-list="references" data-index="${i}" data-field="phone" value="${escapeHtml(item.phone)}" /></div>
+            <div class="field"><label for="ref-${i}-email">Email</label><input id="ref-${i}-email" type="text" data-list="references" data-index="${i}" data-field="email" value="${escapeHtml(item.email)}" /></div>
+          </div>`
+              )
+              .join("")
+          : `<p class="list-empty">No references yet.</p>`;
+      }
+
+      function renderCvLists() {
+        const skillsTarget = document.getElementById("cv-skills");
+        const languagesTarget = document.getElementById("cv-languages");
+        const educationTarget = document.getElementById("cv-education");
+        const experienceTarget = document.getElementById("cv-experience");
+        const projectsTarget = document.getElementById("cv-projects");
+        const referencesTarget = document.getElementById("cv-references");
+
+        if (skillsTarget) {
+          skillsTarget.innerHTML = lists.skills
+            .map((cat) => {
+              const line = formatSkillCategoryLine(cat);
+              return line == null ? "" : `<li>${line}</li>`;
+            })
+            .join("");
+        }
+        if (languagesTarget) {
+          languagesTarget.innerHTML = lists.languages
+            .map((lang) => `<li>${escapeHtml(lang)}</li>`)
+            .join("");
+        }
+
+        function entryHtml(item, { allowBullets = false } = {}) {
+          const dates = formatEntryDates(item);
+          const hasOrg = !!String(item.org || "").trim();
+          const hasLoc = !!String(item.location || "").trim();
+          const hasDates = !!dates;
+          const hasSub = hasOrg || hasLoc || hasDates;
+          const metaRow =
+            hasLoc || hasDates
+              ? `<div class="entry-meta-row">
+              ${hasLoc ? `<span class="entry-location">${escapeHtml(item.location)}</span>` : "<span></span>"}
+              ${hasDates ? `<span class="entry-date">${escapeHtml(dates)}</span>` : ""}
+            </div>`
+              : "";
+          const meta = hasSub
+            ? `<div class="entry-meta">
+              ${hasOrg ? `<span class="entry-org">${escapeHtml(item.org)}</span>` : ""}
+              ${metaRow}
+            </div>`
+            : "";
+
+          let body = "";
+          if (allowBullets && item.bullets) {
+            const lines = String(item.desc || "")
+              .split(/\r?\n/)
+              .map((line) => line.replace(/^\s*[•\-\*]\s*/, "").trim())
+              .filter(Boolean);
+            body = lines.length
+              ? `<ul class="entry-bullets">${lines
+                  .map((line) => `<li>${escapeHtml(line)}</li>`)
+                  .join("")}</ul>`
+              : "";
+          } else {
+            body = `<p class="entry-desc">${escapeHtml(item.desc)}</p>`;
+          }
+
+          return `
+          <article class="entry${hasSub ? "" : " no-subtitle"}">
+            <h3 class="entry-title">${escapeHtml(item.title)}</h3>
+            ${meta}
+            ${body}
+          </article>`;
+        }
+
+        function projectEntryHtml(item) {
+          const refText = String(item.reference || "").trim();
+          const year = String(item.year || "").trim();
+          const hasRef = !!refText;
+          const hasYear = !!year;
+          const hasSub = hasRef;
+          let refHtml = "";
+          if (hasRef) {
+            if (item.referenceLink) {
+              const href = normalizeHref(refText);
+              refHtml = href
+                ? `<span class="entry-org"><a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(refText)}</a></span>`
+                : `<span class="entry-org">${escapeHtml(refText)}</span>`;
+            } else {
+              refHtml = `<span class="entry-org">${escapeHtml(refText)}</span>`;
+            }
+          }
+          const yearHtml = hasYear
+            ? `<span class="entry-date">${escapeHtml(year)}</span>`
+            : "";
+          // Year shares the reference row when a reference exists; otherwise it
+          // sits on the title row so an empty reference never leaves a blank line.
+          const meta = hasRef
+            ? `<div class="entry-meta">
+              <div class="entry-meta-row">
+                ${refHtml}
+                ${yearHtml}
+              </div>
+            </div>`
+            : "";
+          const titleBlock = !hasRef && hasYear
+            ? `<div class="entry-title-row">
+              <h3 class="entry-title">${escapeHtml(item.title)}</h3>
+              ${yearHtml}
+            </div>`
+            : `<h3 class="entry-title">${escapeHtml(item.title)}</h3>`;
+
+          let body = "";
+          if (item.bullets) {
+            const lines = String(item.desc || "")
+              .split(/\r?\n/)
+              .map((line) => line.replace(/^\s*[•\-\*]\s*/, "").trim())
+              .filter(Boolean);
+            body = lines.length
+              ? `<ul class="entry-bullets">${lines
+                  .map((line) => `<li>${escapeHtml(line)}</li>`)
+                  .join("")}</ul>`
+              : "";
+          } else {
+            body = `<p class="entry-desc">${escapeHtml(item.desc)}</p>`;
+          }
+
+          return `
+          <article class="entry${hasSub ? "" : " no-subtitle"}">
+            ${titleBlock}
+            ${meta}
+            ${body}
+          </article>`;
+        }
+
+        if (educationTarget) {
+          educationTarget.innerHTML = lists.education.map((item) => entryHtml(item)).join("");
+          educationTarget.classList.toggle("is-single", lists.education.length <= 1);
+        }
+        if (experienceTarget) {
+          experienceTarget.innerHTML = lists.experience
+            .map((item) => entryHtml(item, { allowBullets: true }))
+            .join("");
+          experienceTarget.classList.toggle("is-single", lists.experience.length <= 1);
+        }
+        if (projectsTarget) {
+          projectsTarget.innerHTML = lists.projects.map((item) => projectEntryHtml(item)).join("");
+        }
+
+        if (referencesTarget) {
+          referencesTarget.innerHTML = lists.references
+            .map(
+              (item) => `
+          <div>
+            <p class="ref-name">${escapeHtml(item.name)}</p>
+            <p class="ref-role">${escapeHtml(item.role)}</p>
+            <p class="ref-meta">
+              <strong>Phone:</strong> ${escapeHtml(item.phone)}<br />
+              <strong>Email :</strong> ${escapeHtml(item.email)}
+            </p>
+          </div>`
+            )
+            .join("");
+        }
+
+        schedulePaginate();
+      }
+
+      function renderLists() {
+        renderEditors();
+        renderCvLists();
+      }
+
+      function readScalarFields() {
+        const fields = {};
+        boundInputs().forEach((input) => {
+          const key = input.getAttribute("data-bind");
+          let value = input.value;
+          if (key === "linkedin") value = normalizeLinkedInUsername(value);
+          if (key === "github") value = normalizeGitHubUsername(value);
+          if (key === "phone") value = normalizePhoneLocal(value);
+          fields[key] = value;
+        });
+        fields.name = nameLine2.value.trim()
+          ? `${nameLine1.value.trim()}<br />${nameLine2.value.trim()}`
+          : nameLine1.value.trim();
+        return fields;
+      }
+
+      function readForm() {
+        return {
+          fields: readScalarFields(),
+          photo: photoSrc,
+          type: readType(),
+          lists: cloneLists(lists),
+          contactVisibility: { ...contactVisibility },
+          sectionVisibility: { ...sectionVisibility },
+          sectionOrder: cloneOrder(sectionOrder),
+        };
+      }
+
+      function digitsOnlyPhone(value) {
+        return String(value || "").replace(/\D+/g, "");
+      }
+
+      /**
+       * Local mobile part only (e.g. 812…). Strips +62 / 62 / leading 0 so the
+       * form and live-edit storage never keep country or trunk prefixes.
+       */
+      function normalizePhoneLocal(raw) {
+        let digits = digitsOnlyPhone(raw);
+        if (digits.startsWith("00")) digits = digits.replace(/^00+/, "");
+        if (digits.startsWith(PHONE_COUNTRY_DIGITS)) {
+          digits = digits.slice(PHONE_COUNTRY_DIGITS.length);
+        }
+        digits = digits.replace(/^0+/, "");
+        return digits;
+      }
+
+      function formatPhoneDisplay(local) {
+        const localDigits = normalizePhoneLocal(local);
+        return localDigits ? `${PHONE_DISPLAY_PREFIX} ${localDigits}` : "";
+      }
+
+      /** Always https://wa.me/62 + local digits (no leading 0 in the path). */
+      function whatsappMeHref(value) {
+        const localDigits = normalizePhoneLocal(value);
+        return localDigits ? `https://wa.me/${PHONE_COUNTRY_DIGITS}${localDigits}` : "";
+      }
+
+      function setPhoneOnCv(raw) {
+        const local = normalizePhoneLocal(raw);
+        const text = formatPhoneDisplay(local);
+        const href = whatsappMeHref(local);
+        const root = pagesEl || pageEl;
+        if (!root) return;
+        root.querySelectorAll('[data-edit="phone"]').forEach((el) => {
+          el.textContent = text;
+          if (el.tagName !== "A") return;
+          if (href) {
+            el.setAttribute("href", href);
+            el.setAttribute("target", "_blank");
+            el.setAttribute("rel", "noopener noreferrer");
+          } else {
+            el.removeAttribute("href");
+            el.removeAttribute("target");
+            el.removeAttribute("rel");
+          }
+        });
+      }
+
+      /**
+       * About Me source of truth is the Content-tab draft. Write the full text
+       * onto the primary node (and any leftover clones) so live-edit never
+       * permanently truncates stored content. paginatePages restores from the
+       * draft, then re-splits on overflow.
+       */
+      function setAboutOnCv(raw) {
+        const text = String(raw ?? "");
+        const root = pagesEl || pageEl;
+        if (!root) return;
+        const primary =
+          findPrimarySection("about")?.querySelector('[data-edit="about"], .about-text') ||
+          null;
+        if (primary) primary.textContent = text;
+        root.querySelectorAll('[data-edit="about"], .about-text').forEach((el) => {
+          if (el !== primary) el.textContent = text;
+        });
+      }
+
+      function restoreAboutFromDraft() {
+        const aboutInput = form?.querySelector('[data-bind="about"]');
+        if (!aboutInput) return;
+        const aboutEl =
+          findPrimarySection("about")?.querySelector('[data-edit="about"], .about-text');
+        if (aboutEl) aboutEl.textContent = aboutInput.value;
+      }
+
+      /** Prefer sentence end, then word boundary, within [0, maxLen]. */
+      function preferAboutBreakOffset(text, maxLen) {
+        if (maxLen >= text.length) return text.length;
+        if (maxLen <= 0) return 0;
+        const slice = text.slice(0, maxLen);
+        const minSentence = Math.max(1, Math.floor(maxLen * 0.45));
+        for (let i = slice.length - 1; i >= minSentence; i--) {
+          const ch = slice[i];
+          if (
+            (ch === "." || ch === "!" || ch === "?") &&
+            (i + 1 >= slice.length || /\s/.test(slice[i + 1]))
+          ) {
+            return i + 1;
+          }
+        }
+        // Avoid mid-word cuts when more text follows.
+        if (maxLen < text.length && /\S/.test(text[maxLen]) && /\S/.test(text[maxLen - 1])) {
+          const sp = slice.lastIndexOf(" ");
+          if (sp > 0) return sp;
+        } else {
+          const sp = slice.search(/\s+$/);
+          if (sp > 0) return sp;
+        }
+        return maxLen;
+      }
+
+      /**
+       * Split .about-text so the column stops overflowing. Mutates aboutEl to
+       * the fitted prefix. Returns null when no split is needed; moveSection
+       * when even an empty body still overflows (caller should move the shell).
+       */
+      function splitAboutTextToFit(aboutEl, column) {
+        const full = aboutEl.textContent || "";
+        if (!full.trim()) return null;
+        if (!measureOverflow(column)) return null;
+
+        aboutEl.textContent = "";
+        if (measureOverflow(column)) {
+          aboutEl.textContent = full;
+          return { fitted: "", remainder: full, moveSection: true };
+        }
+
+        let lo = 0;
+        let hi = full.length;
+        let best = 0;
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1;
+          aboutEl.textContent = full.slice(0, mid);
+          if (!measureOverflow(column)) {
+            best = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+
+        if (best >= full.length) {
+          aboutEl.textContent = full;
+          return null;
+        }
+
+        let cut = preferAboutBreakOffset(full, best);
+        aboutEl.textContent = full.slice(0, cut).trimEnd();
+        if (measureOverflow(column)) {
+          cut = best;
+          aboutEl.textContent = full.slice(0, cut).trimEnd();
+        }
+
+        const remainder = full.slice(cut).trimStart();
+        if (!remainder) {
+          // Only trailing whitespace beyond the fit point — keep the trimmed
+          // prefix so we do not reintroduce overflow.
+          aboutEl.textContent = full.slice(0, cut).trimEnd();
+          return null;
+        }
+        return { fitted: aboutEl.textContent, remainder, moveSection: false };
+      }
+
+      function normalizeLinkedInUsername(raw) {
+        let value = String(raw || "").trim();
+        value = value.replace(/^https?:\/\//i, "");
+        value = value.replace(/^www\./i, "");
+        value = value.replace(/^linkedin\.com\/in\//i, "");
+        value = value.replace(/^in\//i, "");
+        value = value.replace(/\/+$/, "");
+        value = value.split(/[?#]/)[0];
+        return value.trim();
+      }
+
+      function normalizeGitHubUsername(raw) {
+        let value = String(raw || "").trim();
+        value = value.replace(/^https?:\/\//i, "");
+        value = value.replace(/^www\./i, "");
+        value = value.replace(/^github\.com\//i, "");
+        value = value.replace(/^@/, "");
+        value = value.replace(/\/+$/, "");
+        value = value.split(/[?#]/)[0];
+        return value.trim();
+      }
+
+      function setContactField(key, value) {
+        const text = String(value || "");
+
+        if (key === "phone") {
+          setPhoneOnCv(text);
+          return;
+        }
+
+        if (key === "about") {
+          setAboutOnCv(text);
+          return;
+        }
+
+        const el = pageEl.querySelector(`[data-edit="${key}"]`);
+        if (!el) return;
+
+        if (key === "title") {
+          el.textContent = text;
+          syncJobTitleVisibility(text);
+          return;
+        }
+
+        if (key === "email") {
+          el.textContent = text;
+          if (el.tagName === "A") {
+            if (text.trim()) el.setAttribute("href", `mailto:${text.trim()}`);
+            else el.removeAttribute("href");
+            el.removeAttribute("target");
+            el.removeAttribute("rel");
+          }
+          return;
+        }
+
+        if (key === "linkedin") {
+          const user = normalizeLinkedInUsername(text);
+          const display = user ? `${LINKEDIN_PREFIX}${user}` : "";
+          el.textContent = display;
+          if (el.tagName === "A") {
+            if (user) {
+              el.setAttribute("href", `${LINKEDIN_URL_PREFIX}${encodeURIComponent(user)}`);
+              el.setAttribute("target", "_blank");
+              el.setAttribute("rel", "noopener noreferrer");
+            } else {
+              el.removeAttribute("href");
+              el.removeAttribute("target");
+              el.removeAttribute("rel");
+            }
+          }
+          return;
+        }
+
+        if (key === "github") {
+          const user = normalizeGitHubUsername(text);
+          const display = user ? `${GITHUB_PREFIX}${user}` : "";
+          el.textContent = display;
+          if (el.tagName === "A") {
+            if (user) {
+              el.setAttribute("href", `${GITHUB_URL_PREFIX}${encodeURIComponent(user)}`);
+              el.setAttribute("target", "_blank");
+              el.setAttribute("rel", "noopener noreferrer");
+            } else {
+              el.removeAttribute("href");
+              el.removeAttribute("target");
+              el.removeAttribute("rel");
+            }
+          }
+          return;
+        }
+
+        el.textContent = text;
+      }
+
+      function syncJobTitleVisibility(value) {
+        const titleEl = pageEl.querySelector('[data-edit="title"]');
+        if (!titleEl) return;
+        const empty = !String(value ?? titleEl.textContent ?? "").trim();
+        titleEl.classList.toggle("is-empty", empty);
+        titleEl.setAttribute("aria-hidden", empty ? "true" : "false");
+        if (empty) titleEl.setAttribute("hidden", "");
+        else titleEl.removeAttribute("hidden");
+      }
+
+      function applyScalars(fields) {
+        if (!fields) return;
+        if ("name" in fields) {
+          const raw = fields.name;
+          if (String(raw).includes("<br")) {
+            const parts = String(raw)
+              .split(/<br\s*\/?>/i)
+              .map((p) => p.replace(/<[^>]+>/g, "").trim());
+            setNameOnCv(parts[0] || "", parts[1] || "");
+            nameLine1.value = parts[0] || "";
+            nameLine2.value = parts[1] || "";
+          } else {
+            setNameOnCv(raw, "");
+            nameLine1.value = raw;
+            nameLine2.value = "";
+          }
+        }
+        boundInputs().forEach((input) => {
+          const key = input.getAttribute("data-bind");
+          if (!(key in fields)) return;
+          let value = fields[key];
+          if (key === "linkedin") value = normalizeLinkedInUsername(value);
+          if (key === "github") value = normalizeGitHubUsername(value);
+          if (key === "phone") value = normalizePhoneLocal(value);
+          input.value = value;
+          setContactField(key, value);
+        });
+        if (!("title" in (fields || {}))) syncJobTitleVisibility();
+      }
+
+      function migrateLegacyLists(fields) {
+        if (!fields) return null;
+        const skills = [];
+        for (let i = 1; i <= 20; i++) {
+          const key = `skill-${i}`;
+          if (key in fields) skills.push(fields[key]);
+        }
+        const education = [];
+        for (let i = 1; i <= 20; i++) {
+          if (!(`edu-${i}-title` in fields)) break;
+          education.push(
+            normalizeTimelineItem({
+              title: fields[`edu-${i}-title`] || "",
+              org: fields[`edu-${i}-org`] || "",
+              location: fields[`edu-${i}-location`] || "",
+              date: fields[`edu-${i}-date`] || "",
+              desc: fields[`edu-${i}-desc`] || "",
+            })
+          );
+        }
+        const experience = [];
+        for (let i = 1; i <= 20; i++) {
+          if (!(`exp-${i}-title` in fields)) break;
+          experience.push(
+            normalizeTimelineItem({
+              title: fields[`exp-${i}-title`] || "",
+              org: fields[`exp-${i}-org`] || "",
+              location: fields[`exp-${i}-location`] || "",
+              date: fields[`exp-${i}-date`] || "",
+              desc: fields[`exp-${i}-desc`] || "",
+            })
+          );
+        }
+        const references = [];
+        for (let i = 1; i <= 20; i++) {
+          if (!(`ref-${i}-name` in fields)) break;
+          references.push({
+            name: fields[`ref-${i}-name`] || "",
+            role: fields[`ref-${i}-role`] || "",
+            phone: fields[`ref-${i}-phone`] || "",
+            email: fields[`ref-${i}-email`] || "",
+          });
+        }
+        if (!skills.length && !education.length && !experience.length && !references.length) {
+          return null;
+        }
+        return {
+          skills: skills.length
+            ? [{ name: "", skills: [...skills] }]
+            : cloneLists(SAMPLE_LISTS).skills,
+          languages: [...SAMPLE_LISTS.languages],
+          education: education.length ? education : cloneLists(SAMPLE_LISTS).education,
+          experience: experience.length ? experience : cloneLists(SAMPLE_LISTS).experience,
+          projects: cloneLists(SAMPLE_LISTS).projects,
+          references: references.length ? references : cloneLists(SAMPLE_LISTS).references,
+        };
+      }
+
+      function applyContactVisibility() {
+        CONTACT_KEYS.forEach((key) => {
+          const row = pageEl.querySelector(`[data-contact="${key}"]`);
+          const toggle = form.querySelector(`[data-visible="${key}"]`);
+          const show = !!contactVisibility[key];
+          if (toggle) toggle.checked = show;
+          if (row) row.classList.toggle("is-hidden", !show);
+        });
+      }
+
+      function fillContactVisibility(vis) {
+        contactVisibility = { ...CONTACT_VISIBILITY_DEFAULTS, ...(vis || {}) };
+        applyContactVisibility();
+      }
+
+      function applySectionVisibility() {
+        Object.keys(SECTION_VISIBILITY_DEFAULTS).forEach((key) => {
+          const show = sectionVisibility[key] !== false;
+          document.querySelectorAll(`[data-section="${key}"]`).forEach((el) => {
+            el.classList.toggle("is-hidden", !show);
+          });
+        });
+      }
+
+      function fillSectionVisibility(vis) {
+        sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS, ...(vis || {}) };
+        applySectionVisibility();
+      }
+
+      function syncSectionChrome(section, side) {
+        if (!section) return;
+        section.classList.toggle("side-section", side === "sidebar");
+        const heading = section.querySelector("h2");
+        if (!heading) return;
+        heading.classList.toggle("side-heading", side === "sidebar");
+        heading.classList.toggle("main-section-heading", side === "main");
+      }
+
+      function clearContinuationPages() {
+        const main = getMainEl();
+        const sidebar = getSidebarEl();
+        // Primary sections may have been moved onto continuation pages — reclaim them first.
+        pagesEl
+          .querySelectorAll(
+            ".page-continued [data-section]:not([data-continued]), .page-full-cont [data-section]:not([data-continued])"
+          )
+          .forEach((el) => {
+            const id = el.getAttribute("data-section");
+            if (sectionOrder.sidebar.includes(id)) {
+              if (sidebar) sidebar.appendChild(el);
+            } else if (main) {
+              main.appendChild(el);
+            }
+          });
+        pagesEl.querySelectorAll("[data-continued]").forEach((el) => el.remove());
+        pagesEl.querySelectorAll(".page-continued, .page-full-cont").forEach((el) => el.remove());
+        pageEl.querySelectorAll("[data-section]").forEach((section) => {
+          section.style.display = "";
+          clearSectionCont(section.querySelector("h2"));
+          section
+            .querySelectorAll(
+              ".entry, .skills-list > li, .ref-grid > div, .contact-list > li, .projects-list > .entry"
+            )
+            .forEach((item) => {
+              item.style.display = "";
+            });
+        });
+      }
+
+      function updatePagesStackHeight() {
+        const pages = [...pagesEl.querySelectorAll(".page")];
+        const gapPx = pages.length > 1 ? 20 : 0;
+        const total =
+          pages.reduce((sum, p) => sum + (p.offsetHeight || 0), 0) +
+          gapPx * Math.max(0, pages.length - 1);
+        document.body.style.setProperty("--pages-stack-h", `${Math.max(total, 1)}px`);
+      }
+
+      function createContinuationPage() {
+        const article = document.createElement("article");
+        article.className = "page page-continued";
+        article.setAttribute("aria-label", "CV continuation page");
+        const main = document.createElement("div");
+        main.className = "main";
+        article.appendChild(main);
+        pagesEl.appendChild(article);
+        return { article, main };
+      }
+
+      function createFullContinuationPage() {
+        const article = document.createElement("article");
+        article.className = "page page-full-cont";
+        article.setAttribute("aria-label", "CV page");
+        const sidebar = document.createElement("aside");
+        sidebar.className = "sidebar";
+        const main = document.createElement("div");
+        main.className = "main";
+        article.appendChild(sidebar);
+        article.appendChild(main);
+        pagesEl.appendChild(article);
+        return { article, sidebar, main };
+      }
+
+      /** True for main-only or full two-column continuation pages (not page 1). */
+      function isContinuationPage(column) {
+        const page = column?.closest(".page");
+        return !!(
+          page &&
+          (page.classList.contains("page-continued") ||
+            page.classList.contains("page-full-cont"))
+        );
+      }
+
+      /** Remove continuation dots and unwrap .icon-pair back to a lone section .ico. */
+      function clearSectionCont(heading) {
+        if (!heading) return;
+        heading.querySelectorAll(".section-cont").forEach((el) => el.remove());
+        heading.querySelectorAll(".icon-pair").forEach((pair) => {
+          const parent = pair.parentNode;
+          if (!parent) return;
+          while (pair.firstChild) parent.insertBefore(pair.firstChild, pair);
+          pair.remove();
+        });
+      }
+
+      /** Inline Tabler dots (placement B): after section icon, before title. */
+      function createContDotsIcon() {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("class", "ico-cont ico-line section-cont");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("aria-hidden", "true");
+        for (const d of [
+          "M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0",
+          "M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0",
+          "M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0",
+        ]) {
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", d);
+          svg.appendChild(path);
+        }
+        return svg;
+      }
+
+      /** Wrap heading .ico + Tabler dots in .icon-pair (placement B). */
+      function applySectionCont(heading) {
+        clearSectionCont(heading);
+        if (!heading) return;
+        const ico = heading.querySelector(":scope > svg.ico");
+        if (!ico) return;
+        const pair = document.createElement("span");
+        pair.className = "icon-pair";
+        ico.replaceWith(pair);
+        pair.appendChild(ico);
+        pair.appendChild(createContDotsIcon());
+      }
+
+      function cloneSectionShell(section, { continued = false } = {}) {
+        const clone = section.cloneNode(true);
+        clone.setAttribute("data-continued", "true");
+        clone.style.display = "";
+        clone.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
+        const heading = clone.querySelector("h2");
+        if (heading) {
+          clearSectionCont(heading);
+          if (continued) applySectionCont(heading);
+        }
+        const body = clone.querySelector(
+          ".timeline, .skills-list, .ref-grid, .contact-list, .projects-list"
+        );
+        if (body) {
+          body.innerHTML = "";
+          body.classList.remove("is-single");
+        }
+        const about = clone.querySelector(".about-text");
+        if (about) about.textContent = "";
+        return { clone, body };
+      }
+
+      function sectionBodyItems(section) {
+        const host = section.querySelector(
+          ".timeline, .skills-list, .ref-grid, .contact-list, .projects-list"
+        );
+        return host ? [...host.children] : [];
+      }
+
+      function visibleBodyItems(section) {
+        return sectionBodyItems(section).filter(
+          (el) => el.style.display !== "none" && !el.classList.contains("is-hidden")
+        );
+      }
+
+      function measureOverflow(column) {
+        return column.scrollHeight - column.clientHeight > 1;
+      }
+
+      function visibleColumnSections(column) {
+        return [...column.children].filter(
+          (el) =>
+            el.matches("[data-section]") &&
+            !el.classList.contains("is-hidden") &&
+            el.style.display !== "none"
+        );
+      }
+
+      function sectionBodyHost(section) {
+        return section.querySelector(
+          ".timeline, .skills-list, .ref-grid, .contact-list, .projects-list"
+        );
+      }
+
+      /**
+       * True when a continuation page should show the Tabler dots marker for
+       * this section — any shell whose section already started with content on
+       * an earlier page (main-only or full two-column). First appearance never
+       * gets the marker.
+       */
+      function shouldLabelCont(column, sectionId) {
+        if (!isContinuationPage(column)) return false;
+        const page = column.closest(".page");
+        const primary = findPrimarySection(sectionId);
+        if (
+          primary &&
+          primary.style.display !== "none" &&
+          !page.contains(primary) &&
+          (visibleBodyItems(primary).length > 0 ||
+            (primary.querySelector(".about-text")?.textContent || "").trim())
+        ) {
+          return true;
+        }
+        for (const p of pagesEl.querySelectorAll(".page")) {
+          if (p === page) break;
+          for (const sec of p.querySelectorAll(`[data-section="${sectionId}"]`)) {
+            if (sec.style.display === "none" || sec.classList.contains("is-hidden")) continue;
+            if (visibleBodyItems(sec).length > 0) return true;
+            if ((sec.querySelector(".about-text")?.textContent || "").trim()) return true;
+          }
+        }
+        return false;
+      }
+
+      /** Peel overflowing sections/items from the end of a column until it fits. */
+      function peelOverflowFromColumn(column) {
+        const overflow = []; // { type: "section"|"item"|"about-text", sectionId, html?, text? }
+        let guard = 0;
+        while (measureOverflow(column) && guard++ < 400) {
+          const sections = visibleColumnSections(column);
+          const section = sections[sections.length - 1];
+          if (!section) break;
+          const sectionId = section.getAttribute("data-section");
+          const items = visibleBodyItems(section);
+
+          if (items.length > 0) {
+            const item = items[items.length - 1];
+            overflow.unshift({ type: "item", sectionId, html: item.outerHTML });
+            item.style.display = "none";
+            const left = visibleBodyItems(section);
+            if (!left.length) {
+              // Entire section left this page — move it as a whole, not a continued shell.
+              overflow.shift();
+              while (
+                overflow.length &&
+                overflow[0].type === "item" &&
+                overflow[0].sectionId === sectionId
+              ) {
+                overflow.shift();
+              }
+              sectionBodyItems(section).forEach((el) => {
+                el.style.display = "";
+              });
+              section.style.display = "none";
+              overflow.unshift({ type: "section", sectionId });
+            }
+          } else if (sectionId === "about") {
+            // About Me: split text at overflow instead of moving the whole section.
+            const aboutEl = section.querySelector(".about-text");
+            if (!aboutEl || !(aboutEl.textContent || "").trim()) {
+              section.style.display = "none";
+              overflow.unshift({ type: "section", sectionId });
+              continue;
+            }
+            const split = splitAboutTextToFit(aboutEl, column);
+            if (!split) {
+              // Fits after measurement/trim. If still overflowing, bail to
+              // avoid looping forever on the same About shell.
+              if (measureOverflow(column)) break;
+              continue;
+            }
+            if (split.moveSection) {
+              section.style.display = "none";
+              overflow.unshift({ type: "section", sectionId });
+            } else {
+              overflow.unshift({
+                type: "about-text",
+                sectionId: "about",
+                text: split.remainder,
+              });
+            }
+          } else {
+            section.style.display = "none";
+            overflow.unshift({ type: "section", sectionId });
+          }
+        }
+        return overflow;
+      }
+
+      /**
+       * Place peeled overflow blocks into a column, creating further pages via acquireNext
+       * when the column overflows. Profile is never moved (not a [data-section]).
+       */
+      function placeOverflowBlocks(blocks, {
+        getColumn,
+        setColumn,
+        side,
+        acquireNext,
+      }) {
+        let open = null; // { sectionId, body, el }
+
+        function startShell(sectionId) {
+          const primary = findPrimarySection(sectionId);
+          if (!primary) return null;
+          const column = getColumn();
+          const continued = shouldLabelCont(column, sectionId);
+          const { clone, body } = cloneSectionShell(primary, { continued });
+          syncSectionChrome(clone, side);
+          column.appendChild(clone);
+          open = { sectionId, body, el: clone };
+          return open;
+        }
+
+        function ensureRoom() {
+          let guard2 = 0;
+          while (measureOverflow(getColumn()) && guard2++ < 100) {
+            const column = getColumn();
+            const sections = visibleColumnSections(column);
+            const section = sections[sections.length - 1];
+            if (!section) break;
+            const sectionId = section.getAttribute("data-section");
+            const items = visibleBodyItems(section);
+            const nextColumn = acquireNext(column);
+            if (!nextColumn) break;
+
+            const labelCont = shouldLabelCont(nextColumn, sectionId);
+
+            // About Me text may still overflow a continuation column — split again.
+            if (sectionId === "about" && !items.length) {
+              const aboutEl = section.querySelector(".about-text");
+              const split = aboutEl ? splitAboutTextToFit(aboutEl, column) : null;
+              if (split && !split.moveSection) {
+                const { clone } = cloneSectionShell(findPrimarySection(sectionId), {
+                  continued: labelCont,
+                });
+                syncSectionChrome(clone, side);
+                const contAbout = clone.querySelector(".about-text");
+                if (contAbout) contAbout.textContent = split.remainder;
+                nextColumn.appendChild(clone);
+                open = { sectionId, body: null, el: clone };
+                setColumn(nextColumn);
+                continue;
+              }
+              if (split && split.moveSection) {
+                nextColumn.appendChild(section);
+                open = section.hasAttribute("data-continued")
+                  ? { sectionId, body: null, el: section }
+                  : null;
+                setColumn(nextColumn);
+                continue;
+              }
+              // No split possible — fall through to whole-section moves.
+            }
+
+            if (items.length > 1) {
+              const item = items[items.length - 1];
+              const { clone, body } = cloneSectionShell(findPrimarySection(sectionId), {
+                continued: labelCont,
+              });
+              syncSectionChrome(clone, side);
+              if (body) body.appendChild(item);
+              nextColumn.appendChild(clone);
+              open = { sectionId, body, el: clone };
+              setColumn(nextColumn);
+              continue;
+            }
+
+            if (items.length === 1 && sections.length > 1) {
+              const item = items[0];
+              if (section.hasAttribute("data-continued") && visibleBodyItems(section).length <= 1) {
+                nextColumn.appendChild(section);
+                open = { sectionId, body: sectionBodyHost(section), el: section };
+              } else if (section.hasAttribute("data-continued")) {
+                const { clone, body } = cloneSectionShell(findPrimarySection(sectionId), {
+                  continued: labelCont,
+                });
+                syncSectionChrome(clone, side);
+                if (body) body.appendChild(item);
+                if (!visibleBodyItems(section).length) section.remove();
+                nextColumn.appendChild(clone);
+                open = { sectionId, body, el: clone };
+              } else {
+                nextColumn.appendChild(section);
+                open = null;
+              }
+              setColumn(nextColumn);
+              continue;
+            }
+
+            if (sections.length > 1) {
+              nextColumn.appendChild(section);
+              open = section.hasAttribute("data-continued")
+                ? { sectionId, body: sectionBodyHost(section), el: section }
+                : null;
+              setColumn(nextColumn);
+              continue;
+            }
+
+            // Nothing we can split further on this page — drop the unused next page if we created one.
+            const nextPage = nextColumn.closest(".page");
+            if (
+              nextPage &&
+              nextPage !== column.closest(".page") &&
+              !nextPage.querySelector("[data-section]")
+            ) {
+              nextPage.remove();
+            }
+            break;
+          }
+        }
+
+        blocks.forEach((block) => {
+          if (block.type === "section") {
+            const primary = findPrimarySection(block.sectionId);
+            if (!primary) return;
+            primary.style.display = "";
+            sectionBodyItems(primary).forEach((el) => {
+              el.style.display = "";
+            });
+            clearSectionCont(primary.querySelector("h2"));
+            getColumn().appendChild(primary);
+            syncSectionChrome(primary, side);
+            open = null;
+            ensureRoom();
+            return;
+          }
+
+          if (block.type === "about-text") {
+            if (!open || open.sectionId !== block.sectionId) startShell(block.sectionId);
+            if (open) {
+              const aboutEl = open.el.querySelector(".about-text");
+              if (aboutEl) aboutEl.textContent = block.text || "";
+            }
+            ensureRoom();
+            return;
+          }
+
+          if (block.type === "item") {
+            if (!open || open.sectionId !== block.sectionId) startShell(block.sectionId);
+            if (open && open.body) open.body.insertAdjacentHTML("beforeend", block.html);
+            ensureRoom();
+          }
+        });
+      }
+
+      function acquireNextFullSidebar() {
+        return createFullContinuationPage().sidebar;
+      }
+
+      function acquireNextMainColumn(currentMain) {
+        const page = currentMain.closest(".page");
+        const pages = [...pagesEl.querySelectorAll(".page")];
+        const idx = pages.indexOf(page);
+        for (let i = idx + 1; i < pages.length; i++) {
+          if (!pages[i].classList.contains("page-full-cont")) continue;
+          const m = pages[i].querySelector(".main");
+          if (
+            m &&
+            !visibleColumnSections(m).length &&
+            !m.querySelector("[data-continued]")
+          ) {
+            return m;
+          }
+        }
+        return createContinuationPage().main;
+      }
+
+      function paginatePages() {
+        clearContinuationPages();
+        const sidebar = getSidebarEl();
+        const main = getMainEl();
+        if (!main) return;
+
+        sectionOrder.sidebar.forEach((id) => {
+          const el = findPrimarySection(id);
+          if (el && sidebar) {
+            sidebar.appendChild(el);
+            syncSectionChrome(el, "sidebar");
+          }
+        });
+        sectionOrder.main.forEach((id) => {
+          const el = findPrimarySection(id);
+          if (el) {
+            main.appendChild(el);
+            syncSectionChrome(el, "main");
+          }
+        });
+        applySectionVisibility();
+        // Full About draft must be on the primary node before peel/split —
+        // a prior paginate may have left a truncated prefix on page 1.
+        restoreAboutFromDraft();
+
+        const sideReady = sidebar && sidebar.clientHeight >= 40;
+        const mainReady = main.clientHeight >= 40;
+        const sideNeeds = sideReady && measureOverflow(sidebar);
+        const mainNeeds = mainReady && measureOverflow(main);
+
+        if (!sideNeeds && !mainNeeds) {
+          updatePagesStackHeight();
+          scheduleFitZoom();
+          return;
+        }
+
+        const sideOverflow = sideNeeds ? peelOverflowFromColumn(sidebar) : [];
+        const mainOverflow = mainNeeds ? peelOverflowFromColumn(main) : [];
+
+        if (!sideOverflow.length && !mainOverflow.length) {
+          updatePagesStackHeight();
+          scheduleFitZoom();
+          return;
+        }
+
+        // Sidebar overflow → full two-column pages (page-1 chrome; no profile repeat).
+        if (sideOverflow.length) {
+          let currentSidebar = createFullContinuationPage().sidebar;
+          placeOverflowBlocks(sideOverflow, {
+            getColumn: () => currentSidebar,
+            setColumn: (col) => {
+              currentSidebar = col;
+            },
+            side: "sidebar",
+            acquireNext: acquireNextFullSidebar,
+          });
+        }
+
+        // Main overflow → fill full-page main columns first, then main-only continuations.
+        if (mainOverflow.length) {
+          const firstFullMain = pagesEl.querySelector(".page-full-cont > .main");
+          let currentMain = firstFullMain || createContinuationPage().main;
+          placeOverflowBlocks(mainOverflow, {
+            getColumn: () => currentMain,
+            setColumn: (col) => {
+              currentMain = col;
+            },
+            side: "main",
+            acquireNext: acquireNextMainColumn,
+          });
+        }
+
+        // Drop empty continuation pages (keep full pages that still have sidebar content).
+        [...pagesEl.querySelectorAll(".page-continued, .page-full-cont")].forEach((p) => {
+          if (!p.querySelector("[data-section]")) p.remove();
+        });
+
+        // is-single hides the timeline line/dots — only when the *full* section
+        // has one item. Continuation pages may show a single leftover entry from
+        // a multi-item section; those must keep the timeline.
+        document.querySelectorAll(".page .timeline").forEach((timeline) => {
+          const section = timeline.closest("[data-section]");
+          const sectionId = section?.getAttribute("data-section");
+          const primary = sectionId ? findPrimarySection(sectionId) : null;
+          const source = primary?.querySelector(".timeline") || timeline;
+          const fullCount = [...source.children].filter(
+            (el) => !el.classList.contains("is-hidden")
+          ).length;
+          timeline.classList.toggle("is-single", fullCount <= 1);
+        });
+
+        applySectionVisibility();
+        // Pagination clones contact rows via outerHTML; re-apply so every
+        // phone link keeps +62 display text and https://wa.me/62… href.
+        const phoneInput = form?.querySelector('[data-bind="phone"]');
+        if (phoneInput) setPhoneOnCv(phoneInput.value);
+        // About is intentionally not re-applied here: restoreAboutFromDraft +
+        // peel/place already distributed fitted/remainder prefixes. Re-writing
+        // the full draft onto every .about-text would undo the split.
+        updatePagesStackHeight();
+        scheduleFitZoom();
+      }
+
+      function schedulePaginate() {
+        cancelAnimationFrame(paginateRaf);
+        paginateRaf = requestAnimationFrame(() => {
+          requestAnimationFrame(paginatePages);
+        });
+      }
+
+      function renderSectionOrderEditors() {
+        ["sidebar", "main"].forEach((side) => {
+          const order = sectionOrder[side];
+          const canReorder = side === "main";
+          orderEditors[side].innerHTML = order
+            .map((id, index) => {
+              const atStart = index === 0;
+              const atEnd = index === order.length - 1;
+              const shown = sectionVisibility[id] !== false;
+              const moveBtns = canReorder
+                ? `
+                  <button type="button" data-section-move="${side}" data-index="${index}" data-dir="-1" ${atStart ? "disabled" : ""} title="Move up">↑</button>
+                  <button type="button" data-section-move="${side}" data-index="${index}" data-dir="1" ${atEnd ? "disabled" : ""} title="Move down">↓</button>`
+                : "";
+              return `
+                <div class="section-order-item${shown ? "" : " is-section-hidden"}">
+                  <span>${SECTION_LABELS[id] || id}</span>
+                  <div class="visibility-toggle">
+                    <label for="sv-${id}">Show</label>
+                    <input id="sv-${id}" type="checkbox" data-section-visible="${id}" ${shown ? "checked" : ""} />
+                  </div>
+                  ${moveBtns}
+                </div>`;
+            })
+            .join("");
+        });
+      }
+
+      function normalizeSectionOrder(raw) {
+        const defaults = cloneOrder(SECTION_ORDER_DEFAULTS);
+        if (!raw) return defaults;
+        const sidebar = [...(raw.sidebar || [])];
+        const main = [...(raw.main || [])];
+        // Skills always belongs on main; languages on sidebar.
+        const pull = (arr, id) => {
+          const i = arr.indexOf(id);
+          if (i >= 0) arr.splice(i, 1);
+        };
+        pull(sidebar, "skills");
+        pull(main, "languages");
+        pull(sidebar, "languages");
+        if (!sidebar.includes("languages")) {
+          const aboutIdx = sidebar.indexOf("about");
+          sidebar.splice(aboutIdx >= 0 ? aboutIdx + 1 : sidebar.length, 0, "languages");
+        }
+        if (!main.includes("skills")) main.unshift("skills");
+        // Drop unknown / misplaced ids and rebuild from allowed sets.
+        const sideSet = new Set(SECTION_ORDER_DEFAULTS.sidebar);
+        const mainSet = new Set(SECTION_ORDER_DEFAULTS.main);
+        return {
+          sidebar: [
+            ...sidebar.filter((id) => sideSet.has(id)),
+            ...SECTION_ORDER_DEFAULTS.sidebar.filter((id) => !sidebar.includes(id)),
+          ],
+          main: [
+            ...main.filter((id) => mainSet.has(id)),
+            ...SECTION_ORDER_DEFAULTS.main.filter((id) => !main.includes(id)),
+          ],
+        };
+      }
+
+      function normalizeListsData(src) {
+        const rawSkills = src && src.skills;
+        const next = cloneLists(src || SAMPLE_LISTS);
+        if (!src || !Array.isArray(src.languages)) {
+          next.languages = [...SAMPLE_LISTS.languages];
+        }
+        if (!src || !Array.isArray(src.projects)) {
+          next.projects = cloneLists(SAMPLE_LISTS).projects;
+        }
+        if (isFlatSkillStringList(rawSkills)) {
+          next.skills = rawSkills.length
+            ? [{ name: "", skills: [...rawSkills] }]
+            : [];
+        } else {
+          next.skills = (Array.isArray(rawSkills) ? rawSkills : next.skills).map(cloneSkillCategory);
+        }
+        next.education = next.education.map(normalizeTimelineItem);
+        next.experience = next.experience.map(normalizeTimelineItem);
+        next.projects = next.projects.map(normalizeProjectItem);
+        return next;
+      }
+
+      function applySectionOrder() {
+        clearContinuationPages();
+        const sidebar = getSidebarEl();
+        const main = getMainEl();
+        sectionOrder.sidebar.forEach((id) => {
+          const el = findPrimarySection(id);
+          if (el && sidebar) {
+            sidebar.appendChild(el);
+            syncSectionChrome(el, "sidebar");
+          }
+        });
+        sectionOrder.main.forEach((id) => {
+          const el = findPrimarySection(id);
+          if (el && main) {
+            main.appendChild(el);
+            syncSectionChrome(el, "main");
+          }
+        });
+        applySectionVisibility();
+        renderSectionOrderEditors();
+        schedulePaginate();
+      }
+
+      function setActiveTab(tabId, { persist = true } = {}) {
+        const next = DRAWER_TABS.includes(tabId) ? tabId : "content";
+        activeTab = next;
+        drawerTabs.forEach((tab) => {
+          const selected = tab.getAttribute("data-tab") === next;
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        drawerPanels.forEach((panel) => {
+          const selected = panel.getAttribute("data-panel") === next;
+          panel.classList.toggle("is-active", selected);
+          if (selected) panel.removeAttribute("hidden");
+          else panel.setAttribute("hidden", "");
+        });
+        if (persist) {
+          try {
+            localStorage.setItem(TAB_KEY, next);
+          } catch (_) {}
+        }
+      }
+
+      function loadActiveTab() {
+        try {
+          const saved = localStorage.getItem(TAB_KEY);
+          if (saved && DRAWER_TABS.includes(saved)) {
+            setActiveTab(saved, { persist: false });
+            return;
+          }
+        } catch (_) {}
+        setActiveTab("content", { persist: false });
+      }
+
+      function applyData(data) {
+        if (!data) return;
+        if (data.lists) lists = normalizeListsData(data.lists);
+        else if (data.fields) {
+          const migrated = migrateLegacyLists(data.fields);
+          if (migrated) lists = normalizeListsData(migrated);
+        } else {
+          lists = normalizeListsData(SAMPLE_LISTS);
+        }
+        sectionOrder = normalizeSectionOrder(data.sectionOrder);
+        const fields = { ...(data.fields || {}) };
+        if ("linkedin" in fields) fields.linkedin = normalizeLinkedInUsername(fields.linkedin);
+        if ("github" in fields) fields.github = normalizeGitHubUsername(fields.github);
+        if ("phone" in fields) fields.phone = normalizePhoneLocal(fields.phone);
+        applyScalars(fields);
+        photoSrc = data.photo || DEFAULT_PHOTO;
+        if (avatar) {
+          avatar.src = photoSrc;
+          if (photoSrc.startsWith("data:")) avatar.alt = "Portrait photo";
+        }
+        if (photoPreview) photoPreview.src = photoSrc;
+        fillTypeForm(data.type || TYPE_DEFAULTS);
+        applyType(data.type || TYPE_DEFAULTS);
+        fillContactVisibility(data.contactVisibility);
+        fillSectionVisibility(data.sectionVisibility);
+        applySectionOrder();
+        renderLists();
+      }
+
+      function persist() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(readForm()));
+        } catch (err) {
+          console.warn("Could not save CV draft:", err);
+        }
+      }
+
+      function scheduleSave() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(persist, 200);
+      }
+
+      function pushLive() {
+        const fields = readScalarFields();
+        applyScalars(fields);
+        schedulePaginate();
+        scheduleSave();
+      }
+
+      function pushTypeLive() {
+        applyType(readType());
+        schedulePaginate();
+        scheduleSave();
+      }
+
+      function pushListsLive() {
+        renderCvLists();
+        scheduleSave();
+      }
+
+      function setDrawerOpen(open) {
+        document.body.classList.toggle("drawer-open", open);
+        toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        toggleBtn.textContent = open ? "Hide settings" : "Edit CV";
+        if (open) {
+          drawer.removeAttribute("inert");
+          if (drawerBackdrop) drawerBackdrop.removeAttribute("hidden");
+        } else {
+          drawer.setAttribute("inert", "");
+          if (drawerBackdrop) drawerBackdrop.setAttribute("hidden", "");
+        }
+        try {
+          localStorage.setItem(PANEL_KEY, open ? "1" : "0");
+        } catch (_) {}
+        scheduleFitZoom();
+        window.setTimeout(() => {
+          schedulePaginate();
+          scheduleFitZoom();
+        }, 300);
+      }
+
+      function nearestZoomIndex(value) {
+        let best = 0;
+        let bestDiff = Infinity;
+        ZOOM_STEPS.forEach((step, i) => {
+          const diff = Math.abs(step - value);
+          if (diff < bestDiff) {
+            best = i;
+            bestDiff = diff;
+          }
+        });
+        return best;
+      }
+
+      function clampZoom(value) {
+        return Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, value));
+      }
+
+      function availableViewport() {
+        const styles = getComputedStyle(document.body);
+        const padX =
+          (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+        const padY =
+          (parseFloat(styles.paddingTop) || 0) + (parseFloat(styles.paddingBottom) || 0);
+        return {
+          width: Math.max(80, window.innerWidth - padX - FIT_PAD * 2),
+          height: Math.max(80, window.innerHeight - padY - FIT_PAD * 2),
+        };
+      }
+
+      function pageBaseSize() {
+        // Fit height/width against one A4 .page, not the full multi-page stack.
+        const width = pageEl.offsetWidth || pageEl.getBoundingClientRect().width;
+        const height = pageEl.offsetHeight || pageEl.getBoundingClientRect().height;
+        return { width, height };
+      }
+
+      function fitZoomFor(mode) {
+        const avail = availableViewport();
+        const size = pageBaseSize();
+        if (!size.width || !size.height) return zoom;
+        if (mode === "height") return clampZoom(avail.height / size.height);
+        if (mode === "width") return clampZoom(avail.width / size.width);
+        return zoom;
+      }
+
+      function updateZoomChrome() {
+        zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+        zoomOutBtn.disabled = zoom <= ZOOM_MIN + 0.0001;
+        zoomInBtn.disabled = zoom >= ZOOM_MAX - 0.0001;
+        zoomFitHeightBtn.classList.toggle("is-active", zoomMode === "height");
+        zoomFitWidthBtn.classList.toggle("is-active", zoomMode === "width");
+        zoomFitHeightBtn.setAttribute("aria-pressed", zoomMode === "height" ? "true" : "false");
+        zoomFitWidthBtn.setAttribute("aria-pressed", zoomMode === "width" ? "true" : "false");
+      }
+
+      function persistZoom() {
+        try {
+          localStorage.setItem(ZOOM_KEY, String(zoom));
+          localStorage.setItem(ZOOM_MODE_KEY, zoomMode);
+        } catch (_) {}
+      }
+
+      function setZoom(next, mode = "manual", { persist = true } = {}) {
+        zoom = clampZoom(next);
+        if (mode === "manual") {
+          zoom = ZOOM_STEPS[nearestZoomIndex(zoom)];
+        }
+        zoomMode = mode;
+        document.body.style.setProperty("--cv-zoom", String(zoom));
+        updateZoomChrome();
+        if (persist) persistZoom();
+      }
+
+      function applyFitMode(mode) {
+        setZoom(fitZoomFor(mode), mode);
+      }
+
+      function scheduleFitZoom() {
+        if (zoomMode !== "height" && zoomMode !== "width") return;
+        cancelAnimationFrame(fitRaf);
+        fitRaf = requestAnimationFrame(() => applyFitMode(zoomMode));
+      }
+
+      function loadZoom() {
+        try {
+          const modeRaw = localStorage.getItem(ZOOM_MODE_KEY);
+          const raw = localStorage.getItem(ZOOM_KEY);
+          if (modeRaw === "height" || modeRaw === "width") {
+            applyFitMode(modeRaw);
+            return;
+          }
+          if (raw) {
+            const parsed = Number(raw);
+            if (!Number.isNaN(parsed) && parsed > 0) {
+              setZoom(parsed, "manual");
+              return;
+            }
+          }
+        } catch (_) {}
+        setZoom(DEFAULT_ZOOM, "manual");
+      }
+
+      function loadSaved() {
+        try {
+          let raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) raw = localStorage.getItem("cv-live-edit-v4");
+          if (!raw) raw = localStorage.getItem("cv-live-edit-v3");
+          if (!raw) return false;
+          applyData(JSON.parse(raw));
+          return true;
+        } catch (err) {
+          console.warn("Could not load CV draft:", err);
+          return false;
+        }
+      }
+
+      function snapshotDefaults() {
+        return {
+          fields: {
+            name: "Lorna<br />Alvarado",
+            title: "Marketing Manager",
+            phone: "81234567890",
+            email: "hello@reallygreatsite.com",
+            address: "123 Anywhere St., Any City, ST 12345",
+            linkedin: "username",
+            github: "username",
+            about:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+          },
+          photo: DEFAULT_PHOTO,
+          type: { ...TYPE_DEFAULTS },
+          lists: cloneLists(SAMPLE_LISTS),
+          contactVisibility: { ...CONTACT_VISIBILITY_DEFAULTS },
+          sectionVisibility: { ...SECTION_VISIBILITY_DEFAULTS },
+          sectionOrder: cloneOrder(SECTION_ORDER_DEFAULTS),
+        };
+      }
+
+      defaults = snapshotDefaults();
+      if (!loadSaved()) {
+        applyData(defaults);
+      }
+      loadZoom();
+      loadActiveTab();
+
+      try {
+        if (localStorage.getItem(PANEL_KEY) === "1") setDrawerOpen(true);
+      } catch (_) {}
+
+      toggleBtn.addEventListener("click", () => {
+        setDrawerOpen(!document.body.classList.contains("drawer-open"));
+      });
+      closeBtn.addEventListener("click", () => setDrawerOpen(false));
+      if (drawerBackdrop) {
+        drawerBackdrop.addEventListener("click", () => setDrawerOpen(false));
+      }
+
+      drawerTabs.forEach((tab) => {
+        tab.addEventListener("click", () => setActiveTab(tab.getAttribute("data-tab")));
+        tab.addEventListener("keydown", (e) => {
+          const idx = DRAWER_TABS.indexOf(tab.getAttribute("data-tab"));
+          if (idx < 0) return;
+          let next = idx;
+          if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (idx + 1) % DRAWER_TABS.length;
+          else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (idx - 1 + DRAWER_TABS.length) % DRAWER_TABS.length;
+          else if (e.key === "Home") next = 0;
+          else if (e.key === "End") next = DRAWER_TABS.length - 1;
+          else return;
+          e.preventDefault();
+          setActiveTab(DRAWER_TABS[next]);
+          const focusTab = drawerTabs.find((t) => t.getAttribute("data-tab") === DRAWER_TABS[next]);
+          if (focusTab) focusTab.focus();
+        });
+      });
+
+      zoomInBtn.addEventListener("click", () => {
+        const idx = nearestZoomIndex(zoom);
+        if (idx < ZOOM_STEPS.length - 1) setZoom(ZOOM_STEPS[idx + 1], "manual");
+        else if (zoom < ZOOM_MAX) setZoom(ZOOM_MAX, "manual");
+      });
+      zoomOutBtn.addEventListener("click", () => {
+        const idx = nearestZoomIndex(zoom);
+        if (zoom > ZOOM_STEPS[idx] + 0.0001 && idx >= 0) {
+          setZoom(ZOOM_STEPS[idx], "manual");
+        } else if (idx > 0) {
+          setZoom(ZOOM_STEPS[idx - 1], "manual");
+        } else {
+          setZoom(ZOOM_MIN, "manual");
+        }
+      });
+      zoomResetBtn.addEventListener("click", () => setZoom(DEFAULT_ZOOM, "manual"));
+      zoomFitHeightBtn.addEventListener("click", () => applyFitMode("height"));
+      zoomFitWidthBtn.addEventListener("click", () => applyFitMode("width"));
+      if (exportPdfBtn) {
+        exportPdfBtn.addEventListener("click", () => window.print());
+      }
+
+      window.addEventListener("resize", scheduleFitZoom);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && document.body.classList.contains("drawer-open")) {
+          setDrawerOpen(false);
+          return;
+        }
+        if (!(e.ctrlKey || e.metaKey)) return;
+        if (e.key === "=" || e.key === "+") {
+          e.preventDefault();
+          const idx = nearestZoomIndex(zoom);
+          if (idx < ZOOM_STEPS.length - 1) setZoom(ZOOM_STEPS[idx + 1], "manual");
+          else if (zoom < ZOOM_MAX) setZoom(ZOOM_MAX, "manual");
+        } else if (e.key === "-") {
+          e.preventDefault();
+          const idx = nearestZoomIndex(zoom);
+          if (zoom > ZOOM_STEPS[idx] + 0.0001) setZoom(ZOOM_STEPS[idx], "manual");
+          else if (idx > 0) setZoom(ZOOM_STEPS[idx - 1], "manual");
+        } else if (e.key === "0") {
+          e.preventDefault();
+          setZoom(DEFAULT_ZOOM, "manual");
+        }
+      });
+
+      function applyListField(t) {
+        const kind = t.getAttribute("data-list");
+        const index = Number(t.getAttribute("data-index"));
+        const field = t.getAttribute("data-field");
+        if (!lists[kind] || lists[kind][index] == null) return;
+        if (kind === "languages") {
+          lists[kind][index] = t.value;
+        } else if (kind === "skills") {
+          if (field === "name") {
+            lists.skills[index].name = t.value;
+          } else if (field === "skill") {
+            const skillIndex = Number(t.getAttribute("data-skill-index"));
+            if (lists.skills[index].skills[skillIndex] == null) return;
+            lists.skills[index].skills[skillIndex] = t.value;
+          }
+        } else if (field === "endPresent") {
+          lists[kind][index].endPresent = t.checked;
+          if (t.checked) {
+            lists[kind][index].endYear = "";
+            lists[kind][index].endMonth = "";
+          }
+          renderEditors();
+        } else if (field === "bullets") {
+          lists[kind][index].bullets = t.checked;
+          renderEditors();
+        } else if (field === "referenceLink") {
+          lists[kind][index].referenceLink = t.checked;
+        } else {
+          lists[kind][index][field] = t.type === "checkbox" ? t.checked : t.value;
+        }
+        pushListsLive();
+      }
+
+      form.addEventListener("input", (e) => {
+        const t = e.target;
+        if (t.matches("[data-type]")) {
+          pushTypeLive();
+          return;
+        }
+        if (t.matches("[data-list]") && t.type !== "checkbox") {
+          applyListField(t);
+          return;
+        }
+        if (t.matches("input, textarea, select")) pushLive();
+      });
+
+      form.addEventListener("change", (e) => {
+        const t = e.target;
+        if (t.matches("[data-type]")) {
+          pushTypeLive();
+          return;
+        }
+        if (t.matches("[data-list]")) {
+          applyListField(t);
+          return;
+        }
+        if (t.matches("[data-visible]")) {
+          const key = t.getAttribute("data-visible");
+          contactVisibility[key] = t.checked;
+          applyContactVisibility();
+          schedulePaginate();
+          scheduleSave();
+          return;
+        }
+        if (t.matches("[data-section-visible]")) {
+          const key = t.getAttribute("data-section-visible");
+          sectionVisibility[key] = t.checked;
+          applySectionVisibility();
+          renderSectionOrderEditors();
+          schedulePaginate();
+          scheduleSave();
+        }
+      });
+
+      form.addEventListener("click", (e) => {
+        const sectionMove = e.target.closest("[data-section-move]");
+        if (sectionMove && !sectionMove.disabled) {
+          const side = sectionMove.getAttribute("data-section-move");
+          if (side === "sidebar") return;
+          const index = Number(sectionMove.getAttribute("data-index"));
+          const dir = Number(sectionMove.getAttribute("data-dir"));
+          const to = index + dir;
+          const arr = sectionOrder[side];
+          if (to < 0 || to >= arr.length) return;
+          const [moved] = arr.splice(index, 1);
+          arr.splice(to, 0, moved);
+          applySectionOrder();
+          scheduleSave();
+          return;
+        }
+
+        const addSkillBtn = e.target.closest("[data-add-skill]");
+        if (addSkillBtn) {
+          const catIndex = Number(addSkillBtn.getAttribute("data-add-skill"));
+          if (!lists.skills[catIndex]) return;
+          lists.skills[catIndex].skills.push("");
+          renderLists();
+          scheduleSave();
+          const input = editors.skills.querySelector(
+            `input[data-list="skills"][data-index="${catIndex}"][data-field="skill"][data-skill-index="${lists.skills[catIndex].skills.length - 1}"]`
+          );
+          if (input) input.focus();
+          return;
+        }
+
+        const removeSkillBtn = e.target.closest("[data-remove-skill]");
+        if (removeSkillBtn) {
+          const catIndex = Number(removeSkillBtn.getAttribute("data-remove-skill"));
+          const skillIndex = Number(removeSkillBtn.getAttribute("data-skill-index"));
+          if (!lists.skills[catIndex]) return;
+          lists.skills[catIndex].skills.splice(skillIndex, 1);
+          renderLists();
+          scheduleSave();
+          return;
+        }
+
+        const moveSkillBtn = e.target.closest("[data-move-skill]");
+        if (moveSkillBtn && !moveSkillBtn.disabled) {
+          const catIndex = Number(moveSkillBtn.getAttribute("data-move-skill"));
+          const skillIndex = Number(moveSkillBtn.getAttribute("data-skill-index"));
+          const dir = Number(moveSkillBtn.getAttribute("data-dir"));
+          const arr = lists.skills[catIndex] && lists.skills[catIndex].skills;
+          if (!arr) return;
+          const to = skillIndex + dir;
+          if (to < 0 || to >= arr.length) return;
+          const [moved] = arr.splice(skillIndex, 1);
+          arr.splice(to, 0, moved);
+          renderLists();
+          scheduleSave();
+          return;
+        }
+
+        const addBtn = e.target.closest("[data-add]");
+        if (addBtn) {
+          const kind = addBtn.getAttribute("data-add");
+          lists[kind].push(emptyItem(kind));
+          renderLists();
+          scheduleSave();
+          const editor = editors[kind];
+          const last = editor.querySelector(".drawer-subgroup:last-of-type input, .drawer-subgroup:last-of-type textarea");
+          if (last) last.focus();
+          return;
+        }
+
+        const removeBtn = e.target.closest("[data-remove]");
+        if (removeBtn) {
+          const kind = removeBtn.getAttribute("data-remove");
+          const index = Number(removeBtn.getAttribute("data-index"));
+          lists[kind].splice(index, 1);
+          renderLists();
+          scheduleSave();
+          return;
+        }
+
+        const moveBtn = e.target.closest("[data-move]");
+        if (moveBtn && !moveBtn.disabled) {
+          const kind = moveBtn.getAttribute("data-move");
+          const index = Number(moveBtn.getAttribute("data-index"));
+          const dir = Number(moveBtn.getAttribute("data-dir"));
+          const to = index + dir;
+          if (to < 0 || to >= lists[kind].length) return;
+          const arr = lists[kind];
+          const [moved] = arr.splice(index, 1);
+          arr.splice(to, 0, moved);
+          renderLists();
+          scheduleSave();
+        }
+      });
+
+      form.addEventListener("dragstart", (e) => {
+        const handle = e.target.closest("[data-drag]");
+        if (!handle) return;
+        const kind = handle.getAttribute("data-drag");
+        const index = Number(handle.getAttribute("data-index"));
+        dragState = { kind, index };
+        const card = handle.closest(".drawer-subgroup");
+        if (card) card.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", `${kind}:${index}`);
+      });
+
+      form.addEventListener("dragend", () => {
+        form.querySelectorAll(".drawer-subgroup").forEach((el) => {
+          el.classList.remove("dragging", "drag-over");
+        });
+        dragState = null;
+      });
+
+      form.addEventListener("dragover", (e) => {
+        const card = e.target.closest(".drawer-subgroup[data-kind]");
+        if (!card || !dragState) return;
+        if (card.getAttribute("data-kind") !== dragState.kind) return;
+        e.preventDefault();
+        form.querySelectorAll(".drawer-subgroup").forEach((el) => el.classList.remove("drag-over"));
+        card.classList.add("drag-over");
+      });
+
+      form.addEventListener("drop", (e) => {
+        const card = e.target.closest(".drawer-subgroup[data-kind]");
+        if (!card || !dragState) return;
+        const kind = card.getAttribute("data-kind");
+        if (kind !== dragState.kind) return;
+        e.preventDefault();
+        const toIndex = Number(card.getAttribute("data-index"));
+        const fromIndex = dragState.index;
+        if (fromIndex === toIndex) return;
+        const arr = lists[kind];
+        const [moved] = arr.splice(fromIndex, 1);
+        arr.splice(toIndex, 0, moved);
+        renderLists();
+        scheduleSave();
+      });
+
+      form.addEventListener("submit", (e) => e.preventDefault());
+
+      resetBtn.addEventListener("click", () => {
+        if (!confirm("Reset to the original sample content, lists, and typography?")) return;
+        lists = normalizeListsData(SAMPLE_LISTS);
+        contactVisibility = { ...CONTACT_VISIBILITY_DEFAULTS };
+        sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
+        sectionOrder = cloneOrder(SECTION_ORDER_DEFAULTS);
+        applyData(defaults);
+        photoSrc = DEFAULT_PHOTO;
+        if (avatar) {
+          avatar.src = DEFAULT_PHOTO;
+          avatar.alt = "Portrait of Lorna Alvarado";
+        }
+        if (photoPreview) photoPreview.src = DEFAULT_PHOTO;
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem("cv-live-edit-v4");
+          localStorage.removeItem("cv-live-edit-v3");
+        } catch (_) {}
+      });
+
+      photoPick.addEventListener("click", () => photoInput.click());
+      photoInput.addEventListener("change", () => {
+        const file = photoInput.files && photoInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          photoSrc = reader.result;
+          if (avatar) {
+            avatar.src = photoSrc;
+            avatar.alt = "Portrait photo";
+          }
+          if (photoPreview) photoPreview.src = photoSrc;
+          persist();
+        };
+        reader.readAsDataURL(file);
+        photoInput.value = "";
+      });
+    })();
+  </script>
+
 </body>
 </html>
