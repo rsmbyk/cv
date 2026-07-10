@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lorna Alvarado — Marketing Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+  <style>
+    /*
+      Layout + type locked to Canva PDF (595.5 × 842.25 pt A4).
+      Montserrat Medium/SemiBold/Bold/Regular/MediumItalic.
+    */
+    :root {
+      --accent: #608abf;
+      --ink: #636466;
+      --sidebar-bg: #f7f7f7;
+      --page-w: 210mm;
+      --page-h: 297mm;
+      --sidebar-w: 35%;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      color: var(--ink);
+      background: #e8eaed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: var(--page-w);
+      height: var(--page-h);
+      background: #fff;
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
+
+    /* —— Sidebar —— */
+    .sidebar {
+      background: var(--sidebar-bg);
+      position: relative;
+      padding: 0 25pt 18pt;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Blue corner: true 45° right triangle (equal legs) */
+    .sidebar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--accent);
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      z-index: 0;
+    }
+
+    .profile {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      /* photo top ≈ 30pt */
+      padding-top: 30pt;
+      margin-bottom: 0;
+    }
+
+    .avatar {
+      /* PDF white circle 141 × 141 pt */
+      width: 141pt;
+      height: 141pt;
+      border-radius: 50%;
+      border: 5pt solid #fff;
+      object-fit: cover;
+      object-position: center 15%;
+      background: #ddd;
+      display: block;
+    }
+
+    .name {
+      margin-top: 15pt; /* photo bottom ~171 → Lorna 186 */
+      font-size: 30pt;
+      font-weight: 500;
+      color: var(--accent);
+      line-height: 30pt;
+      letter-spacing: -0.01em;
+    }
+
+    .title {
+      margin-top: 1pt; /* Alvarado ends ~252.5, title 253.5 */
+      font-size: 12pt;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .side-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .side-section.contact { margin-top: 31pt; } /* title end 268 → Contact 299 */
+    .side-section.about { margin-top: 28pt; }
+    .side-section.skills { margin-top: 28pt; }
+
+    .side-heading {
+      display: flex;
+      align-items: center;
+      gap: 7pt;
+      font-size: 15pt;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 18pt;
+      padding-bottom: 9.6pt;
+      border-bottom: 0.75pt solid var(--accent);
+      margin-bottom: 18pt;
+    }
+
+    .side-heading .ico {
+      width: 13pt;
+      height: 13pt;
+      flex-shrink: 0;
+      color: var(--ink);
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10pt;
+    }
+
+    .contact-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8pt;
+      font-size: 8pt;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .contact-list .ico {
+      width: 15pt;
+      height: 15pt;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+
+    .about-text {
+      font-size: 9pt;
+      font-weight: 400;
+      line-height: 15pt;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .skills-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skills-list li {
+      font-size: 10pt;
+      font-weight: 500;
+      color: var(--ink);
+      padding-left: 14pt;
+      position: relative;
+      line-height: 24.8pt;
+    }
+
+    .skills-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10.5pt;
+      width: 3pt;
+      height: 3pt;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    /* —— Main —— */
+    .main {
+      /* PDF: text x278–558.5 → ~32pt left into main + ~37pt right */
+      padding: 50pt 37pt 30pt 32pt;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .main > section {
+      min-width: 0;
+    }
+
+    .main > section.experience { margin-top: 20pt; }
+    .main > section.section-references { margin-top: 18pt; }
+
+    .main-section-heading {
+      display: flex;
+      align-items: center;
+      gap: 8pt;
+      font-size: 15pt;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 18pt;
+      padding-bottom: 8pt;
+      border-bottom: 0.75pt solid var(--accent);
+      margin-bottom: 14pt;
+    }
+
+    .main-section-heading .ico {
+      width: 16pt;
+      height: 16pt;
+      flex-shrink: 0;
+      color: var(--ink);
+    }
+
+    .timeline {
+      position: relative;
+      /* text at 278, dots at 262 → 16pt from content start; content start is padding-left */
+      padding-left: 16pt;
+      display: flex;
+      flex-direction: column;
+      /* edu entry pitch ~94pt total; gap between blocks ~20pt after 4-line desc */
+      gap: 20pt;
+    }
+
+    .timeline.experience-timeline {
+      /* exp pitches ~78–99pt; 3-line desc → gap ~16pt */
+      gap: 16pt;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 3pt;
+      top: 5pt;
+      bottom: 5pt;
+      width: 0.75pt;
+      background: var(--accent);
+    }
+
+    .entry { position: relative; }
+
+    .entry::before {
+      content: "";
+      position: absolute;
+      left: -16pt;
+      top: 3pt;
+      width: 6.6pt;
+      height: 6.6pt;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 2pt #fff;
+    }
+
+    .entry-title {
+      font-size: 10pt;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .entry-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12pt;
+      margin-top: 1pt;
+      margin-bottom: 4pt;
+      min-width: 0;
+    }
+
+    .entry-org {
+      font-size: 9pt;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--ink);
+      min-width: 0;
+    }
+
+    .entry-date {
+      font-size: 8pt;
+      font-weight: 400;
+      color: var(--ink);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .entry-desc {
+      font-size: 8pt;
+      font-weight: 400;
+      line-height: 12pt;
+      color: var(--ink);
+      overflow-wrap: break-word;
+    }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24pt;
+      min-width: 0;
+    }
+
+    .ref-grid > div {
+      min-width: 0;
+    }
+
+    .ref-name {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4pt;
+    }
+
+    .ref-role {
+      font-size: 10pt;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 8pt;
+    }
+
+    .ref-meta {
+      font-size: 8pt;
+      font-weight: 400;
+      line-height: 14pt;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+
+    .ref-meta strong {
+      font-size: 7pt;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* Tabler Icons — filled headers, outline contact rows */
+    .ico-fill { fill: currentColor; stroke: none; }
+    .ico-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media screen and (max-width: 720px) {
+      body { padding: 0; background: #fff; }
+      .page {
+        width: 100%;
+        height: auto;
+        grid-template-columns: 1fr;
+        box-shadow: none;
+      }
+      .sidebar::before {
+        width: 70%;
+      }
+      .main { padding: 24pt; }
+    }
+
+    @page { size: A4; margin: 0; }
+
+    @media print {
+      body { background: none; padding: 0; }
+      .page {
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <aside class="sidebar">
+      <header class="profile">
+        <img class="avatar" src="photo.jpg" alt="Portrait of Lorna Alvarado" width="188" height="188" />
+        <h1 class="name">Lorna<br />Alvarado</h1>
+        <p class="title">Marketing Manager</p>
+      </header>
+
+      <section class="side-section contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading" class="side-heading">
+          <!-- tabler:id-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 3a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V7q0-.053.005-.102A3.994 3.994 0 0 1 6 3zm-1 12H7a1 1 0 0 0 0 2h10a1 1 0 0 0 0-2M9 7a2.995 2.995 0 0 0-2.995 2.898A1 1 0 0 0 6 10a3 3 0 1 0 3-3m8 4h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2m0-4h-2a1 1 0 0 0 0 2h2a1 1 0 0 0 0-2" />
+          </svg>
+          Contact
+        </h2>
+        <ul class="contact-list">
+          <li>
+            <!-- tabler:phone -->
+            <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
+            </svg>
+            <span>+123-456-7890</span>
+          </li>
+          <li>
+            <!-- tabler:at -->
+            <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0" />
+              <path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-5.5 8.28" />
+            </svg>
+            <span>hello@reallygreatsite.com</span>
+          </li>
+          <li>
+            <!-- tabler:map-pin -->
+            <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0-6 0" />
+              <path d="M17.657 16.657L13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0" />
+            </svg>
+            <span>123 Anywhere St., Any City, ST 12345</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="side-section about" aria-labelledby="about-heading">
+        <h2 id="about-heading" class="side-heading">
+          <!-- tabler:user-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2a5 5 0 1 1-5 5l.005-.217A5 5 0 0 1 12 2m2 12a5 5 0 0 1 5 5v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1a5 5 0 0 1 5-5z" />
+          </svg>
+          About Me
+        </h2>
+        <p class="about-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </p>
+      </section>
+
+      <section class="side-section skills" aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="side-heading">
+          <!-- tabler:puzzle-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 2a3 3 0 0 1 2.995 2.824L13 5v1h3a2 2 0 0 1 1.995 1.85L18 8v3h1a3 3 0 0 1 .176 5.995L19 17h-1v3a2 2 0 0 1-1.85 1.995L16 22h-3a2 2 0 0 1-1.995-1.85L11 20v-1a1 1 0 0 0-1.993-.117L9 19v1a2 2 0 0 1-1.85 1.995L7 22H4a2 2 0 0 1-1.995-1.85L2 20v-3a2 2 0 0 1 1.85-1.995L4 15h1a1 1 0 0 0 .117-1.993L5 13H4a2 2 0 0 1-1.995-1.85L2 11V8a2 2 0 0 1 1.85-1.995L4 6h3V5a3 3 0 0 1 3-3" />
+          </svg>
+          Skills
+        </h2>
+        <ul class="skills-list">
+          <li>Management Skills</li>
+          <li>Creativity</li>
+          <li>Digital Marketing</li>
+          <li>Negotiation</li>
+          <li>Critical Thinking</li>
+          <li>Leadership</li>
+        </ul>
+      </section>
+    </aside>
+
+    <div class="main">
+      <section aria-labelledby="education-heading">
+        <h2 id="education-heading" class="main-section-heading">
+          <!-- tabler:school (outline — no filled variant) -->
+          <svg class="ico ico-line" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 9L12 5L2 9l10 4v6" />
+            <path d="M6 10.6V16a6 3 0 0 0 12 0v-5.4" />
+          </svg>
+          Education
+        </h2>
+        <div class="timeline">
+          <article class="entry">
+            <h3 class="entry-title">Bachelor of Business Management</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Borcelle University</span>
+              <span class="entry-date">2016 - 2020</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque. Sed leo nisl, semper ac
+              hendrerit a, sollicitudin in arcu.
+            </p>
+          </article>
+          <article class="entry">
+            <h3 class="entry-title">Bachelor of Business Management</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Borcelle University</span>
+              <span class="entry-date">2020 - 2023</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque. Sed leo nisl, semper ac
+              hendrerit a, sollicitudin in arcu.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="experience" aria-labelledby="experience-heading">
+        <h2 id="experience-heading" class="main-section-heading">
+          <!-- tabler:briefcase-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 13.478V18a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-4.522l.553.277a21 21 0 0 0 18.897-.002zM14 2a3 3 0 0 1 3 3v1h2a3 3 0 0 1 3 3v2.242l-1.447.724a19 19 0 0 1-16.726.186l-.647-.32l-1.18-.59V9a3 3 0 0 1 3-3h2V5a3 3 0 0 1 3-3zm-2 8a1 1 0 0 0-1 1a1 1 0 1 0 2 .01c0-.562-.448-1.01-1-1.01m2-6h-4a1 1 0 0 0-1 1v1h6V5a1 1 0 0 0-1-1" />
+          </svg>
+          Experience
+        </h2>
+        <div class="timeline experience-timeline">
+          <article class="entry">
+            <h3 class="entry-title">Product Design Manager</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Arowwai Industries</span>
+              <span class="entry-date">2016 - 2020</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque.
+            </p>
+          </article>
+          <article class="entry">
+            <h3 class="entry-title">Marketing Manager</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Arowwai Industries</span>
+              <span class="entry-date">2019 - 2020</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque.
+            </p>
+          </article>
+          <article class="entry">
+            <h3 class="entry-title">Marketing Manager</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Arowwai Industries</span>
+              <span class="entry-date">2017 - 2019</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque.
+            </p>
+          </article>
+          <article class="entry">
+            <h3 class="entry-title">Marketing Manager</h3>
+            <div class="entry-meta">
+              <span class="entry-org">Arowwai Industries</span>
+              <span class="entry-date">2016 - 2017</span>
+            </div>
+            <p class="entry-desc">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit
+              amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut
+              quam eget, luctus sollicitudin neque.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-references" aria-labelledby="references-heading">
+        <h2 id="references-heading" class="main-section-heading">
+          <!-- tabler:book-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.5 5.134a1 1 0 0 1 .493.748L22 6v13a1 1 0 0 1-1.5.866A8 8 0 0 0 13 19.6V4.426a10 10 0 0 1 8.5.708M11 4.427l.001 15.174a8 8 0 0 0-7.234.117l-.327.18l-.103.044l-.049.016l-.11.026l-.061.01L3 20h-.042l-.11-.012l-.077-.014l-.108-.032l-.126-.056l-.095-.056l-.089-.067l-.06-.056l-.073-.082l-.064-.089l-.022-.036l-.032-.06l-.044-.103l-.016-.049l-.026-.11l-.01-.061l-.004-.049L2 6a1 1 0 0 1 .5-.866a10 10 0 0 1 8.5-.707" />
+          </svg>
+          References
+        </h2>
+        <div class="ref-grid">
+          <div>
+            <p class="ref-name">Harumi Kobayashi</p>
+            <p class="ref-role">Wardiere Inc. / CEO</p>
+            <p class="ref-meta">
+              <strong>Phone:</strong> 123-456-7890<br />
+              <strong>Email :</strong> hello@reallygreatsite.com
+            </p>
+          </div>
+          <div>
+            <p class="ref-name">Bailey Dupont</p>
+            <p class="ref-role">Wardiere Inc. / CEO</p>
+            <p class="ref-meta">
+              <strong>Phone:</strong> 123-456-7890<br />
+              <strong>Email :</strong> hello@reallygreatsite.com
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </article>
+</body>
+</html>
