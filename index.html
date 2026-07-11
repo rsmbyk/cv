@@ -1088,6 +1088,56 @@
       font-weight: 600;
       color: #6b7076;
     }
+    .field-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.35rem;
+      min-height: 0.9rem;
+    }
+    .field-head label {
+      margin: 0;
+    }
+    .field-reset {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: #8a9096;
+      font: inherit;
+      font-size: 0.58rem;
+      font-weight: 600;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+    .field-reset:hover {
+      color: #3a3d40;
+    }
+    .panel-reset-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin: 0 0 0.55rem;
+    }
+    .panel-reset-btn {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 7px;
+      padding: 0.3rem 0.6rem;
+      font: inherit;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .panel-reset-btn:hover {
+      background: #f3f5f7;
+    }
     .field input,
     .field textarea {
       width: 100%;
@@ -1331,7 +1381,6 @@
       </div>
       <div class="drawer-actions">
         <button type="button" class="primary" id="drawer-close">Collapse</button>
-        <button type="button" id="edit-reset">Reset sample</button>
       </div>
     </div>
     <div class="drawer-tabs" role="tablist" aria-label="Settings categories">
@@ -1370,6 +1419,9 @@
     </div>
     <form class="drawer-body" id="settings-form" autocomplete="off">
       <div class="drawer-panel is-active" role="tabpanel" id="panel-content" data-panel="content" aria-labelledby="tab-content">
+        <div class="panel-reset-bar">
+          <button type="button" class="panel-reset-btn" id="reset-content" title="Restore all CV content to sample defaults">Reset content</button>
+        </div>
         <fieldset class="drawer-group">
           <legend>Profile</legend>
           <div class="field">
@@ -1871,6 +1923,9 @@
       </div>
 
       <div class="drawer-panel" role="tabpanel" id="panel-sections" data-panel="sections" aria-labelledby="tab-sections" hidden>
+        <div class="panel-reset-bar">
+          <button type="button" class="panel-reset-btn" id="reset-sections" title="Restore section visibility and order to defaults">Reset sections</button>
+        </div>
         <fieldset class="drawer-group">
           <legend>Sections</legend>
           <p style="font-size:0.62rem;color:#6b7076;line-height:1.35;margin:0 0 0.55rem">
@@ -2351,7 +2406,8 @@
 
       const toggleBtn = document.getElementById("drawer-toggle");
       const closeBtn = document.getElementById("drawer-close");
-      const resetBtn = document.getElementById("edit-reset");
+      const resetContentBtn = document.getElementById("reset-content");
+      const resetSectionsBtn = document.getElementById("reset-sections");
       const drawer = document.getElementById("settings-drawer");
       const drawerBackdrop = document.getElementById("drawer-backdrop");
       const form = document.getElementById("settings-form");
@@ -4247,6 +4303,81 @@
         scheduleSave();
       }
 
+      function setPhoto(src, { alt } = {}) {
+        photoSrc = src || DEFAULT_PHOTO;
+        if (avatar) {
+          avatar.src = photoSrc;
+          if (alt) avatar.alt = alt;
+          else if (photoSrc.startsWith("data:")) avatar.alt = "Portrait photo";
+        }
+        if (photoPreview) photoPreview.src = photoSrc;
+      }
+
+      /** Wire a small Reset link beside each type/spacing control. */
+      function wireFieldResets() {
+        typeInputs().forEach((input) => {
+          const key = input.getAttribute("data-type");
+          if (!key || !(key in TYPE_DEFAULTS)) return;
+          const field = input.closest(".field");
+          if (!field || field.querySelector("[data-reset-type]")) return;
+          const label = field.querySelector(":scope > label");
+          if (!label) return;
+          const labelText = (label.textContent || "").replace(/\u00a0/g, " ").trim();
+          if (!labelText) return;
+
+          const head = document.createElement("div");
+          head.className = "field-head";
+          label.replaceWith(head);
+          head.appendChild(label);
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "field-reset";
+          btn.setAttribute("data-reset-type", key);
+          btn.title = "Reset to default";
+          btn.setAttribute("aria-label", `Reset ${labelText} to default`);
+          btn.textContent = "Reset";
+          head.appendChild(btn);
+        });
+      }
+
+      function resetTypeControl(key) {
+        if (!(key in TYPE_DEFAULTS)) return;
+        const input = form.querySelector(`[data-type="${key}"]`);
+        if (!input) return;
+        input.value = TYPE_DEFAULTS[key];
+        pushTypeLive();
+      }
+
+      /** Content tab only: sample fields, lists, photo, contact visibility. */
+      function resetContentToDefaults() {
+        if (
+          !confirm(
+            "Reset all CV content to the sample defaults? Typography, spacing, and section layout stay as they are."
+          )
+        ) {
+          return;
+        }
+        const d = defaults;
+        lists = normalizeListsData(d.lists);
+        applyScalars({ ...(d.fields || {}) });
+        fillContactVisibility(d.contactVisibility);
+        setPhoto(d.photo || DEFAULT_PHOTO, { alt: "Portrait of Lorna Alvarado" });
+        renderLists();
+        schedulePaginate();
+        persist();
+      }
+
+      /** Sections tab only: visibility + order. */
+      function resetSectionsToDefaults() {
+        if (!confirm("Reset section visibility and order to the defaults?")) return;
+        sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
+        sectionOrder = cloneOrder(SECTION_ORDER_DEFAULTS);
+        applySectionOrder();
+        schedulePaginate();
+        persist();
+      }
+
       function setDrawerOpen(open) {
         document.body.classList.toggle("drawer-open", open);
         toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
@@ -4412,6 +4543,7 @@
       }
       loadZoom();
       loadActiveTab();
+      wireFieldResets();
 
       try {
         if (localStorage.getItem(PANEL_KEY) === "1") setDrawerOpen(true);
@@ -4564,6 +4696,13 @@
       });
 
       form.addEventListener("click", (e) => {
+        const typeReset = e.target.closest("[data-reset-type]");
+        if (typeReset) {
+          e.preventDefault();
+          resetTypeControl(typeReset.getAttribute("data-reset-type"));
+          return;
+        }
+
         const sectionMove = e.target.closest("[data-section-move]");
         if (sectionMove && !sectionMove.disabled) {
           const side = sectionMove.getAttribute("data-section-move");
@@ -4704,25 +4843,12 @@
 
       form.addEventListener("submit", (e) => e.preventDefault());
 
-      resetBtn.addEventListener("click", () => {
-        if (!confirm("Reset to the original sample content, lists, and typography?")) return;
-        lists = normalizeListsData(SAMPLE_LISTS);
-        contactVisibility = { ...CONTACT_VISIBILITY_DEFAULTS };
-        sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
-        sectionOrder = cloneOrder(SECTION_ORDER_DEFAULTS);
-        applyData(defaults);
-        photoSrc = DEFAULT_PHOTO;
-        if (avatar) {
-          avatar.src = DEFAULT_PHOTO;
-          avatar.alt = "Portrait of Lorna Alvarado";
-        }
-        if (photoPreview) photoPreview.src = DEFAULT_PHOTO;
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-          localStorage.removeItem("cv-live-edit-v4");
-          localStorage.removeItem("cv-live-edit-v3");
-        } catch (_) {}
-      });
+      if (resetContentBtn) {
+        resetContentBtn.addEventListener("click", resetContentToDefaults);
+      }
+      if (resetSectionsBtn) {
+        resetSectionsBtn.addEventListener("click", resetSectionsToDefaults);
+      }
 
       photoPick.addEventListener("click", () => photoInput.click());
       photoInput.addEventListener("change", () => {
@@ -4730,12 +4856,7 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
-          photoSrc = reader.result;
-          if (avatar) {
-            avatar.src = photoSrc;
-            avatar.alt = "Portrait photo";
-          }
-          if (photoPreview) photoPreview.src = photoSrc;
+          setPhoto(reader.result);
           persist();
         };
         reader.readAsDataURL(file);
