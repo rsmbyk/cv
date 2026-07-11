@@ -1152,6 +1152,92 @@
       display: block;
       flex-shrink: 0;
     }
+
+    /* —— Confirm modal (Content reset) —— */
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      font-family: "Montserrat", sans-serif;
+      color: #3a3d40;
+    }
+    .confirm-modal.is-open {
+      display: flex;
+    }
+    .confirm-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.36);
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .confirm-modal-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(22rem, 100%);
+      background: #fff;
+      border: 1px solid #d8dde3;
+      border-radius: 10px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+      padding: 1.15rem 1.15rem 1rem;
+    }
+    .confirm-modal-dialog h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1f2225;
+      margin: 0 0 0.45rem;
+    }
+    .confirm-modal-dialog p {
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: #6b7076;
+      margin: 0 0 1rem;
+    }
+    .confirm-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .confirm-modal-actions button {
+      appearance: none;
+      border: 1px solid #c5ccd4;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 7px;
+      padding: 0.42rem 0.75rem;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .confirm-modal-actions button:hover {
+      background: #f3f5f7;
+    }
+    .confirm-modal-actions button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .confirm-modal-actions .danger {
+      background: #9b2c2c;
+      border-color: #9b2c2c;
+      color: #fff;
+    }
+    .confirm-modal-actions .danger:hover {
+      background: #822424;
+      border-color: #822424;
+      color: #fff;
+      filter: none;
+    }
     .field input,
     .field textarea {
       width: 100%;
@@ -1365,7 +1451,8 @@
       .screen-chrome,
       .zoom-controls,
       .drawer-backdrop,
-      .settings-drawer { display: none !important; }
+      .settings-drawer,
+      .confirm-modal { display: none !important; }
     }
   </style>
 </head>
@@ -1387,6 +1474,26 @@
     <button type="button" id="export-pdf" title="Export PDF" aria-label="Export PDF">PDF</button>
   </div>
   <button type="button" class="drawer-backdrop" id="drawer-backdrop" aria-label="Close settings" tabindex="-1" hidden></button>
+
+  <div class="confirm-modal" id="content-reset-modal" hidden>
+    <button type="button" class="confirm-modal-backdrop" id="content-reset-backdrop" aria-label="Dismiss" tabindex="-1"></button>
+    <div
+      class="confirm-modal-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="content-reset-title"
+      aria-describedby="content-reset-body"
+    >
+      <h2 id="content-reset-title">Reset all content?</h2>
+      <p id="content-reset-body">
+        This restores every Content field to the sample CV (name, contacts, about, lists, photo, and contact visibility). Your current content will be lost. This can’t be undone.
+      </p>
+      <div class="confirm-modal-actions">
+        <button type="button" id="content-reset-cancel">Cancel</button>
+        <button type="button" class="danger" id="content-reset-confirm">Reset content</button>
+      </div>
+    </div>
+  </div>
 
   <aside class="settings-drawer" id="settings-drawer" aria-label="CV settings" inert>
     <div class="drawer-header">
@@ -2437,6 +2544,10 @@
       const closeBtn = document.getElementById("drawer-close");
       const resetContentBtn = document.getElementById("reset-content");
       const resetSectionsBtn = document.getElementById("reset-sections");
+      const contentResetModal = document.getElementById("content-reset-modal");
+      const contentResetBackdrop = document.getElementById("content-reset-backdrop");
+      const contentResetCancel = document.getElementById("content-reset-cancel");
+      const contentResetConfirm = document.getElementById("content-reset-confirm");
       const drawer = document.getElementById("settings-drawer");
       const drawerBackdrop = document.getElementById("drawer-backdrop");
       const form = document.getElementById("settings-form");
@@ -4400,14 +4511,40 @@
       }
 
       /** Content tab only: sample fields, lists, photo, contact visibility. */
-      function resetContentToDefaults() {
-        if (
-          !confirm(
-            "Reset all CV content to the sample defaults? Typography, spacing, and section layout stay as they are."
-          )
-        ) {
-          return;
+      let contentResetResolver = null;
+
+      function isContentResetModalOpen() {
+        return Boolean(contentResetModal && contentResetModal.classList.contains("is-open"));
+      }
+
+      function closeContentResetModal(confirmed) {
+        if (!contentResetModal || !isContentResetModalOpen()) return;
+        contentResetModal.classList.remove("is-open");
+        contentResetModal.setAttribute("hidden", "");
+        const resolve = contentResetResolver;
+        contentResetResolver = null;
+        if (typeof resolve === "function") resolve(Boolean(confirmed));
+        if (resetContentBtn && typeof resetContentBtn.focus === "function") {
+          resetContentBtn.focus();
         }
+      }
+
+      function openContentResetModal() {
+        if (!contentResetModal) return Promise.resolve(false);
+        if (isContentResetModalOpen()) return Promise.resolve(false);
+        return new Promise((resolve) => {
+          contentResetResolver = resolve;
+          contentResetModal.removeAttribute("hidden");
+          contentResetModal.classList.add("is-open");
+          if (contentResetCancel && typeof contentResetCancel.focus === "function") {
+            contentResetCancel.focus();
+          }
+        });
+      }
+
+      async function resetContentToDefaults() {
+        const ok = await openContentResetModal();
+        if (!ok) return;
         const d = defaults;
         lists = normalizeListsData(d.lists);
         applyScalars({ ...(d.fields || {}) });
@@ -4650,9 +4787,16 @@
       window.addEventListener("resize", scheduleFitZoom);
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && document.body.classList.contains("drawer-open")) {
-          setDrawerOpen(false);
-          return;
+        if (e.key === "Escape") {
+          if (isContentResetModalOpen()) {
+            e.preventDefault();
+            closeContentResetModal(false);
+            return;
+          }
+          if (document.body.classList.contains("drawer-open")) {
+            setDrawerOpen(false);
+            return;
+          }
         }
         if (!(e.ctrlKey || e.metaKey)) return;
         if (e.key === "=" || e.key === "+") {
@@ -4895,6 +5039,15 @@
 
       if (resetContentBtn) {
         resetContentBtn.addEventListener("click", resetContentToDefaults);
+      }
+      if (contentResetCancel) {
+        contentResetCancel.addEventListener("click", () => closeContentResetModal(false));
+      }
+      if (contentResetConfirm) {
+        contentResetConfirm.addEventListener("click", () => closeContentResetModal(true));
+      }
+      if (contentResetBackdrop) {
+        contentResetBackdrop.addEventListener("click", () => closeContentResetModal(false));
       }
       if (resetSectionsBtn) {
         resetSectionsBtn.addEventListener("click", resetSectionsToDefaults);
