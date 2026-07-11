@@ -1112,9 +1112,14 @@
       line-height: 0;
       border-radius: 4px;
     }
-    .field-reset:hover {
+    .field-reset:hover:not(:disabled) {
       color: #3a3d40;
       background: #f3f5f7;
+    }
+    .field-reset:disabled {
+      color: #cfd4d9;
+      cursor: default;
+      pointer-events: none;
     }
     .field-reset svg {
       width: 0.85rem;
@@ -1143,8 +1148,15 @@
       font-weight: 600;
       line-height: 1.2;
     }
-    .panel-reset-btn:hover {
+    .panel-reset-btn:hover:not(:disabled) {
       background: #f3f5f7;
+    }
+    .panel-reset-btn:disabled {
+      color: #a8b0b8;
+      border-color: #e4e8ec;
+      background: #f7f8f9;
+      cursor: default;
+      pointer-events: none;
     }
     .panel-reset-btn svg {
       width: 0.95rem;
@@ -4410,6 +4422,7 @@
         fillSectionVisibility(data.sectionVisibility);
         applySectionOrder();
         renderLists();
+        syncResetButtons();
       }
 
       function persist() {
@@ -4418,9 +4431,11 @@
         } catch (err) {
           console.warn("Could not save CV draft:", err);
         }
+        syncResetButtons();
       }
 
       function scheduleSave() {
+        syncResetButtons();
         clearTimeout(saveTimer);
         saveTimer = setTimeout(persist, 200);
       }
@@ -4441,6 +4456,65 @@
       function pushListsLive() {
         renderCvLists();
         scheduleSave();
+      }
+
+      /** Loose equality for type/spacing controls (numeric + case-insensitive colors). */
+      function typeValueEquals(current, expected) {
+        if (current === expected) return true;
+        const a = String(current ?? "");
+        const b = String(expected ?? "");
+        if (a === b) return true;
+        const na = Number(a);
+        const nb = Number(b);
+        if (a.trim() !== "" && b.trim() !== "" && Number.isFinite(na) && Number.isFinite(nb)) {
+          return na === nb;
+        }
+        return a.toLowerCase() === b.toLowerCase();
+      }
+
+      function isTypeControlAtDefault(key) {
+        if (!(key in TYPE_DEFAULTS)) return true;
+        const input = form.querySelector(`[data-type="${key}"]`);
+        if (!input) return true;
+        return typeValueEquals(input.value, TYPE_DEFAULTS[key]);
+      }
+
+      /** Content tab owns scalars, lists, photo, and contact visibility — not type/sections. */
+      function isContentAtDefaults() {
+        if (!defaults) return true;
+        const fields = readScalarFields();
+        const expectedFields = defaults.fields || {};
+        for (const key of Object.keys(expectedFields)) {
+          if (String(fields[key] ?? "") !== String(expectedFields[key] ?? "")) return false;
+        }
+        if ((photoSrc || DEFAULT_PHOTO) !== (defaults.photo || DEFAULT_PHOTO)) return false;
+        const expectedVis = defaults.contactVisibility || CONTACT_VISIBILITY_DEFAULTS;
+        for (const key of CONTACT_KEYS) {
+          if (!!contactVisibility[key] !== !!expectedVis[key]) return false;
+        }
+        return JSON.stringify(lists) === JSON.stringify(normalizeListsData(defaults.lists));
+      }
+
+      /** Sections tab owns visibility + order only. */
+      function isSectionsAtDefaults() {
+        for (const key of Object.keys(SECTION_VISIBILITY_DEFAULTS)) {
+          const current = sectionVisibility[key] !== false;
+          const expected = SECTION_VISIBILITY_DEFAULTS[key] !== false;
+          if (current !== expected) return false;
+        }
+        return (
+          JSON.stringify(sectionOrder.sidebar) === JSON.stringify(SECTION_ORDER_DEFAULTS.sidebar) &&
+          JSON.stringify(sectionOrder.main) === JSON.stringify(SECTION_ORDER_DEFAULTS.main)
+        );
+      }
+
+      function syncResetButtons() {
+        form.querySelectorAll("[data-reset-type]").forEach((btn) => {
+          const key = btn.getAttribute("data-reset-type");
+          btn.disabled = isTypeControlAtDefault(key);
+        });
+        if (resetContentBtn) resetContentBtn.disabled = isContentAtDefaults();
+        if (resetSectionsBtn) resetSectionsBtn.disabled = isSectionsAtDefaults();
       }
 
       function setPhoto(src, { alt } = {}) {
@@ -4504,6 +4578,7 @@
 
       function resetTypeControl(key) {
         if (!(key in TYPE_DEFAULTS)) return;
+        if (isTypeControlAtDefault(key)) return;
         const input = form.querySelector(`[data-type="${key}"]`);
         if (!input) return;
         input.value = TYPE_DEFAULTS[key];
@@ -4543,6 +4618,7 @@
       }
 
       async function resetContentToDefaults() {
+        if (isContentAtDefaults()) return;
         const ok = await openContentResetModal();
         if (!ok) return;
         const d = defaults;
@@ -4557,6 +4633,7 @@
 
       /** Sections tab only: visibility + order. */
       function resetSectionsToDefaults() {
+        if (isSectionsAtDefaults()) return;
         if (!confirm("Reset section visibility and order to the defaults?")) return;
         sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
         sectionOrder = cloneOrder(SECTION_ORDER_DEFAULTS);
@@ -4731,6 +4808,7 @@
       loadZoom();
       loadActiveTab();
       wireFieldResets();
+      syncResetButtons();
 
       try {
         if (localStorage.getItem(PANEL_KEY) === "1") setDrawerOpen(true);
@@ -4893,6 +4971,7 @@
         const typeReset = e.target.closest("[data-reset-type]");
         if (typeReset) {
           e.preventDefault();
+          if (typeReset.disabled) return;
           resetTypeControl(typeReset.getAttribute("data-reset-type"));
           return;
         }
