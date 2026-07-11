@@ -1090,7 +1090,7 @@
     }
     .field-head {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       gap: 0.35rem;
       min-height: 0.9rem;
@@ -1103,19 +1103,23 @@
       border: 0;
       background: transparent;
       color: #8a9096;
-      font: inherit;
-      font-size: 0.58rem;
-      font-weight: 600;
-      line-height: 1;
-      padding: 0;
+      padding: 0.12rem;
       cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      white-space: nowrap;
       flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+      border-radius: 4px;
     }
     .field-reset:hover {
       color: #3a3d40;
+      background: #f3f5f7;
+    }
+    .field-reset svg {
+      width: 0.85rem;
+      height: 0.85rem;
+      display: block;
     }
     .panel-reset-bar {
       display: flex;
@@ -1128,15 +1132,20 @@
       background: #fff;
       color: #3a3d40;
       border-radius: 7px;
-      padding: 0.3rem 0.6rem;
-      font: inherit;
-      font-size: 0.65rem;
-      font-weight: 600;
+      padding: 0.28rem;
       cursor: pointer;
-      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
     }
     .panel-reset-btn:hover {
       background: #f3f5f7;
+    }
+    .panel-reset-btn svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      display: block;
     }
     .field input,
     .field textarea {
@@ -1420,7 +1429,13 @@
     <form class="drawer-body" id="settings-form" autocomplete="off">
       <div class="drawer-panel is-active" role="tabpanel" id="panel-content" data-panel="content" aria-labelledby="tab-content">
         <div class="panel-reset-bar">
-          <button type="button" class="panel-reset-btn" id="reset-content" title="Restore all CV content to sample defaults">Reset content</button>
+          <button type="button" class="panel-reset-btn" id="reset-content" title="Reset content" aria-label="Reset content">
+            <!-- tabler:refresh -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+            </svg>
+          </button>
         </div>
         <fieldset class="drawer-group">
           <legend>Profile</legend>
@@ -1924,7 +1939,13 @@
 
       <div class="drawer-panel" role="tabpanel" id="panel-sections" data-panel="sections" aria-labelledby="tab-sections" hidden>
         <div class="panel-reset-bar">
-          <button type="button" class="panel-reset-btn" id="reset-sections" title="Restore section visibility and order to defaults">Reset sections</button>
+          <button type="button" class="panel-reset-btn" id="reset-sections" title="Reset sections" aria-label="Reset sections">
+            <!-- tabler:refresh -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+              <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+            </svg>
+          </button>
         </div>
         <fieldset class="drawer-group">
           <legend>Sections</legend>
@@ -4313,7 +4334,28 @@
         if (photoPreview) photoPreview.src = photoSrc;
       }
 
-      /** Wire a small Reset link beside each type/spacing control. */
+      /** Tabler refresh icon for icon-only reset controls. */
+      function createRefreshIcon() {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", "currentColor");
+        svg.setAttribute("stroke-width", "1.75");
+        svg.setAttribute("stroke-linecap", "round");
+        svg.setAttribute("stroke-linejoin", "round");
+        svg.setAttribute("aria-hidden", "true");
+        for (const d of [
+          "M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4",
+          "M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4",
+        ]) {
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", d);
+          svg.appendChild(path);
+        }
+        return svg;
+      }
+
+      /** Wire a compact icon-only reset beside each type/spacing control. */
       function wireFieldResets() {
         typeInputs().forEach((input) => {
           const key = input.getAttribute("data-type");
@@ -4336,7 +4378,7 @@
           btn.setAttribute("data-reset-type", key);
           btn.title = "Reset to default";
           btn.setAttribute("aria-label", `Reset ${labelText} to default`);
-          btn.textContent = "Reset";
+          btn.appendChild(createRefreshIcon());
           head.appendChild(btn);
         });
       }
