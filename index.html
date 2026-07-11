@@ -1132,12 +1132,16 @@
       background: #fff;
       color: #3a3d40;
       border-radius: 7px;
-      padding: 0.28rem;
+      padding: 0.28rem 0.55rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      line-height: 0;
+      gap: 0.35rem;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.2;
     }
     .panel-reset-btn:hover {
       background: #f3f5f7;
@@ -1146,6 +1150,7 @@
       width: 0.95rem;
       height: 0.95rem;
       display: block;
+      flex-shrink: 0;
     }
     .field input,
     .field textarea {
@@ -1430,12 +1435,13 @@
     <form class="drawer-body" id="settings-form" autocomplete="off">
       <div class="drawer-panel is-active" role="tabpanel" id="panel-content" data-panel="content" aria-labelledby="tab-content">
         <div class="panel-reset-bar">
-          <button type="button" class="panel-reset-btn" id="reset-content" title="Reset content" aria-label="Reset content">
+          <button type="button" class="panel-reset-btn" id="reset-content" title="Reset to default" aria-label="Reset to default">
             <!-- tabler:refresh -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
               <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
             </svg>
+            Reset to default
           </button>
         </div>
         <fieldset class="drawer-group">
@@ -1940,12 +1946,13 @@
 
       <div class="drawer-panel" role="tabpanel" id="panel-sections" data-panel="sections" aria-labelledby="tab-sections" hidden>
         <div class="panel-reset-bar">
-          <button type="button" class="panel-reset-btn" id="reset-sections" title="Reset sections" aria-label="Reset sections">
+          <button type="button" class="panel-reset-btn" id="reset-sections" title="Reset to default" aria-label="Reset to default">
             <!-- tabler:refresh -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
               <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
             </svg>
+            Reset to default
           </button>
         </div>
         <fieldset class="drawer-group">
