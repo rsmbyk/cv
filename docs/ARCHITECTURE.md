@@ -90,7 +90,7 @@ Entry points:
 
 ```json
 {
-  "fields": { "name": "…", "title": "…", "phone": "…", "email": "…", "address": "…", "linkedin": "…", "github": "…", "about": "…" },
+  "fields": { "name": "…", "title": "…", "phone": "…", "phoneDial": "62", "phoneCountry": "ID", "email": "…", "address": "…", "linkedin": "…", "github": "…", "about": "…" },
   "photo": "photo.jpg | data:…",
   "type": { /* keys from TYPE_DEFAULTS / data-type controls */ },
   "lists": { "skills": [], "languages": [], "education": [], "experience": [], "projects": [], "references": [] },
@@ -103,7 +103,7 @@ Entry points:
 }
 ```
 
-`name` in storage may include a literal `<br />` between two lines. Phone is stored as **local digits only** (see [CONTENT-MODEL.md](CONTENT-MODEL.md)). Type object may still contain legacy keys; `applyType` / `fillTypeForm` migrate them into current L/R pad and gap keys.
+`name` in storage may include a literal `<br />` between two lines. Phone is stored as **local digits** plus `phoneDial` / `phoneCountry` (see [CONTENT-MODEL.md](CONTENT-MODEL.md)). Type object may still contain legacy keys; `applyType` / `fillTypeForm` migrate them into current L/R pad and gap keys.
 
 ## CSS variables approach
 

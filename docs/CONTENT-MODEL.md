@@ -10,7 +10,9 @@ Bound via `data-bind` on form controls (plus two name lines).
 | --- | --- | --- | --- |
 | `name` | `#f-name-line1`, `#f-name-line2` | `[data-edit="name"]` | Stored as `line1` or `line1<br />line2`. Applied with `setNameOnCv`. |
 | `title` | job title input | `[data-edit="title"]` | Empty → collapse (below). |
-| `phone` | phone input | `[data-edit="phone"]` | Local digits only in form/storage. |
+| `phone` | phone input | `[data-edit="phone"]` | Local digits only. |
+| `phoneDial` | `#f-phone-dial` | (with phone) | Calling-code digits (no `+`), e.g. `62`. |
+| `phoneCountry` | `#f-phone-dial` | (with phone) | ISO 3166-1 alpha-2 for the selector (disambiguates shared dials like `+1`). |
 | `email` | | `[data-edit="email"]` | `mailto:` when non-empty. |
 | `address` | | `[data-edit="address"]` | Plain text. |
 | `linkedin` | username | `[data-edit="linkedin"]` | Display `linkedin.com/in/{user}`; href `https://linkedin.com/in/…`. |
@@ -34,26 +36,29 @@ Keeps vertical rhythm when the role is omitted.
 
 Each row is `[data-contact="{key}"]`. Visibility toggles use `data-visible` and `contactVisibility`; hidden rows get `.is-hidden`.
 
-### Phone / WhatsApp (+62)
+### Phone / WhatsApp
 
-Constants:
+`COUNTRY_CALLING_CODES` — curated ITU list (name + dial). Selector label: `Indonesia (+62)`.
 
-- `PHONE_COUNTRY_DIGITS = "62"`
-- `PHONE_DISPLAY_PREFIX = "+62"`
+Storage (under `fields`):
 
-`normalizePhoneLocal(raw)`:
+- `phone` — local digits only (e.g. `81234567890`)
+- `phoneDial` — country calling digits, no `+` (e.g. `62`)
+- `phoneCountry` — ISO code for the `<select>` (e.g. `ID`)
+
+`normalizePhoneLocal(raw, dial)`:
 
 1. Digits only
 2. Strip leading `00…`
-3. Strip leading country `62`
+3. Strip leading active `phoneDial`
 4. Strip leading `0` trunk digits
 
-Form and `fields.phone` store **local** mobile digits (e.g. `81234567890`), never `+62` or `0…`.
-
-Display: `formatPhoneDisplay` → `+62 81234567890`  
-Href: `whatsappMeHref` → `https://wa.me/62` + local digits (no leading 0 in the path)
+Display: `formatPhoneDisplay` → `+{dial} {local}`  
+Href: `whatsappMeHref` → `https://wa.me/{dial}{local}` (digits only)
 
 `setPhoneOnCv` updates **all** `[data-edit="phone"]` under `#cv-pages` (including clones after pagination).
+
+**Default dial (no IP geolocation):** on first visit (`snapshotDefaults`), best-effort ISO from `navigator.languages` / `navigator.language` region tags, else IANA timezone → `TZ_TO_ISO`, else `62` / `ID`. Never overrides a draft that already has `phoneDial` or `phoneCountry`.
 
 LinkedIn / GitHub usernames are stripped of URL prefixes by `normalizeLinkedInUsername` / `normalizeGitHubUsername`.
 
@@ -115,7 +120,7 @@ Rendered as `.entry` articles with `data-entry` / `data-entry-index`.
 { name, role, phone, email }
 ```
 
-Rendered in `.ref-grid` with Phone/Email labels. Reference phones are **not** normalized to +62/WhatsApp (free-form sample text).
+Rendered in `.ref-grid` with Phone/Email labels. Reference phones are **not** run through the contact dial selector / WhatsApp helpers (free-form sample text).
 
 ## Sample defaults
 
@@ -125,7 +130,7 @@ Rendered in `.ref-grid` with Phone/Email labels. Reference phones are **not** no
 | --- | --- |
 | Name | Lorna / Alvarado |
 | Title | Marketing Manager |
-| Phone | `81234567890` → displays `+62 81234567890` |
+| Phone | `81234567890` + locale (or `62`/`ID`) dial → displays `+{dial} 81234567890` |
 | Email / address | reallygreatsite placeholders |
 | LinkedIn / GitHub | `username` |
 | About | short Lorem paragraph |
@@ -154,9 +159,10 @@ Section order defaults: sidebar `contact → about → languages`; main `skills 
 - `ref-N-*` → references
 - Languages / projects fall back to samples if not present in that legacy shape
 
-### Phone local part
+### Phone dial + local part
 
-Any load/apply path that sets phone runs `normalizePhoneLocal` so older drafts with `+62…` or `08…` become local digits.
+- Any load/apply path that sets phone runs `normalizePhoneLocal` with the active dial so older drafts with `+62…` or `08…` become local digits.
+- Drafts missing `phoneDial` / `phoneCountry` migrate to Indonesia (`62` / `ID`) — the previous fixed prefix — and do **not** re-run locale detection.
 
 ### Type/spacing legacy keys
 
