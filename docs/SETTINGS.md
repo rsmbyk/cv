@@ -21,7 +21,7 @@ Notable groups:
 
 - **Type:** `font`, `size-*`, `color-*`, `line-height-body`, `text-align-body` (`left` \| `justify`), `weight-skill-cat` (`400` \| `500` \| `600` \| `700`), `accent`, `bg-sidebar`, `bg-main`, `photo-*`, `size-icon-*`, `triangle-deg`, `timeline-dot`, `timeline-line`
 - **Spacing pads:** `pad-sidebar-{top,right,bottom,left}`, `pad-profile-{top,bottom}`, `pad-main-{top,right,bottom,left}`, `pad-cont-main-{top,right,bottom,left}`
-- **Spacing gaps:** `gap-photo-name`, `gap-side-section`, `gap-main-section`, `gap-timeline-items`, `gap-list-items` (contacts & languages), `gap-group-items` (skills categories & projects), `gap-icon-title`, `gap-icon-contact`, `gap-title-line`, `gap-underline-content`, `gap-title-subtitle`, `gap-subtitle-content`, `gap-title-content`
+- **Spacing gaps:** `gap-photo-name`, `gap-side-section`, `gap-main-section`, `gap-list-items` (contacts, languages & skills), `gap-timeline-items` (education, experience & projects — item gap only; projects have no timeline chrome), `gap-icon-title`, `gap-icon-contact`, `gap-title-line`, `gap-underline-content`, `gap-title-subtitle`, `gap-subtitle-content`, `gap-title-content`
 
 `applyType` writes mapped values to `:root`. Invalid `text-align-body` or `weight-skill-cat` snap back to defaults.
 

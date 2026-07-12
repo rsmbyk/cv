@@ -51,7 +51,6 @@
       --gap-main-section: 20;
       --gap-timeline-items: 18;
       --gap-list-items: 10;
-      --gap-group-items: 14;
       --gap-icon-title: 8;
       --gap-icon-contact: 8;
       --gap-title-line: 9;
@@ -369,11 +368,6 @@
       gap: calc(var(--gap-list-items) * 1pt);
     }
 
-    /* Skills categories (languages keep --gap-list-items above). */
-    #cv-skills {
-      gap: calc(var(--gap-group-items) * 1pt);
-    }
-
     .skills-list li {
       font-size: calc(var(--size-body) * 1pt + 1.5pt);
       font-weight: 500;
@@ -478,7 +472,7 @@
     .projects-list {
       display: flex;
       flex-direction: column;
-      gap: calc(var(--gap-group-items) * 1pt);
+      gap: calc(var(--gap-timeline-items) * 1pt);
     }
 
     .entry-org a {
@@ -2146,12 +2140,8 @@
           <legend>List items</legend>
           <div class="pad-grid">
             <div class="field">
-              <label for="t-gap-list-items">Contact &amp; language item gap</label>
+              <label for="t-gap-list-items">Contact, language &amp; skills item gap</label>
               <input id="t-gap-list-items" type="number" min="2" max="28" step="0.5" data-type="gap-list-items" value="10" />
-            </div>
-            <div class="field">
-              <label for="t-gap-group-items">Skills &amp; projects item gap</label>
-              <input id="t-gap-group-items" type="number" min="3" max="32" step="0.5" data-type="gap-group-items" value="14" />
             </div>
           </div>
         </fieldset>
@@ -2160,7 +2150,7 @@
           <legend>Timeline items</legend>
           <div class="pad-grid">
             <div class="field">
-              <label for="t-gap-timeline-items">Timeline item gap</label>
+              <label for="t-gap-timeline-items">Timeline item gap (edu / exp / projects)</label>
               <input id="t-gap-timeline-items" type="number" min="4" max="40" step="1" data-type="gap-timeline-items" value="18" />
             </div>
             <div class="field">
@@ -2466,7 +2456,6 @@
         "gap-main-section": "20",
         "gap-timeline-items": "18",
         "gap-list-items": "10",
-        "gap-group-items": "14",
         "gap-icon-title": "8",
         "gap-icon-contact": "8",
         "gap-title-line": "9",
@@ -2523,7 +2512,6 @@
         "gap-main-section": "--gap-main-section",
         "gap-timeline-items": "--gap-timeline-items",
         "gap-list-items": "--gap-list-items",
-        "gap-group-items": "--gap-group-items",
         "gap-icon-title": "--gap-icon-title",
         "gap-icon-contact": "--gap-icon-contact",
         "gap-title-line": "--gap-title-line",
@@ -4687,18 +4675,15 @@
             break;
           case "gap-list-items":
             paintFlexChildGaps(
-              queryCvFocus(root, ".contact-list, #cv-languages"),
-              pageOf
-            );
-            break;
-          case "gap-group-items":
-            paintFlexChildGaps(
-              queryCvFocus(root, "#cv-skills, .projects-list"),
+              queryCvFocus(root, ".contact-list, .skills-list"),
               pageOf
             );
             break;
           case "gap-timeline-items":
-            paintFlexChildGaps(queryCvFocus(root, ".timeline"), pageOf);
+            paintFlexChildGaps(
+              queryCvFocus(root, ".timeline, .projects-list"),
+              pageOf
+            );
             break;
           case "gap-icon-title":
             each(".side-heading, .main-section-heading", (heading, page) => {
@@ -4924,8 +4909,9 @@
             return queryCvFocus(root, "[data-photo]");
           case "timeline-dot":
           case "timeline-line":
-          case "gap-timeline-items":
             return queryCvFocus(root, ".timeline");
+          case "gap-timeline-items":
+            return queryCvFocus(root, ".timeline, .projects-list");
           case "triangle-deg":
           case "accent":
             return queryCvFocus(root, "#cv-page-1 > .sidebar");
@@ -4951,9 +4937,7 @@
           case "gap-main-section":
             return queryCvFocus(root, ".main > section");
           case "gap-list-items":
-            return queryCvFocus(root, ".contact-list, #cv-languages");
-          case "gap-group-items":
-            return queryCvFocus(root, "#cv-skills, .projects-list");
+            return queryCvFocus(root, ".contact-list, .skills-list");
           case "pad-cont-main-top":
           case "pad-cont-main-right":
           case "pad-cont-main-bottom":
