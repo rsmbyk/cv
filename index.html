@@ -1488,6 +1488,29 @@
     }
     .photo-row button:hover { background: #f3f5f7; }
 
+    /* Content-drawer focus → CV region (screen only; never print/PDF) */
+    @media screen {
+      .cv-focus-highlight {
+        outline: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
+        outline-offset: 3px;
+        border-radius: 4px;
+        background-color: color-mix(in srgb, var(--accent) 11%, transparent);
+        transition:
+          outline-color 0.12s ease,
+          background-color 0.12s ease;
+      }
+      .avatar.cv-focus-highlight,
+      img.cv-focus-highlight[data-photo] {
+        border-radius: 50%;
+        background-color: transparent;
+        outline-offset: 5px;
+      }
+      .name.cv-focus-highlight,
+      .title.cv-focus-highlight {
+        border-radius: 3px;
+      }
+    }
+
     @media screen and (max-width: 900px) {
       body.drawer-open { padding-left: 1rem; }
       /* Keep Edit under the overlay drawer at left: 0 (no early slide-out).
@@ -1539,6 +1562,10 @@
       .drawer-backdrop,
       .settings-drawer,
       .confirm-modal { display: none !important; }
+      .cv-focus-highlight {
+        outline: none !important;
+        background-color: transparent !important;
+      }
     }
   </style>
 </head>
@@ -3223,19 +3250,24 @@
 
         if (skillsTarget) {
           skillsTarget.innerHTML = lists.skills
-            .map((cat) => {
+            .map((cat, i) => {
               const line = formatSkillCategoryLine(cat);
-              return line == null ? "" : `<li>${line}</li>`;
+              return line == null
+                ? ""
+                : `<li data-entry="skills" data-entry-index="${i}">${line}</li>`;
             })
             .join("");
         }
         if (languagesTarget) {
           languagesTarget.innerHTML = lists.languages
-            .map((lang) => `<li>${escapeHtml(lang)}</li>`)
+            .map(
+              (lang, i) =>
+                `<li data-entry="languages" data-entry-index="${i}">${escapeHtml(lang)}</li>`
+            )
             .join("");
         }
 
-        function entryHtml(item, { allowBullets = false } = {}) {
+        function entryHtml(item, { allowBullets = false, kind = "", index = 0 } = {}) {
           const dates = formatEntryDates(item);
           const hasOrg = !!String(item.org || "").trim();
           const hasLoc = !!String(item.location || "").trim();
@@ -3271,14 +3303,14 @@
           }
 
           return `
-          <article class="entry${hasSub ? "" : " no-subtitle"}">
+          <article class="entry${hasSub ? "" : " no-subtitle"}" data-entry="${kind}" data-entry-index="${index}">
             <h3 class="entry-title">${escapeHtml(item.title)}</h3>
             ${meta}
             ${body}
           </article>`;
         }
 
-        function projectEntryHtml(item) {
+        function projectEntryHtml(item, index = 0) {
           const refText = String(item.reference || "").trim();
           const year = String(item.year || "").trim();
           const hasRef = !!refText;
@@ -3331,7 +3363,7 @@
           }
 
           return `
-          <article class="entry${hasSub ? "" : " no-subtitle"}">
+          <article class="entry${hasSub ? "" : " no-subtitle"}" data-entry="projects" data-entry-index="${index}">
             ${titleBlock}
             ${meta}
             ${body}
@@ -3339,24 +3371,28 @@
         }
 
         if (educationTarget) {
-          educationTarget.innerHTML = lists.education.map((item) => entryHtml(item)).join("");
+          educationTarget.innerHTML = lists.education
+            .map((item, i) => entryHtml(item, { kind: "education", index: i }))
+            .join("");
           educationTarget.classList.toggle("is-single", lists.education.length <= 1);
         }
         if (experienceTarget) {
           experienceTarget.innerHTML = lists.experience
-            .map((item) => entryHtml(item, { allowBullets: true }))
+            .map((item, i) => entryHtml(item, { allowBullets: true, kind: "experience", index: i }))
             .join("");
           experienceTarget.classList.toggle("is-single", lists.experience.length <= 1);
         }
         if (projectsTarget) {
-          projectsTarget.innerHTML = lists.projects.map((item) => projectEntryHtml(item)).join("");
+          projectsTarget.innerHTML = lists.projects
+            .map((item, i) => projectEntryHtml(item, i))
+            .join("");
         }
 
         if (referencesTarget) {
           referencesTarget.innerHTML = lists.references
             .map(
-              (item) => `
-          <div>
+              (item, i) => `
+          <div data-entry="references" data-entry-index="${i}">
             <p class="ref-name">${escapeHtml(item.name)}</p>
             <p class="ref-role">${escapeHtml(item.role)}</p>
             <p class="ref-meta">
@@ -3369,6 +3405,7 @@
         }
 
         schedulePaginate();
+        syncCvFocusHighlight();
       }
 
       function renderLists() {
@@ -4335,6 +4372,7 @@
         // the full draft onto every .about-text would undo the split.
         updatePagesStackHeight();
         scheduleFitZoom();
+        syncCvFocusHighlight();
       }
 
       function schedulePaginate() {
@@ -4342,6 +4380,119 @@
         paginateRaf = requestAnimationFrame(() => {
           requestAnimationFrame(paginatePages);
         });
+      }
+
+      /** Soft highlight on the CV region linked to the focused Content field. */
+      function clearCvFocusHighlight() {
+        const root = pagesEl || pageEl;
+        if (!root) return;
+        root.querySelectorAll(".cv-focus-highlight").forEach((el) => {
+          el.classList.remove("cv-focus-highlight");
+        });
+      }
+
+      function isCvFocusTargetVisible(el) {
+        if (!el || !el.isConnected) return false;
+        if (el.classList.contains("is-hidden") || el.style.display === "none") return false;
+        const section = el.closest("[data-section]");
+        if (
+          section &&
+          (section.classList.contains("is-hidden") || section.style.display === "none")
+        ) {
+          return false;
+        }
+        const page = el.closest(".page");
+        if (!page || page.style.display === "none") return false;
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      }
+
+      /** Prefer the primary (non-continued) match; else the first visible clone. */
+      function pickVisibleCvFocusTarget(candidates) {
+        const visible = [...candidates].filter(isCvFocusTargetVisible);
+        if (!visible.length) return null;
+        return (
+          visible.find((el) => !el.closest("[data-continued]")) || visible[0]
+        );
+      }
+
+      function resolveCvFocusTarget(focusEl) {
+        const panel = document.getElementById("panel-content");
+        if (!panel || !focusEl || !panel.contains(focusEl)) return null;
+        if (!panel.classList.contains("is-active")) return null;
+        const root = pagesEl || pageEl;
+        if (!root) return null;
+
+        if (
+          focusEl.id === "photo-pick" ||
+          focusEl.id === "photo-input" ||
+          focusEl.closest(".photo-row")
+        ) {
+          return pickVisibleCvFocusTarget(root.querySelectorAll("[data-photo]"));
+        }
+
+        if (focusEl.id === "f-name-line1" || focusEl.id === "f-name-line2") {
+          return pickVisibleCvFocusTarget(root.querySelectorAll('[data-edit="name"]'));
+        }
+
+        const bind = focusEl.getAttribute("data-bind");
+        if (bind) {
+          if (CONTACT_KEYS.includes(bind)) {
+            return pickVisibleCvFocusTarget(
+              root.querySelectorAll(`[data-contact="${bind}"]`)
+            );
+          }
+          if (bind === "about") {
+            return pickVisibleCvFocusTarget(
+              root.querySelectorAll('[data-edit="about"], .about-text')
+            );
+          }
+          if (bind === "title") {
+            return pickVisibleCvFocusTarget(root.querySelectorAll('[data-edit="title"]'));
+          }
+        }
+
+        const visibleKey = focusEl.getAttribute("data-visible");
+        if (visibleKey && CONTACT_KEYS.includes(visibleKey)) {
+          return pickVisibleCvFocusTarget(
+            root.querySelectorAll(`[data-contact="${visibleKey}"]`)
+          );
+        }
+
+        const listControl = focusEl.closest("[data-list]");
+        if (listControl) {
+          const kind = listControl.getAttribute("data-list");
+          const index = listControl.getAttribute("data-index");
+          if (kind != null && index != null) {
+            return pickVisibleCvFocusTarget(
+              root.querySelectorAll(
+                `[data-entry="${kind}"][data-entry-index="${index}"]`
+              )
+            );
+          }
+        }
+
+        const subgroup = focusEl.closest(".drawer-subgroup[data-kind]");
+        if (subgroup) {
+          const kind = subgroup.getAttribute("data-kind");
+          const index = subgroup.getAttribute("data-index");
+          if (kind != null && index != null) {
+            return pickVisibleCvFocusTarget(
+              root.querySelectorAll(
+                `[data-entry="${kind}"][data-entry-index="${index}"]`
+              )
+            );
+          }
+        }
+
+        return null;
+      }
+
+      function syncCvFocusHighlight() {
+        clearCvFocusHighlight();
+        const active = document.activeElement;
+        const target = resolveCvFocusTarget(active);
+        if (target) target.classList.add("cv-focus-highlight");
       }
 
       function renderSectionOrderEditors() {
@@ -4469,6 +4620,7 @@
             localStorage.setItem(TAB_KEY, next);
           } catch (_) {}
         }
+        syncCvFocusHighlight();
       }
 
       function loadActiveTab() {
@@ -4742,6 +4894,7 @@
         } else {
           drawer.setAttribute("inert", "");
           if (drawerBackdrop) drawerBackdrop.setAttribute("hidden", "");
+          clearCvFocusHighlight();
         }
         try {
           localStorage.setItem(PANEL_KEY, open ? "1" : "0");
@@ -5205,6 +5358,22 @@
       });
 
       form.addEventListener("submit", (e) => e.preventDefault());
+
+      const panelContent = document.getElementById("panel-content");
+      if (panelContent) {
+        panelContent.addEventListener("focusin", () => {
+          syncCvFocusHighlight();
+        });
+        panelContent.addEventListener("focusout", () => {
+          requestAnimationFrame(() => {
+            if (!panelContent.contains(document.activeElement)) {
+              clearCvFocusHighlight();
+            } else {
+              syncCvFocusHighlight();
+            }
+          });
+        });
+      }
 
       if (resetContentBtn) {
         resetContentBtn.addEventListener("click", resetContentToDefaults);
