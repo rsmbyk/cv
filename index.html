@@ -736,13 +736,17 @@
       display: block;
       flex-shrink: 0;
     }
-    .drawer-toggle-icon--hide {
+    /* Explicit display toggle — must beat `.drawer-toggle svg { display: block }` */
+    .drawer-toggle .drawer-toggle-icon--edit {
+      display: block;
+    }
+    .drawer-toggle .drawer-toggle-icon--hide {
       display: none;
     }
-    body.drawer-open .drawer-toggle-icon--edit {
+    body.drawer-open .drawer-toggle .drawer-toggle-icon--edit {
       display: none;
     }
-    body.drawer-open .drawer-toggle-icon--hide {
+    body.drawer-open .drawer-toggle .drawer-toggle-icon--hide {
       display: block;
     }
     .drawer-toggle-label {
