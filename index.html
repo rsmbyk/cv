@@ -1387,7 +1387,7 @@
     }
     .type-row .field { margin-bottom: 0; }
     .type-row .size-field { width: 4.2rem; }
-    .type-row .color-field { width: 2.6rem; }
+    .type-row .color-field { width: 7.1rem; }
     .type-row input[type="number"] {
       width: 100%;
       border: 1px solid #cfd4da;
@@ -1398,17 +1398,39 @@
       color: #1f2225;
       background: #fff;
     }
-    .type-row input[type="color"] {
-      width: 100%;
+    .color-pair {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      width: fit-content;
+      max-width: 100%;
+    }
+    .color-pair input[type="color"] {
+      width: 2.4rem;
       height: 2rem;
+      flex: 0 0 auto;
       padding: 0.15rem;
       border: 1px solid #cfd4da;
       border-radius: 6px;
       background: #fff;
       cursor: pointer;
     }
+    .color-pair .color-hex {
+      width: 4.4rem;
+      flex: 0 0 auto;
+      border: 1px solid #cfd4da;
+      border-radius: 6px;
+      padding: 0.4rem 0.3rem;
+      font: inherit;
+      font-size: 0.68rem;
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+      letter-spacing: 0.02em;
+      color: #1f2225;
+      background: #fff;
+    }
     .type-row input[type="number"]:focus,
-    .type-row input[type="color"]:focus {
+    .color-pair input[type="color"]:focus,
+    .color-pair .color-hex:focus {
       outline: 2px solid rgba(96, 138, 191, 0.45);
       outline-offset: 1px;
       border-color: var(--accent);
@@ -1895,7 +1917,10 @@
             </div>
             <div class="field color-field">
               <label for="t-name-color">Color</label>
-              <input id="t-name-color" type="color" data-type="color-name" />
+              <div class="color-pair">
+                <input id="t-name-color" type="color" data-type="color-name" />
+                <input type="text" class="color-hex" data-hex-for="color-name" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Name color hex" />
+              </div>
             </div>
           </div>
           <div class="type-row">
@@ -1909,7 +1934,10 @@
             </div>
             <div class="field color-field">
               <label for="t-job-color">Color</label>
-              <input id="t-job-color" type="color" data-type="color-job" />
+              <div class="color-pair">
+                <input id="t-job-color" type="color" data-type="color-job" />
+                <input type="text" class="color-hex" data-hex-for="color-job" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Job title color hex" />
+              </div>
             </div>
           </div>
         </fieldset>
@@ -1927,7 +1955,10 @@
             </div>
             <div class="field color-field">
               <label for="t-section-color">Color</label>
-              <input id="t-section-color" type="color" data-type="color-section" />
+              <div class="color-pair">
+                <input id="t-section-color" type="color" data-type="color-section" />
+                <input type="text" class="color-hex" data-hex-for="color-section" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Section title color hex" />
+              </div>
             </div>
           </div>
         </fieldset>
@@ -1945,7 +1976,10 @@
             </div>
             <div class="field color-field">
               <label for="t-item-title-color">Color</label>
-              <input id="t-item-title-color" type="color" data-type="color-item-title" />
+              <div class="color-pair">
+                <input id="t-item-title-color" type="color" data-type="color-item-title" />
+                <input type="text" class="color-hex" data-hex-for="color-item-title" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Item title color hex" />
+              </div>
             </div>
           </div>
           <div class="type-row">
@@ -1959,7 +1993,10 @@
             </div>
             <div class="field color-field">
               <label for="t-item-sub-color">Color</label>
-              <input id="t-item-sub-color" type="color" data-type="color-item-sub" />
+              <div class="color-pair">
+                <input id="t-item-sub-color" type="color" data-type="color-item-sub" />
+                <input type="text" class="color-hex" data-hex-for="color-item-sub" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Item subtitle color hex" />
+              </div>
             </div>
           </div>
           <p style="font-size:0.62rem;color:#6b7076;line-height:1.35;margin:-0.15rem 0 0">
@@ -1980,7 +2017,10 @@
             </div>
             <div class="field color-field">
               <label for="t-body-color">Color</label>
-              <input id="t-body-color" type="color" data-type="color-body" />
+              <div class="color-pair">
+                <input id="t-body-color" type="color" data-type="color-body" />
+                <input type="text" class="color-hex" data-hex-for="color-body" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Body color hex" />
+              </div>
             </div>
           </div>
           <div class="field">
@@ -2068,19 +2108,31 @@
           <legend>Accent</legend>
           <div class="field">
             <label for="t-accent">Accent color</label>
-            <input id="t-accent" type="color" data-type="accent" value="#608abf" />
+            <div class="color-pair">
+              <input id="t-accent" type="color" data-type="accent" value="#608abf" />
+              <input type="text" class="color-hex" data-hex-for="accent" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Accent color hex" value="#608abf" />
+            </div>
           </div>
           <div class="field">
             <label for="t-bg-sidebar">Sidebar background</label>
-            <input id="t-bg-sidebar" type="color" data-type="bg-sidebar" value="#f7f7f7" />
+            <div class="color-pair">
+              <input id="t-bg-sidebar" type="color" data-type="bg-sidebar" value="#f7f7f7" />
+              <input type="text" class="color-hex" data-hex-for="bg-sidebar" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Sidebar background hex" value="#f7f7f7" />
+            </div>
           </div>
           <div class="field">
             <label for="t-bg-main">Main background</label>
-            <input id="t-bg-main" type="color" data-type="bg-main" value="#ffffff" />
+            <div class="color-pair">
+              <input id="t-bg-main" type="color" data-type="bg-main" value="#ffffff" />
+              <input type="text" class="color-hex" data-hex-for="bg-main" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Main background hex" value="#ffffff" />
+            </div>
           </div>
           <div class="field">
             <label for="t-photo-ring-color">Photo ring</label>
-            <input id="t-photo-ring-color" type="color" data-type="photo-ring-color" value="#ffffff" />
+            <div class="color-pair">
+              <input id="t-photo-ring-color" type="color" data-type="photo-ring-color" value="#ffffff" />
+              <input type="text" class="color-hex" data-hex-for="photo-ring-color" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Photo ring color hex" value="#ffffff" />
+            </div>
           </div>
         </fieldset>
       </div>
@@ -3457,6 +3509,60 @@
           const key = input.getAttribute("data-type");
           if (key in src) input.value = src[key];
         });
+        syncColorHexInputs();
+      }
+
+      /** Normalize typed color to `#rrggbb`, or null if incomplete/invalid. */
+      function parseHexColor(raw) {
+        let s = String(raw || "").trim();
+        if (!s) return null;
+        if (s[0] !== "#") s = `#${s}`;
+        if (!/^#[0-9a-fA-F]{6}$/.test(s)) return null;
+        return s.toLowerCase();
+      }
+
+      function syncColorHexInputs() {
+        form.querySelectorAll('input[type="color"][data-type]').forEach((picker) => {
+          const key = picker.getAttribute("data-type");
+          const hex = form.querySelector(`[data-hex-for="${key}"]`);
+          if (hex) hex.value = picker.value;
+        });
+      }
+
+      function syncColorHexFromPicker(picker) {
+        if (!picker) return;
+        const key = picker.getAttribute("data-type");
+        if (!key) return;
+        const hex = form.querySelector(`[data-hex-for="${key}"]`);
+        if (hex) hex.value = picker.value;
+      }
+
+      /** Apply valid hex → picker + live type; leave invalid drafts untouched. */
+      function applyHexInput(hexInput) {
+        const key = hexInput.getAttribute("data-hex-for");
+        if (!key) return;
+        const normalized = parseHexColor(hexInput.value);
+        if (!normalized) return;
+        const picker = form.querySelector(`input[type="color"][data-type="${key}"]`);
+        if (!picker) return;
+        if (picker.value.toLowerCase() !== normalized) {
+          picker.value = normalized;
+          pushTypeLive();
+        } else {
+          syncResetButtons();
+        }
+      }
+
+      /** On blur, snap hex text back to the last applied picker value. */
+      function snapHexInputToPicker(hexInput) {
+        const key = hexInput.getAttribute("data-hex-for");
+        if (!key) return;
+        const picker = form.querySelector(`input[type="color"][data-type="${key}"]`);
+        if (picker) hexInput.value = picker.value;
+      }
+
+      function typeKeyFromControl(el) {
+        return el?.getAttribute?.("data-type") || el?.getAttribute?.("data-hex-for") || null;
       }
 
       function nameFromCv() {
@@ -5271,7 +5377,7 @@
 
       function applyCvFocusForSource(source) {
         if (!source) return;
-        const typeKey = source.getAttribute?.("data-type");
+        const typeKey = typeKeyFromControl(source);
         if (isGapOrPaddingTypeKey(typeKey)) {
           const root = pagesEl || pageEl;
           if (root) paintGapPadHighlights(typeKey, root);
@@ -5284,7 +5390,7 @@
 
       function controlHasCvFocusMapping(el) {
         if (!el) return false;
-        const typeKey = el.getAttribute?.("data-type");
+        const typeKey = typeKeyFromControl(el);
         if (isGapOrPaddingTypeKey(typeKey)) return true;
         return resolveCvFocusTargets(el).length > 0;
       }
@@ -5398,7 +5504,7 @@
        * Skip keys that are too global (e.g. font family).
        */
       function resolveTypeSpacingCvFocusTargets(focusEl, root) {
-        const typeKey = focusEl.getAttribute("data-type");
+        const typeKey = typeKeyFromControl(focusEl);
         if (!typeKey) return [];
 
         const SECTION_HEADINGS = ".side-heading, .main-section-heading";
@@ -6021,6 +6127,7 @@
         const input = form.querySelector(`[data-type="${key}"]`);
         if (!input) return;
         input.value = TYPE_DEFAULTS[key];
+        if (input.type === "color") syncColorHexFromPicker(input);
         pushTypeLive();
       }
 
@@ -6396,7 +6503,12 @@
       form.addEventListener("input", (e) => {
         const t = e.target;
         if (t.id === "f-phone-dial") syncPhoneDialSelectA11y();
+        if (t.matches("[data-hex-for]")) {
+          applyHexInput(t);
+          return;
+        }
         if (t.matches("[data-type]")) {
+          if (t.type === "color") syncColorHexFromPicker(t);
           pushTypeLive();
           return;
         }
@@ -6407,9 +6519,15 @@
         if (t.matches("input, textarea, select")) pushLive();
       });
 
+      form.addEventListener("focusout", (e) => {
+        const t = e.target;
+        if (t && t.matches?.("[data-hex-for]")) snapHexInputToPicker(t);
+      });
+
       form.addEventListener("change", (e) => {
         const t = e.target;
         if (t.matches("[data-type]")) {
+          if (t.type === "color") syncColorHexFromPicker(t);
           pushTypeLive();
           return;
         }

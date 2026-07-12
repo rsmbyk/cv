@@ -25,6 +25,8 @@ Notable groups:
 
 `applyType` writes mapped values to `:root`. Invalid `text-align-body` or `weight-skill-cat` snap back to defaults.
 
+Color controls are a picker plus a compact `#RRGGBB` hex text field (`data-hex-for`). The picker keeps `data-type` (persistence / reset source of truth). Valid hex updates the picker and runs `pushTypeLive`; invalid drafts are ignored until valid, then snap back to the picker value on blur.
+
 ### Skill category weight
 
 Control: `#t-weight-skill-cat` → `--weight-skill-cat` → `.skill-cat { font-weight: var(--weight-skill-cat) }`. Emphasizes optional category names in the Skills list.
