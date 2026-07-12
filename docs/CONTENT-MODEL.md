@@ -11,8 +11,8 @@ Bound via `data-bind` on form controls (plus two name lines).
 | `name` | `#f-name-line1`, `#f-name-line2` | `[data-edit="name"]` | Stored as `line1` or `line1<br />line2`. Applied with `setNameOnCv`. |
 | `title` | job title input | `[data-edit="title"]` | Empty → collapse (below). |
 | `phone` | phone input | `[data-edit="phone"]` | Local digits only. |
-| `phoneDial` | `#f-phone-dial` | (with phone) | Calling-code digits (no `+`), e.g. `62`. |
-| `phoneCountry` | `#f-phone-dial` | (with phone) | ISO 3166-1 alpha-2 for the selector (disambiguates shared dials like `+1`). |
+| `phoneDial` | `#f-phone-dial` (hidden ISO; dial derived) | (with phone) | Calling-code digits (no `+`), e.g. `62`. |
+| `phoneCountry` | `#f-phone-dial` / dial trigger | (with phone) | ISO 3166-1 alpha-2 for the dial control (disambiguates shared dials like `+1`). |
 | `email` | | `[data-edit="email"]` | `mailto:` when non-empty. |
 | `address` | | `[data-edit="address"]` | Plain text. |
 | `linkedin` | username | `[data-edit="linkedin"]` | Display `linkedin.com/in/{user}`; href `https://linkedin.com/in/…`. |
@@ -38,13 +38,13 @@ Each row is `[data-contact="{key}"]`. Visibility toggles use `data-visible` and 
 
 ### Phone / WhatsApp
 
-`COUNTRY_CALLING_CODES` — curated ITU list (ISO + name + dial). Selector label: flag emoji + dial (e.g. `🇮🇩 +62`); country name kept on option `title` / `aria-label`. Flag from ISO via regional indicator symbols (`isoToFlagEmoji`).
+`COUNTRY_CALLING_CODES` — curated ITU list (ISO + name + dial). Custom dial control (not a native `<select>`, so flags can render on Windows): trigger and listbox show a **flagcdn** PNG (`https://flagcdn.com/w20/{iso}.png`, lowercase ISO) plus `+dial`; country name on option title / `aria-label`. Hidden `#f-phone-dial` stores the ISO. Keyboard: open with Enter/Space/Arrow keys, move with arrows, choose with Enter, dismiss with Escape / outside click.
 
 Storage (under `fields`):
 
 - `phone` — local digits only (e.g. `81234567890`)
 - `phoneDial` — country calling digits, no `+` (e.g. `62`)
-- `phoneCountry` — ISO code for the `<select>` (e.g. `ID`)
+- `phoneCountry` — ISO code for the dial control (e.g. `ID`)
 
 `normalizePhoneLocal(raw, dial)`:
 
