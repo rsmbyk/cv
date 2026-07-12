@@ -1488,7 +1488,7 @@
     }
     .photo-row button:hover { background: #f3f5f7; }
 
-    /* Content-drawer focus → CV region (screen only; never print/PDF) */
+    /* Drawer focus (Content / Type / Spacing) → CV region (screen only; never print/PDF) */
     @media screen {
       .cv-focus-highlight {
         outline: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
@@ -1508,6 +1508,12 @@
       .name.cv-focus-highlight,
       .title.cv-focus-highlight {
         border-radius: 3px;
+      }
+      .sidebar.cv-focus-highlight,
+      .main.cv-focus-highlight,
+      .profile.cv-focus-highlight,
+      .page-continued.cv-focus-highlight {
+        border-radius: 0;
       }
     }
 
@@ -4382,7 +4388,7 @@
         });
       }
 
-      /** Soft highlight on the CV region linked to the focused Content field. */
+      /** Soft highlight on CV region(s) linked to the focused drawer control. */
       function clearCvFocusHighlight() {
         const root = pagesEl || pageEl;
         if (!root) return;
@@ -4416,13 +4422,16 @@
         );
       }
 
-      function resolveCvFocusTarget(focusEl) {
-        const panel = document.getElementById("panel-content");
-        if (!panel || !focusEl || !panel.contains(focusEl)) return null;
-        if (!panel.classList.contains("is-active")) return null;
-        const root = pagesEl || pageEl;
-        if (!root) return null;
+      /** All visible matches (for Type/Spacing controls that affect many regions). */
+      function allVisibleCvFocusTargets(candidates) {
+        return [...candidates].filter(isCvFocusTargetVisible);
+      }
 
+      function queryCvFocus(root, selector) {
+        return allVisibleCvFocusTargets(root.querySelectorAll(selector));
+      }
+
+      function resolveContentCvFocusTarget(focusEl, root) {
         if (
           focusEl.id === "photo-pick" ||
           focusEl.id === "photo-input" ||
@@ -4488,11 +4497,147 @@
         return null;
       }
 
+      /**
+       * Map Type/Spacing `data-type` keys to CV regions.
+       * Skip keys that are too global (e.g. font family).
+       */
+      function resolveTypeSpacingCvFocusTargets(focusEl, root) {
+        const typeKey = focusEl.getAttribute("data-type");
+        if (!typeKey) return [];
+
+        const SECTION_HEADINGS = ".side-heading, .main-section-heading";
+        const TIMELINE_ENTRIES = ".entry, [data-entry='references']";
+        const BODY_TEXT = ".about-text, .entry-desc, .entry-bullets";
+
+        switch (typeKey) {
+          case "size-name":
+          case "color-name":
+            return queryCvFocus(root, '[data-edit="name"]');
+          case "size-job":
+          case "color-job":
+            return queryCvFocus(root, '[data-edit="title"]');
+          case "size-section":
+          case "color-section":
+          case "size-icon-title":
+          case "gap-icon-title":
+          case "gap-title-line":
+          case "gap-underline-content":
+            return queryCvFocus(root, SECTION_HEADINGS);
+          case "size-item-title":
+          case "color-item-title":
+          case "size-item-sub":
+          case "color-item-sub":
+          case "gap-title-subtitle":
+          case "gap-subtitle-content":
+          case "gap-title-content":
+            return queryCvFocus(root, TIMELINE_ENTRIES);
+          case "size-body":
+          case "color-body":
+          case "line-height-body":
+          case "text-align-body":
+            return queryCvFocus(root, BODY_TEXT);
+          case "size-icon-contact":
+          case "gap-icon-contact":
+            return queryCvFocus(root, "[data-contact]");
+          case "photo-size":
+          case "photo-ring":
+          case "photo-ring-color":
+            return queryCvFocus(root, "[data-photo]");
+          case "timeline-dot":
+          case "timeline-line":
+          case "gap-timeline-items":
+            return queryCvFocus(root, ".timeline");
+          case "triangle-deg":
+          case "accent":
+            return queryCvFocus(root, "#cv-page-1 > .sidebar");
+          case "bg-sidebar":
+          case "pad-sidebar-top":
+          case "pad-sidebar-right":
+          case "pad-sidebar-bottom":
+          case "pad-sidebar-left":
+            return queryCvFocus(root, ".sidebar");
+          case "bg-main":
+            return queryCvFocus(root, ".main");
+          case "pad-main-top":
+          case "pad-main-right":
+          case "pad-main-bottom":
+          case "pad-main-left":
+            return queryCvFocus(root, ".page:not(.page-continued) .main");
+          case "pad-profile-top":
+          case "pad-profile-bottom":
+          case "gap-photo-name":
+            return queryCvFocus(root, ".profile");
+          case "gap-side-section":
+            return queryCvFocus(root, ".side-section");
+          case "gap-main-section":
+            return queryCvFocus(root, ".main > section");
+          case "gap-list-items":
+            return queryCvFocus(
+              root,
+              ".contact-list, .skills-list, .projects-list"
+            );
+          case "pad-cont-main-top":
+          case "pad-cont-main-right":
+          case "pad-cont-main-bottom":
+          case "pad-cont-main-left":
+            return queryCvFocus(root, ".page-continued");
+          case "font":
+          default:
+            return [];
+        }
+      }
+
+      function resolveCvFocusTargets(focusEl) {
+        if (!focusEl) return [];
+        const root = pagesEl || pageEl;
+        if (!root) return [];
+
+        const panelContent = document.getElementById("panel-content");
+        const panelType = document.getElementById("panel-type");
+        const panelSpacing = document.getElementById("panel-spacing");
+
+        if (
+          panelContent &&
+          panelContent.classList.contains("is-active") &&
+          panelContent.contains(focusEl)
+        ) {
+          const one = resolveContentCvFocusTarget(focusEl, root);
+          return one ? [one] : [];
+        }
+
+        if (
+          panelType &&
+          panelType.classList.contains("is-active") &&
+          panelType.contains(focusEl)
+        ) {
+          return resolveTypeSpacingCvFocusTargets(focusEl, root);
+        }
+
+        if (
+          panelSpacing &&
+          panelSpacing.classList.contains("is-active") &&
+          panelSpacing.contains(focusEl)
+        ) {
+          return resolveTypeSpacingCvFocusTargets(focusEl, root);
+        }
+
+        return [];
+      }
+
       function syncCvFocusHighlight() {
         clearCvFocusHighlight();
-        const active = document.activeElement;
-        const target = resolveCvFocusTarget(active);
-        if (target) target.classList.add("cv-focus-highlight");
+        resolveCvFocusTargets(document.activeElement).forEach((el) => {
+          el.classList.add("cv-focus-highlight");
+        });
+      }
+
+      function isInCvFocusPanel(el) {
+        if (!el || !el.closest) return false;
+        return !!(
+          el.closest("#panel-content") ||
+          el.closest("#panel-type") ||
+          el.closest("#panel-spacing")
+        );
       }
 
       function renderSectionOrderEditors() {
@@ -5377,20 +5522,23 @@
       form.addEventListener("submit", (e) => e.preventDefault());
 
       const panelContent = document.getElementById("panel-content");
-      if (panelContent) {
-        panelContent.addEventListener("focusin", () => {
+      const panelType = document.getElementById("panel-type");
+      const panelSpacing = document.getElementById("panel-spacing");
+      [panelContent, panelType, panelSpacing].forEach((panel) => {
+        if (!panel) return;
+        panel.addEventListener("focusin", () => {
           syncCvFocusHighlight();
         });
-        panelContent.addEventListener("focusout", () => {
+        panel.addEventListener("focusout", () => {
           requestAnimationFrame(() => {
-            if (!panelContent.contains(document.activeElement)) {
+            if (!isInCvFocusPanel(document.activeElement)) {
               clearCvFocusHighlight();
             } else {
               syncCvFocusHighlight();
             }
           });
         });
-      }
+      });
 
       if (resetContentBtn) {
         resetContentBtn.addEventListener("click", resetContentToDefaults);
