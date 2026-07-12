@@ -907,6 +907,10 @@
       color: #fff;
     }
     .drawer-actions .primary:hover { filter: brightness(0.95); }
+    /* Large screens: edge Edit/Hide is pinned to the drawer — hide in-drawer Collapse. */
+    #drawer-close {
+      display: none;
+    }
 
     .drawer-tabs {
       flex: 0 0 auto;
@@ -1487,6 +1491,10 @@
       .settings-drawer {
         width: min(var(--drawer-w), 92vw);
         z-index: 1050;
+      }
+      /* Overlay mode: edge Edit sits under the backdrop — keep in-drawer close. */
+      #drawer-close {
+        display: block;
       }
     }
 
