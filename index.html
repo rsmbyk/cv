@@ -699,17 +699,65 @@
     .screen-chrome {
       position: fixed;
       top: 1rem;
-      left: 1rem;
+      left: 0;
       z-index: 1100;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
       transition: left 0.28s ease;
     }
     body.drawer-open .screen-chrome {
-      left: calc(var(--drawer-w) + 0.75rem);
+      left: var(--drawer-w);
     }
-    .drawer-toggle,
+    .drawer-toggle {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid #c5ccd4;
+      border-left: 0;
+      background: #fff;
+      color: #3a3d40;
+      border-radius: 0 10px 10px 0;
+      padding: 0.55rem 0.65rem;
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      line-height: 0;
+      overflow: hidden;
+      transition: background 0.18s ease, padding 0.22s ease, gap 0.22s ease;
+    }
+    .drawer-toggle svg {
+      width: 1rem;
+      height: 1rem;
+      display: block;
+      flex-shrink: 0;
+    }
+    .drawer-toggle-label {
+      display: inline-block;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      line-height: 1.2;
+      transition: max-width 0.22s ease, opacity 0.18s ease, margin 0.22s ease;
+    }
+    .drawer-toggle:hover,
+    .drawer-toggle:focus-visible {
+      background: #f3f5f7;
+      gap: 0.4rem;
+      padding-right: 0.85rem;
+    }
+    .drawer-toggle:hover .drawer-toggle-label,
+    .drawer-toggle:focus-visible .drawer-toggle-label {
+      max-width: 3.5rem;
+      opacity: 1;
+    }
+    .drawer-toggle:focus-visible {
+      outline: 2px solid #3a3d40;
+      outline-offset: 2px;
+    }
     .zoom-controls button {
       appearance: none;
       border: 1px solid #c5ccd4;
@@ -723,7 +771,6 @@
       cursor: pointer;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
-    .drawer-toggle:hover,
     .zoom-controls button:hover { background: #f3f5f7; }
     .zoom-controls {
       position: fixed;
@@ -1423,7 +1470,10 @@
 
     @media screen and (max-width: 900px) {
       body.drawer-open { padding-left: 1rem; }
-      body.drawer-open .screen-chrome,
+      body.drawer-open .screen-chrome {
+        left: 0;
+        z-index: 1030;
+      }
       body.drawer-open .zoom-controls {
         left: 1rem;
         z-index: 1030;
@@ -1470,8 +1520,15 @@
 </head>
 <body>
   <div class="screen-chrome">
-    <button type="button" class="drawer-toggle" id="drawer-toggle" aria-expanded="false" aria-controls="settings-drawer">
-      Edit CV
+    <button type="button" class="drawer-toggle" id="drawer-toggle" aria-expanded="false" aria-controls="settings-drawer" aria-label="Edit CV" title="Edit CV">
+      <!-- tabler:pencil -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 20l3 -3" />
+        <path d="M14 4l6 6" />
+        <path d="M12.5 6.5l-8.5 8.5l-1 4l4 -1l8.5 -8.5" />
+        <path d="M16 5l3 3" />
+      </svg>
+      <span class="drawer-toggle-label">Edit</span>
     </button>
   </div>
   <div class="zoom-controls" role="group" aria-label="CV view controls">
@@ -4645,7 +4702,10 @@
       function setDrawerOpen(open) {
         document.body.classList.toggle("drawer-open", open);
         toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
-        toggleBtn.textContent = open ? "Hide settings" : "Edit CV";
+        toggleBtn.setAttribute("aria-label", open ? "Hide settings" : "Edit CV");
+        toggleBtn.setAttribute("title", open ? "Hide settings" : "Edit CV");
+        const toggleLabel = toggleBtn.querySelector(".drawer-toggle-label");
+        if (toggleLabel) toggleLabel.textContent = open ? "Hide" : "Edit";
         if (open) {
           drawer.removeAttribute("inert");
           if (drawerBackdrop) drawerBackdrop.removeAttribute("hidden");
