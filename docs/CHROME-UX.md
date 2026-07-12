@@ -20,10 +20,11 @@ Screen-only UI around the A4 preview. Hidden in `@media print`.
 
 **Invariant:** Edit/Hide stays **under** the drawer and backdrop for the whole open/collapse animation (commented in CSS). Do not raise chrome above 1040 or the button will poke through the drawer.
 
-### `#drawer-close` (Collapse)
+### `#drawer-close` (Close)
 
+- Icon-only Tabler `x` with `aria-label` / `title` **Close**
 - Default (wide layout): `#drawer-close { display: none }` — edge Edit/Hide is enough
-- At `max-width: 900px`: shown again (`display: block`) because the drawer overlays and the edge control sits under the backdrop
+- At `max-width: 900px`: shown again (`display: inline-flex`) because the drawer overlays and the edge control sits under the backdrop
 
 ## Zoom
 

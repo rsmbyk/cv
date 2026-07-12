@@ -931,21 +931,21 @@
       background: #fff;
       color: #3a3d40;
       border-radius: 7px;
-      padding: 0.35rem 0.65rem;
-      font: inherit;
-      font-size: 0.68rem;
-      font-weight: 600;
+      padding: 0.28rem;
       cursor: pointer;
-      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
     }
     .drawer-actions button:hover { background: #f3f5f7; }
-    .drawer-actions .primary {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
+    .drawer-actions button svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      display: block;
+      flex-shrink: 0;
     }
-    .drawer-actions .primary:hover { filter: brightness(0.95); }
-    /* Large screens: edge Edit/Hide is pinned to the drawer — hide in-drawer Collapse. */
+    /* Large screens: edge Edit/Hide is pinned to the drawer — hide in-drawer Close. */
     #drawer-close {
       display: none;
     }
@@ -1571,7 +1571,7 @@
       }
       /* Overlay mode: edge Edit sits under the backdrop — keep in-drawer close. */
       #drawer-close {
-        display: block;
+        display: inline-flex;
       }
     }
 
@@ -1672,7 +1672,13 @@
         <p>Edits update the resume live and auto-save in this browser.</p>
       </div>
       <div class="drawer-actions">
-        <button type="button" class="primary" id="drawer-close">Collapse</button>
+        <button type="button" id="drawer-close" aria-label="Close" title="Close">
+          <!-- tabler:x -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+          </svg>
+        </button>
       </div>
     </div>
     <div class="drawer-tabs" role="tablist" aria-label="Settings categories">
