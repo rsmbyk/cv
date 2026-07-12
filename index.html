@@ -60,6 +60,7 @@
       --gap-title-content: 4;
       --line-height-body: 1.55;
       --text-align-body: left;
+      --weight-skill-cat: 600;
       --size-icon-title: 14;
       --size-icon-contact: 15;
       --triangle-deg: 45;
@@ -385,6 +386,10 @@
       height: 3pt;
       border-radius: 50%;
       background: var(--color-body);
+    }
+
+    .skill-cat {
+      font-weight: var(--weight-skill-cat);
     }
 
     /* —— Main —— */
@@ -1968,6 +1973,20 @@
         </fieldset>
 
         <fieldset class="drawer-group">
+          <legend>Lists</legend>
+          <div class="field">
+            <label for="t-weight-skill-cat">Skill category weight</label>
+            <select id="t-weight-skill-cat" data-type="weight-skill-cat">
+              <option value="400">Regular</option>
+              <option value="500">Medium</option>
+              <option value="600" selected>Semibold</option>
+              <option value="700">Bold</option>
+            </select>
+            <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">Weight of the category name before the skill list.</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="drawer-group">
           <legend>Icons</legend>
           <div class="pad-grid">
             <div class="field">
@@ -2404,6 +2423,7 @@
         "size-item-sub": "9",
         "line-height-body": "1.55",
         "text-align-body": "left",
+        "weight-skill-cat": "600",
         "color-name": "#608abf",
         "color-job": "#636466",
         "color-section": "#636466",
@@ -2459,6 +2479,7 @@
         "size-item-sub": "--size-item-sub",
         "line-height-body": "--line-height-body",
         "text-align-body": "--text-align-body",
+        "weight-skill-cat": "--weight-skill-cat",
         "color-name": "--color-name",
         "color-job": "--color-job",
         "color-section": "--color-section",
@@ -2805,7 +2826,7 @@
         if (!skills.length) return null;
         const joined = skills.join(", ");
         if (!name) return escapeHtml(joined);
-        return `${escapeHtml(name)} — ${escapeHtml(joined)}`;
+        return `<strong class="skill-cat">${escapeHtml(name)}</strong> — ${escapeHtml(joined)}`;
       }
 
       function normalizeTimelineItem(item) {
@@ -3027,6 +3048,9 @@
         if (normalized["text-align-body"] !== "left" && normalized["text-align-body"] !== "justify") {
           normalized["text-align-body"] = TYPE_DEFAULTS["text-align-body"];
         }
+        if (!["400", "500", "600", "700"].includes(String(normalized["weight-skill-cat"]))) {
+          normalized["weight-skill-cat"] = TYPE_DEFAULTS["weight-skill-cat"];
+        }
         Object.keys(CSS_VAR_MAP).forEach((key) => {
           if (!(key in normalized)) return;
           const cssVar = CSS_VAR_MAP[key];
@@ -3063,6 +3087,9 @@
         }
         if (src["text-align-body"] !== "left" && src["text-align-body"] !== "justify") {
           src["text-align-body"] = TYPE_DEFAULTS["text-align-body"];
+        }
+        if (!["400", "500", "600", "700"].includes(String(src["weight-skill-cat"]))) {
+          src["weight-skill-cat"] = TYPE_DEFAULTS["weight-skill-cat"];
         }
         typeInputs().forEach((input) => {
           const key = input.getAttribute("data-type");
