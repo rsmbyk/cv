@@ -15,20 +15,20 @@
     :root {
       --accent: #608abf;
       --ink: #636466;
-      --bg-sidebar: #f7f7f7;
-      --bg-main: #ffffff;
+      --bg-sidebar: #e5e4e2;
+      --bg-main: #fdfdfd;
       --photo-ring-color: #ffffff;
       --page-w: 210mm;
       --page-h: 297mm;
       --sidebar-w: 35%;
       --drawer-w: 340px;
 
-      --cv-font: "Montserrat", sans-serif;
-      --size-name: 30;
+      --cv-font: "Nunito Sans", sans-serif;
+      --size-name: 24;
       --size-job: 12;
       --size-section: 15;
-      --size-body: 8.5;
-      --size-item-title: 10;
+      --size-body: 9;
+      --size-item-title: 12;
       --size-item-sub: 9;
       --color-name: #608abf;
       --color-job: #636466;
@@ -36,49 +36,49 @@
       --color-body: #636466;
       --color-item-title: #636466;
       --color-item-sub: #636466;
-      --pad-sidebar-top: 0;
-      --pad-sidebar-right: 25;
-      --pad-sidebar-bottom: 18;
-      --pad-sidebar-left: 25;
-      --pad-profile-top: 30;
-      --pad-profile-bottom: 31;
-      --pad-main-top: 50;
-      --pad-main-right: 37;
+      --pad-sidebar-top: 20;
+      --pad-sidebar-right: 20;
+      --pad-sidebar-bottom: 20;
+      --pad-sidebar-left: 20;
+      --pad-profile-top: 10;
+      --pad-profile-bottom: 30;
+      --pad-main-top: 45;
+      --pad-main-right: 30;
       --pad-main-bottom: 30;
-      --pad-main-left: 32;
-      --gap-photo-name: 15;
-      --gap-side-section: 28;
+      --pad-main-left: 30;
+      --gap-photo-name: 10;
+      --gap-side-section: 20;
       --gap-main-section: 20;
-      --gap-timeline-items: 18;
-      --gap-list-items: 10;
-      --gap-icon-title: 8;
-      --gap-icon-contact: 8;
-      --gap-title-line: 9;
-      --gap-underline-content: 16;
-      --gap-title-subtitle: 1;
-      --gap-subtitle-content: 4;
-      --gap-title-content: 4;
-      --line-height-body: 1.55;
-      --text-align-body: left;
-      --weight-skill-cat: 600;
-      --size-icon-title: 14;
-      --size-icon-contact: 15;
-      --triangle-deg: 45;
-      --photo-size: 141;
+      --gap-timeline-items: 10;
+      --gap-list-items: 5;
+      --gap-icon-title: 10;
+      --gap-icon-contact: 5;
+      --gap-title-line: 5;
+      --gap-underline-content: 10;
+      --gap-title-subtitle: 2.5;
+      --gap-subtitle-content: 2.5;
+      --gap-title-content: 5;
+      --line-height-body: 1.5;
+      --text-align-body: justify;
+      --weight-skill-cat: 700;
+      --size-icon-title: 15;
+      --size-icon-contact: 10;
+      --triangle-deg: 41;
+      --photo-size: 139;
       --photo-ring: 5;
-      --timeline-dot: 6.6;
-      --timeline-line: 0.75;
-      --pad-cont-main-top: 40;
-      --pad-cont-main-right: 34;
-      --pad-cont-main-bottom: 30;
-      --pad-cont-main-left: 34;
+      --timeline-dot: 7;
+      --timeline-line: 1.75;
+      --pad-cont-main-top: 60;
+      --pad-cont-main-right: 40;
+      --pad-cont-main-bottom: 60;
+      --pad-cont-main-left: 40;
       --pages-stack-h: 297mm;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: "Montserrat", sans-serif;
+      font-family: "Nunito Sans", sans-serif;
       color: var(--ink);
       background: #e8eaed;
       min-height: 100vh;
@@ -2175,7 +2175,7 @@
               <option value="Open Sans">Open Sans</option>
               <option value="Roboto">Roboto</option>
               <option value="Source Sans 3">Source Sans 3</option>
-              <option value="Nunito Sans">Nunito Sans</option>
+              <option value="Nunito Sans" selected>Nunito Sans</option>
               <option value="Work Sans">Work Sans</option>
               <option value="IBM Plex Sans">IBM Plex Sans</option>
               <option value="DM Sans">DM Sans</option>
@@ -2307,14 +2307,14 @@
           </div>
           <div class="field">
             <label for="t-line-height-body">Paragraph line height</label>
-            <input id="t-line-height-body" type="number" min="1.1" max="2.4" step="0.05" data-type="line-height-body" value="1.55" />
+            <input id="t-line-height-body" type="number" min="1.1" max="2.4" step="0.05" data-type="line-height-body" value="1.5" />
             <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">About Me and timeline descriptions (including bullets).</p>
           </div>
           <div class="field">
             <label for="t-text-align-body">Paragraph align</label>
             <select id="t-text-align-body" data-type="text-align-body">
-              <option value="left" selected>Left</option>
-              <option value="justify">Justify</option>
+              <option value="left">Left</option>
+              <option value="justify" selected>Justify</option>
             </select>
             <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">About Me and timeline descriptions (including bullets).</p>
           </div>
@@ -2327,8 +2327,8 @@
             <select id="t-weight-skill-cat" data-type="weight-skill-cat">
               <option value="400">Regular</option>
               <option value="500">Medium</option>
-              <option value="600" selected>Semibold</option>
-              <option value="700">Bold</option>
+              <option value="600">Semibold</option>
+              <option value="700" selected>Bold</option>
             </select>
             <p style="font-size:0.58rem;color:#6b7076;line-height:1.35;margin:0.25rem 0 0">Weight of the category name before the skill list.</p>
           </div>
@@ -2339,11 +2339,11 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-icon-title">Section icon (pt)</label>
-              <input id="t-icon-title" type="number" min="8" max="28" step="0.5" data-type="size-icon-title" value="14" />
+              <input id="t-icon-title" type="number" min="8" max="28" step="0.5" data-type="size-icon-title" value="15" />
             </div>
             <div class="field">
               <label for="t-icon-contact">Contact icon (pt)</label>
-              <input id="t-icon-contact" type="number" min="8" max="28" step="0.5" data-type="size-icon-contact" value="15" />
+              <input id="t-icon-contact" type="number" min="8" max="28" step="0.5" data-type="size-icon-contact" value="10" />
             </div>
           </div>
         </fieldset>
@@ -2353,7 +2353,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-triangle-deg">Triangle angle (°)</label>
-              <input id="t-triangle-deg" type="number" min="20" max="70" step="1" data-type="triangle-deg" value="45" />
+              <input id="t-triangle-deg" type="number" min="20" max="70" step="1" data-type="triangle-deg" value="41" />
             </div>
           </div>
         </fieldset>
@@ -2363,7 +2363,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-photo-size">Photo size (pt)</label>
-              <input id="t-photo-size" type="number" min="60" max="200" step="1" data-type="photo-size" value="141" />
+              <input id="t-photo-size" type="number" min="60" max="200" step="1" data-type="photo-size" value="139" />
             </div>
             <div class="field">
               <label for="t-photo-ring">Photo ring (pt)</label>
@@ -2377,11 +2377,11 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-timeline-dot">Timeline dot (pt)</label>
-              <input id="t-timeline-dot" type="number" min="3" max="14" step="0.1" data-type="timeline-dot" value="6.6" />
+              <input id="t-timeline-dot" type="number" min="3" max="14" step="0.1" data-type="timeline-dot" value="7" />
             </div>
             <div class="field">
               <label for="t-timeline-line">Timeline line (pt)</label>
-              <input id="t-timeline-line" type="number" min="0.25" max="4" step="0.05" data-type="timeline-line" value="0.75" />
+              <input id="t-timeline-line" type="number" min="0.25" max="4" step="0.05" data-type="timeline-line" value="1.75" />
             </div>
           </div>
         </fieldset>
@@ -2398,14 +2398,14 @@
           <div class="field">
             <label for="t-bg-sidebar-swatch">Sidebar background</label>
             <div class="color-pair">
-              <input id="t-bg-sidebar" class="color-native" type="color" data-type="bg-sidebar" value="#f7f7f7" tabindex="-1" aria-hidden="true" />
+              <input id="t-bg-sidebar" class="color-native" type="color" data-type="bg-sidebar" value="#e5e4e2" tabindex="-1" aria-hidden="true" />
               <button type="button" id="t-bg-sidebar-swatch" class="color-swatch" data-color-swatch-for="bg-sidebar" aria-haspopup="dialog" aria-expanded="false" aria-label="Sidebar background color"></button>
             </div>
           </div>
           <div class="field">
             <label for="t-bg-main-swatch">Main background</label>
             <div class="color-pair">
-              <input id="t-bg-main" class="color-native" type="color" data-type="bg-main" value="#ffffff" tabindex="-1" aria-hidden="true" />
+              <input id="t-bg-main" class="color-native" type="color" data-type="bg-main" value="#fdfdfd" tabindex="-1" aria-hidden="true" />
               <button type="button" id="t-bg-main-swatch" class="color-swatch" data-color-swatch-for="bg-main" aria-haspopup="dialog" aria-expanded="false" aria-label="Main background color"></button>
             </div>
           </div>
@@ -2425,19 +2425,19 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-pad-sidebar-top">Sidebar top (pt)</label>
-              <input id="t-pad-sidebar-top" type="number" min="0" max="48" step="1" data-type="pad-sidebar-top" value="0" />
+              <input id="t-pad-sidebar-top" type="number" min="0" max="48" step="1" data-type="pad-sidebar-top" value="20" />
             </div>
             <div class="field">
               <label for="t-pad-sidebar-bottom">Sidebar bottom (pt)</label>
-              <input id="t-pad-sidebar-bottom" type="number" min="4" max="48" step="1" data-type="pad-sidebar-bottom" value="18" />
+              <input id="t-pad-sidebar-bottom" type="number" min="4" max="48" step="1" data-type="pad-sidebar-bottom" value="20" />
             </div>
             <div class="field">
               <label for="t-pad-sidebar-left">Sidebar left (pt)</label>
-              <input id="t-pad-sidebar-left" type="number" min="8" max="48" step="1" data-type="pad-sidebar-left" value="25" />
+              <input id="t-pad-sidebar-left" type="number" min="8" max="48" step="1" data-type="pad-sidebar-left" value="20" />
             </div>
             <div class="field">
               <label for="t-pad-sidebar-right">Sidebar right (pt)</label>
-              <input id="t-pad-sidebar-right" type="number" min="8" max="48" step="1" data-type="pad-sidebar-right" value="25" />
+              <input id="t-pad-sidebar-right" type="number" min="8" max="48" step="1" data-type="pad-sidebar-right" value="20" />
             </div>
           </div>
         </fieldset>
@@ -2447,15 +2447,15 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-pad-profile-top">Photo top (pt)</label>
-              <input id="t-pad-profile-top" type="number" min="8" max="60" step="1" data-type="pad-profile-top" value="30" />
+              <input id="t-pad-profile-top" type="number" min="8" max="60" step="1" data-type="pad-profile-top" value="10" />
             </div>
             <div class="field">
               <label for="t-pad-profile-bottom">Profile bottom (pt)</label>
-              <input id="t-pad-profile-bottom" type="number" min="0" max="80" step="1" data-type="pad-profile-bottom" value="31" />
+              <input id="t-pad-profile-bottom" type="number" min="0" max="80" step="1" data-type="pad-profile-bottom" value="30" />
             </div>
             <div class="field">
               <label for="t-gap-photo-name">Photo ↔ name (pt)</label>
-              <input id="t-gap-photo-name" type="number" min="0" max="48" step="1" data-type="gap-photo-name" value="15" />
+              <input id="t-gap-photo-name" type="number" min="0" max="48" step="1" data-type="gap-photo-name" value="10" />
             </div>
           </div>
         </fieldset>
@@ -2465,7 +2465,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-gap-icon-contact">Contact icon → text</label>
-              <input id="t-gap-icon-contact" type="number" min="2" max="20" step="0.5" data-type="gap-icon-contact" value="8" />
+              <input id="t-gap-icon-contact" type="number" min="2" max="20" step="0.5" data-type="gap-icon-contact" value="5" />
             </div>
           </div>
         </fieldset>
@@ -2475,7 +2475,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-gap-side">Sidebar section gap</label>
-              <input id="t-gap-side" type="number" min="8" max="48" step="1" data-type="gap-side-section" value="28" />
+              <input id="t-gap-side" type="number" min="8" max="48" step="1" data-type="gap-side-section" value="20" />
             </div>
             <div class="field">
               <label for="t-gap-main">Main section gap</label>
@@ -2483,15 +2483,15 @@
             </div>
             <div class="field">
               <label for="t-gap-icon-title">Section icon → title</label>
-              <input id="t-gap-icon-title" type="number" min="2" max="20" step="0.5" data-type="gap-icon-title" value="8" />
+              <input id="t-gap-icon-title" type="number" min="2" max="20" step="0.5" data-type="gap-icon-title" value="10" />
             </div>
             <div class="field">
               <label for="t-gap-title-line">Title → underline</label>
-              <input id="t-gap-title-line" type="number" min="2" max="24" step="0.5" data-type="gap-title-line" value="9" />
+              <input id="t-gap-title-line" type="number" min="2" max="24" step="0.5" data-type="gap-title-line" value="5" />
             </div>
             <div class="field">
               <label for="t-gap-underline-content">Underline → content</label>
-              <input id="t-gap-underline-content" type="number" min="4" max="36" step="1" data-type="gap-underline-content" value="16" />
+              <input id="t-gap-underline-content" type="number" min="4" max="36" step="1" data-type="gap-underline-content" value="10" />
             </div>
           </div>
         </fieldset>
@@ -2501,7 +2501,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-gap-list-items">Contact, language &amp; skills item gap</label>
-              <input id="t-gap-list-items" type="number" min="2" max="28" step="0.5" data-type="gap-list-items" value="10" />
+              <input id="t-gap-list-items" type="number" min="2" max="28" step="0.5" data-type="gap-list-items" value="5" />
             </div>
           </div>
         </fieldset>
@@ -2511,19 +2511,19 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-gap-timeline-items">Timeline item gap (edu / exp / projects)</label>
-              <input id="t-gap-timeline-items" type="number" min="4" max="40" step="1" data-type="gap-timeline-items" value="18" />
+              <input id="t-gap-timeline-items" type="number" min="4" max="40" step="1" data-type="gap-timeline-items" value="10" />
             </div>
             <div class="field">
               <label for="t-gap-title-subtitle">Item title → subtitle</label>
-              <input id="t-gap-title-subtitle" type="number" min="0" max="16" step="0.5" data-type="gap-title-subtitle" value="1" />
+              <input id="t-gap-title-subtitle" type="number" min="0" max="16" step="0.5" data-type="gap-title-subtitle" value="2.5" />
             </div>
             <div class="field">
               <label for="t-gap-subtitle-content">Subtitle → content</label>
-              <input id="t-gap-subtitle-content" type="number" min="0" max="20" step="0.5" data-type="gap-subtitle-content" value="4" />
+              <input id="t-gap-subtitle-content" type="number" min="0" max="20" step="0.5" data-type="gap-subtitle-content" value="2.5" />
             </div>
             <div class="field">
               <label for="t-gap-title-content">Title → content (no sub)</label>
-              <input id="t-gap-title-content" type="number" min="0" max="20" step="0.5" data-type="gap-title-content" value="4" />
+              <input id="t-gap-title-content" type="number" min="0" max="20" step="0.5" data-type="gap-title-content" value="5" />
             </div>
           </div>
         </fieldset>
@@ -2533,7 +2533,7 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-pad-main-top">Main top (pt)</label>
-              <input id="t-pad-main-top" type="number" min="16" max="80" step="1" data-type="pad-main-top" value="50" />
+              <input id="t-pad-main-top" type="number" min="16" max="80" step="1" data-type="pad-main-top" value="45" />
             </div>
             <div class="field">
               <label for="t-pad-main-bottom">Main bottom (pt)</label>
@@ -2541,11 +2541,11 @@
             </div>
             <div class="field">
               <label for="t-pad-main-left">Main left (pt)</label>
-              <input id="t-pad-main-left" type="number" min="12" max="56" step="1" data-type="pad-main-left" value="32" />
+              <input id="t-pad-main-left" type="number" min="12" max="56" step="1" data-type="pad-main-left" value="30" />
             </div>
             <div class="field">
               <label for="t-pad-main-right">Main right (pt)</label>
-              <input id="t-pad-main-right" type="number" min="12" max="56" step="1" data-type="pad-main-right" value="37" />
+              <input id="t-pad-main-right" type="number" min="12" max="56" step="1" data-type="pad-main-right" value="30" />
             </div>
           </div>
         </fieldset>
@@ -2558,19 +2558,19 @@
           <div class="pad-grid">
             <div class="field">
               <label for="t-pad-cont-main-top">Cont. top (pt)</label>
-              <input id="t-pad-cont-main-top" type="number" min="8" max="80" step="1" data-type="pad-cont-main-top" value="40" />
+              <input id="t-pad-cont-main-top" type="number" min="8" max="80" step="1" data-type="pad-cont-main-top" value="60" />
             </div>
             <div class="field">
               <label for="t-pad-cont-main-bottom">Cont. bottom (pt)</label>
-              <input id="t-pad-cont-main-bottom" type="number" min="8" max="60" step="1" data-type="pad-cont-main-bottom" value="30" />
+              <input id="t-pad-cont-main-bottom" type="number" min="8" max="60" step="1" data-type="pad-cont-main-bottom" value="60" />
             </div>
             <div class="field">
               <label for="t-pad-cont-main-left">Cont. left (pt)</label>
-              <input id="t-pad-cont-main-left" type="number" min="12" max="56" step="1" data-type="pad-cont-main-left" value="34" />
+              <input id="t-pad-cont-main-left" type="number" min="12" max="56" step="1" data-type="pad-cont-main-left" value="40" />
             </div>
             <div class="field">
               <label for="t-pad-cont-main-right">Cont. right (pt)</label>
-              <input id="t-pad-cont-main-right" type="number" min="12" max="56" step="1" data-type="pad-cont-main-right" value="34" />
+              <input id="t-pad-cont-main-right" type="number" min="12" max="56" step="1" data-type="pad-cont-main-right" value="40" />
             </div>
           </div>
         </fieldset>
@@ -2699,27 +2699,6 @@
     </aside>
 
     <div class="main">
-      <section data-section="skills" aria-labelledby="skills-heading">
-        <h2 id="skills-heading" class="main-section-heading">
-          <!-- tabler:puzzle-filled -->
-          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 2a3 3 0 0 1 2.995 2.824L13 5v1h3a2 2 0 0 1 1.995 1.85L18 8v3h1a3 3 0 0 1 .176 5.995L19 17h-1v3a2 2 0 0 1-1.85 1.995L16 22h-3a2 2 0 0 1-1.995-1.85L11 20v-1a1 1 0 0 0-1.993-.117L9 19v1a2 2 0 0 1-1.85 1.995L7 22H4a2 2 0 0 1-1.995-1.85L2 20v-3a2 2 0 0 1 1.85-1.995L4 15h1a1 1 0 0 0 .117-1.993L5 13H4a2 2 0 0 1-1.995-1.85L2 11V8a2 2 0 0 1 1.85-1.995L4 6h3V5a3 3 0 0 1 3-3" />
-          </svg>
-          Skills
-        </h2>
-        <ul class="skills-list" id="cv-skills"></ul>
-      </section>
-
-      <section data-section="education" aria-labelledby="education-heading">
-        <h2 id="education-heading" class="main-section-heading">
-          <!-- tabler:school-filled -->
-          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 13.431v2.569c0 2.398 -3.205 4 -7 4s-7 -1.602 -7 -4v-2.569l5.886 2.354a3 3 0 0 0 2.011 .078l.217 -.078zm2 -2.955l-8.629 3.452a1 1 0 0 1 -.742 0l-10 -4c-.839 -.335 -.839 -1.521 0 -1.856l10 -4a1 1 0 0 1 .245 -.064l.126 -.008l.126 .008a1 1 0 0 1 .245 .064l10.032 4.013l.108 .055l.099 .068l.088 .076l.075 .082l.035 .044l.073 .115l.052 .115l.034 .102l.025 .135l.006 .058l.002 6.065a1 1 0 0 1 -2 0z" />
-          </svg>
-          Educations
-        </h2>
-        <div class="timeline" id="cv-education"></div>
-      </section>
 
       <section class="experience" data-section="experience" aria-labelledby="experience-heading">
         <h2 id="experience-heading" class="main-section-heading">
@@ -2732,6 +2711,19 @@
         <div class="timeline experience-timeline" id="cv-experience"></div>
       </section>
 
+
+      <section data-section="education" aria-labelledby="education-heading">
+        <h2 id="education-heading" class="main-section-heading">
+          <!-- tabler:school-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 13.431v2.569c0 2.398 -3.205 4 -7 4s-7 -1.602 -7 -4v-2.569l5.886 2.354a3 3 0 0 0 2.011 .078l.217 -.078zm2 -2.955l-8.629 3.452a1 1 0 0 1 -.742 0l-10 -4c-.839 -.335 -.839 -1.521 0 -1.856l10 -4a1 1 0 0 1 .245 -.064l.126 -.008l.126 .008a1 1 0 0 1 .245 .064l10.032 4.013l.108 .055l.099 .068l.088 .076l.075 .082l.035 .044l.073 .115l.052 .115l.034 .102l.025 .135l.006 .058l.002 6.065a1 1 0 0 1 -2 0z" />
+          </svg>
+          Educations
+        </h2>
+        <div class="timeline" id="cv-education"></div>
+      </section>
+
+
       <section data-section="projects" aria-labelledby="projects-heading">
         <h2 id="projects-heading" class="main-section-heading">
           <!-- tabler:folder-filled -->
@@ -2743,6 +2735,18 @@
         <div class="projects-list" id="cv-projects"></div>
       </section>
 
+      <section data-section="skills" aria-labelledby="skills-heading">
+        <h2 id="skills-heading" class="main-section-heading">
+          <!-- tabler:puzzle-filled -->
+          <svg class="ico ico-fill" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 2a3 3 0 0 1 2.995 2.824L13 5v1h3a2 2 0 0 1 1.995 1.85L18 8v3h1a3 3 0 0 1 .176 5.995L19 17h-1v3a2 2 0 0 1-1.85 1.995L16 22h-3a2 2 0 0 1-1.995-1.85L11 20v-1a1 1 0 0 0-1.993-.117L9 19v1a2 2 0 0 1-1.85 1.995L7 22H4a2 2 0 0 1-1.995-1.85L2 20v-3a2 2 0 0 1 1.85-1.995L4 15h1a1 1 0 0 0 .117-1.993L5 13H4a2 2 0 0 1-1.995-1.85L2 11V8a2 2 0 0 1 1.85-1.995L4 6h3V5a3 3 0 0 1 3-3" />
+          </svg>
+          Skills
+        </h2>
+        <ul class="skills-list" id="cv-skills"></ul>
+      </section>
+
+
       <section class="section-references" data-section="references" aria-labelledby="references-heading">
         <h2 id="references-heading" class="main-section-heading">
           <!-- tabler:book-filled -->
@@ -2753,7 +2757,7 @@
         </h2>
         <div class="ref-grid" id="cv-references"></div>
       </section>
-    </div>
+</div>
   </article>
   </div>
 
@@ -2774,16 +2778,16 @@
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.";
 
       const TYPE_DEFAULTS = {
-        font: "Montserrat",
-        "size-name": "30",
+        font: "Nunito Sans",
+        "size-name": "24",
         "size-job": "12",
         "size-section": "15",
-        "size-body": "8.5",
-        "size-item-title": "10",
+        "size-body": "9",
+        "size-item-title": "12",
         "size-item-sub": "9",
-        "line-height-body": "1.55",
-        "text-align-body": "left",
-        "weight-skill-cat": "600",
+        "line-height-body": "1.5",
+        "text-align-body": "justify",
+        "weight-skill-cat": "700",
         "color-name": "#608abf",
         "color-job": "#636466",
         "color-section": "#636466",
@@ -2791,42 +2795,42 @@
         "color-item-title": "#636466",
         "color-item-sub": "#636466",
         accent: "#608abf",
-        "bg-sidebar": "#f7f7f7",
-        "bg-main": "#ffffff",
+        "bg-sidebar": "#e5e4e2",
+        "bg-main": "#fdfdfd",
         "photo-ring-color": "#ffffff",
-        "triangle-deg": "45",
-        "photo-size": "141",
+        "triangle-deg": "41",
+        "photo-size": "139",
         "photo-ring": "5",
-        "size-icon-title": "14",
-        "size-icon-contact": "15",
-        "timeline-dot": "6.6",
-        "timeline-line": "0.75",
-        "pad-sidebar-top": "0",
-        "pad-sidebar-right": "25",
-        "pad-sidebar-bottom": "18",
-        "pad-sidebar-left": "25",
-        "pad-profile-top": "30",
-        "pad-profile-bottom": "31",
-        "pad-main-top": "50",
-        "pad-main-right": "37",
+        "size-icon-title": "15",
+        "size-icon-contact": "10",
+        "timeline-dot": "7",
+        "timeline-line": "1.75",
+        "pad-sidebar-top": "20",
+        "pad-sidebar-right": "20",
+        "pad-sidebar-bottom": "20",
+        "pad-sidebar-left": "20",
+        "pad-profile-top": "10",
+        "pad-profile-bottom": "30",
+        "pad-main-top": "45",
+        "pad-main-right": "30",
         "pad-main-bottom": "30",
-        "pad-main-left": "32",
-        "gap-photo-name": "15",
-        "gap-side-section": "28",
+        "pad-main-left": "30",
+        "gap-photo-name": "10",
+        "gap-side-section": "20",
         "gap-main-section": "20",
-        "gap-timeline-items": "18",
-        "gap-list-items": "10",
-        "gap-icon-title": "8",
-        "gap-icon-contact": "8",
-        "gap-title-line": "9",
-        "gap-underline-content": "16",
-        "gap-title-subtitle": "1",
-        "gap-subtitle-content": "4",
-        "gap-title-content": "4",
-        "pad-cont-main-top": "40",
-        "pad-cont-main-right": "34",
-        "pad-cont-main-bottom": "30",
-        "pad-cont-main-left": "34",
+        "gap-timeline-items": "10",
+        "gap-list-items": "5",
+        "gap-icon-title": "10",
+        "gap-icon-contact": "5",
+        "gap-title-line": "5",
+        "gap-underline-content": "10",
+        "gap-title-subtitle": "2.5",
+        "gap-subtitle-content": "2.5",
+        "gap-title-content": "5",
+        "pad-cont-main-top": "60",
+        "pad-cont-main-right": "40",
+        "pad-cont-main-bottom": "60",
+        "pad-cont-main-left": "40",
       };
 
       const CSS_VAR_MAP = {
@@ -2897,7 +2901,7 @@
 
       const SECTION_ORDER_DEFAULTS = {
         sidebar: ["contact", "about", "languages"],
-        main: ["skills", "education", "experience", "projects", "references"],
+        main: ["experience", "education", "projects", "skills", "references"],
       };
 
       const SECTION_VISIBILITY_DEFAULTS = {
