@@ -4679,9 +4679,50 @@
         });
       }
 
+      /**
+       * Prefer the field row's primary control so hovering label, gap, or
+       * input within the same `.field` keeps one stable hover source.
+       */
+      function findFieldRowHoverControl(field) {
+        if (!field || !isInCvFocusPanel(field)) return null;
+
+        const labeled = field.querySelector("label[for]");
+        if (labeled?.htmlFor) {
+          const byFor = document.getElementById(labeled.htmlFor);
+          if (
+            byFor &&
+            field.contains(byFor) &&
+            isInCvFocusPanel(byFor) &&
+            resolveCvFocusTargets(byFor).length
+          ) {
+            return byFor;
+          }
+        }
+
+        for (const control of field.querySelectorAll("input, select, textarea, button")) {
+          if (control.classList.contains("field-reset")) continue;
+          if (isInCvFocusPanel(control) && resolveCvFocusTargets(control).length) {
+            return control;
+          }
+        }
+
+        const photoRow = field.querySelector(".photo-row");
+        if (photoRow && resolveCvFocusTargets(photoRow).length) return photoRow;
+
+        return null;
+      }
+
       /** Nearest drawer control that maps to a CV region (for hover). */
       function findHoverCvFocusSource(fromEl) {
         if (!fromEl || !fromEl.closest || !isInCvFocusPanel(fromEl)) return null;
+
+        // Whole `.field` row (label + control + gap) shares one hover source so
+        // moving within the row never clears the CV highlight.
+        const field = fromEl.closest(".field");
+        if (field) {
+          const fieldControl = findFieldRowHoverControl(field);
+          if (fieldControl) return fieldControl;
+        }
 
         const label = fromEl.closest("label");
         if (label && isInCvFocusPanel(label)) {
