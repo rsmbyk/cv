@@ -700,7 +700,9 @@
       position: fixed;
       top: 1rem;
       left: 0;
-      z-index: 1100;
+      /* Below drawer (1050) and backdrop (1040) so Edit stays covered
+         while the drawer is open or mid-collapse — not only when open. */
+      z-index: 1030;
       display: flex;
       align-items: center;
       transition: left 0.28s ease;
@@ -776,7 +778,8 @@
       position: fixed;
       bottom: 1rem;
       left: 1rem;
-      z-index: 1100;
+      /* Same stacking as Edit: stay under drawer/backdrop through collapse. */
+      z-index: 1030;
       display: flex;
       align-items: center;
       gap: 0.2rem;
@@ -1470,13 +1473,13 @@
 
     @media screen and (max-width: 900px) {
       body.drawer-open { padding-left: 1rem; }
+      /* Keep Edit under the overlay drawer at left: 0 (no early slide-out).
+         Base z-index already sits below drawer/backdrop for the whole collapse. */
       body.drawer-open .screen-chrome {
         left: 0;
-        z-index: 1030;
       }
       body.drawer-open .zoom-controls {
         left: 1rem;
-        z-index: 1030;
       }
       body.drawer-open .drawer-backdrop {
         display: block;
