@@ -3880,6 +3880,18 @@
         return PHONE_DIAL_BY_ISO[key] || "";
       }
 
+      /**
+       * ISO 3166-1 alpha-2 → flag emoji via regional indicator symbols
+       * (A→U+1F1E6 … Z→U+1F1FF). Returns "" for invalid codes.
+       */
+      function isoToFlagEmoji(iso) {
+        const code = String(iso || "").toUpperCase();
+        if (!/^[A-Z]{2}$/.test(code)) return "";
+        return String.fromCodePoint(
+          ...[...code].map((ch) => 0x1f1e6 - 65 + ch.charCodeAt(0))
+        );
+      }
+
       function countryIsoForDial(dial, preferredIso) {
         const digits = normalizePhoneDial(dial);
         if (!digits) return "";
@@ -3903,8 +3915,12 @@
         const frag = document.createDocumentFragment();
         sorted.forEach((c) => {
           const opt = document.createElement("option");
+          const flag = isoToFlagEmoji(c.iso);
+          const a11y = `${c.name} (+${c.dial})`;
           opt.value = c.iso;
-          opt.textContent = `${c.name} (+${c.dial})`;
+          opt.textContent = flag ? `${flag} +${c.dial}` : `+${c.dial}`;
+          opt.title = a11y;
+          opt.setAttribute("aria-label", a11y);
           opt.dataset.dial = c.dial;
           frag.appendChild(opt);
         });
@@ -3974,6 +3990,16 @@
         return dialForCountryIso(getPhoneCountryIso()) || PHONE_DIAL_FALLBACK;
       }
 
+      function syncPhoneDialSelectA11y() {
+        const sel = phoneDialSelect();
+        const chosen = sel?.selectedOptions?.[0];
+        if (!sel || !chosen) return;
+        const label = chosen.getAttribute("aria-label") || chosen.title || "";
+        if (!label) return;
+        sel.title = label;
+        sel.setAttribute("aria-label", label);
+      }
+
       function setPhoneCountry(isoOrDial, preferredIso) {
         populatePhoneDialSelect();
         const sel = phoneDialSelect();
@@ -3981,15 +4007,16 @@
         let iso = String(isoOrDial || "").toUpperCase();
         if (iso && dialForCountryIso(iso)) {
           sel.value = iso;
-          return;
+        } else {
+          const asDial = normalizePhoneDial(isoOrDial);
+          iso = countryIsoForDial(asDial, preferredIso);
+          if (iso) {
+            sel.value = iso;
+          } else {
+            sel.value = countryIsoForDial(PHONE_DIAL_FALLBACK, "ID") || "ID";
+          }
         }
-        const asDial = normalizePhoneDial(isoOrDial);
-        iso = countryIsoForDial(asDial, preferredIso);
-        if (iso) {
-          sel.value = iso;
-          return;
-        }
-        sel.value = countryIsoForDial(PHONE_DIAL_FALLBACK, "ID") || "ID";
+        syncPhoneDialSelectA11y();
       }
 
       /**
@@ -6362,6 +6389,7 @@
 
       form.addEventListener("input", (e) => {
         const t = e.target;
+        if (t.id === "f-phone-dial") syncPhoneDialSelectA11y();
         if (t.matches("[data-type]")) {
           pushTypeLive();
           return;

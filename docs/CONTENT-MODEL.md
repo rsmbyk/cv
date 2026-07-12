@@ -38,7 +38,7 @@ Each row is `[data-contact="{key}"]`. Visibility toggles use `data-visible` and 
 
 ### Phone / WhatsApp
 
-`COUNTRY_CALLING_CODES` — curated ITU list (name + dial). Selector label: `Indonesia (+62)`.
+`COUNTRY_CALLING_CODES` — curated ITU list (ISO + name + dial). Selector label: flag emoji + dial (e.g. `🇮🇩 +62`); country name kept on option `title` / `aria-label`. Flag from ISO via regional indicator symbols (`isoToFlagEmoji`).
 
 Storage (under `fields`):
 
