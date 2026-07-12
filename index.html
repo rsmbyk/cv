@@ -5169,6 +5169,23 @@
         pushListsLive();
       }
 
+      // Focused number inputs eat wheel events and change their value; block that
+      // so scrolling the drawer doesn't nudge type/spacing/year fields by accident.
+      form.addEventListener(
+        "wheel",
+        (e) => {
+          const t = e.target;
+          if (
+            t instanceof HTMLInputElement &&
+            t.type === "number" &&
+            document.activeElement === t
+          ) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+
       form.addEventListener("input", (e) => {
         const t = e.target;
         if (t.matches("[data-type]")) {
