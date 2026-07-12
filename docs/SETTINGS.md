@@ -25,7 +25,7 @@ Notable groups:
 
 `applyType` writes mapped values to `:root`. Invalid `text-align-body` or `weight-skill-cat` snap back to defaults.
 
-Color controls are a picker plus a compact `#RRGGBB` hex text field (`data-hex-for`). The picker keeps `data-type` (persistence / reset source of truth). Valid hex updates the picker and runs `pushTypeLive`; invalid drafts are ignored until valid, then snap back to the picker value on blur.
+Color controls use a swatch button that opens a shared custom popover (`#color-popover`) with an SV spectrum, hue slider, and `#RRGGBB` hex field. A visually hidden native `<input type="color" data-type>` remains the persistence / reset source of truth. Valid hex updates that input and runs `pushTypeLive`; invalid drafts are ignored until valid, then snap back on blur. Click-outside or Escape closes the popover (Escape closes the popover before the drawer).
 
 ### Skill category weight
 
