@@ -4624,11 +4624,76 @@
         return [];
       }
 
+      /** Drawer control under the pointer (Content / Type / Spacing); focus wins over this. */
+      let hoverCvFocusEl = null;
+
+      function isDrawerEditableControl(el) {
+        if (!el || !el.tagName) return false;
+        const tag = el.tagName;
+        return tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA";
+      }
+
+      /**
+       * Soft highlight on CV region(s) for the focused drawer control, or — when
+       * nothing is being edited — the hovered mapped control.
+       * Priority: focused input/select/textarea → any focused mapped control → hover.
+       */
       function syncCvFocusHighlight() {
         clearCvFocusHighlight();
-        resolveCvFocusTargets(document.activeElement).forEach((el) => {
+        const active = document.activeElement;
+        const activeInPanel = isInCvFocusPanel(active);
+        let source = null;
+
+        if (activeInPanel && isDrawerEditableControl(active)) {
+          source = active;
+        } else if (activeInPanel) {
+          const focusTargets = resolveCvFocusTargets(active);
+          if (focusTargets.length) {
+            focusTargets.forEach((el) => el.classList.add("cv-focus-highlight"));
+            return;
+          }
+        }
+
+        if (!source && hoverCvFocusEl && isInCvFocusPanel(hoverCvFocusEl)) {
+          source = hoverCvFocusEl;
+        }
+
+        if (!source) return;
+        resolveCvFocusTargets(source).forEach((el) => {
           el.classList.add("cv-focus-highlight");
         });
+      }
+
+      /** Nearest drawer control that maps to a CV region (for hover). */
+      function findHoverCvFocusSource(fromEl) {
+        if (!fromEl || !fromEl.closest || !isInCvFocusPanel(fromEl)) return null;
+
+        const label = fromEl.closest("label");
+        if (label && isInCvFocusPanel(label)) {
+          const control =
+            label.control ||
+            (label.htmlFor ? document.getElementById(label.htmlFor) : null);
+          if (control && isInCvFocusPanel(control) && resolveCvFocusTargets(control).length) {
+            return control;
+          }
+        }
+
+        const formControl = fromEl.closest("input, select, textarea, button");
+        if (
+          formControl &&
+          isInCvFocusPanel(formControl) &&
+          resolveCvFocusTargets(formControl).length
+        ) {
+          return formControl;
+        }
+
+        let el = fromEl;
+        while (el && el !== document.body) {
+          if (!isInCvFocusPanel(el)) break;
+          if (resolveCvFocusTargets(el).length) return el;
+          el = el.parentElement;
+        }
+        return null;
       }
 
       function isInCvFocusPanel(el) {
@@ -5039,6 +5104,7 @@
         } else {
           drawer.setAttribute("inert", "");
           if (drawerBackdrop) drawerBackdrop.setAttribute("hidden", "");
+          hoverCvFocusEl = null;
           clearCvFocusHighlight();
         }
         try {
@@ -5531,12 +5597,22 @@
         });
         panel.addEventListener("focusout", () => {
           requestAnimationFrame(() => {
-            if (!isInCvFocusPanel(document.activeElement)) {
-              clearCvFocusHighlight();
-            } else {
-              syncCvFocusHighlight();
-            }
+            // Re-sync so hover can take over after focus leaves an editable.
+            syncCvFocusHighlight();
           });
+        });
+        panel.addEventListener("pointerover", (e) => {
+          const next = findHoverCvFocusSource(e.target);
+          if (next === hoverCvFocusEl) return;
+          hoverCvFocusEl = next;
+          syncCvFocusHighlight();
+        });
+        panel.addEventListener("pointerout", (e) => {
+          const related = e.relatedTarget;
+          if (related && panel.contains(related)) return;
+          if (!hoverCvFocusEl) return;
+          hoverCvFocusEl = null;
+          syncCvFocusHighlight();
         });
       });
 
