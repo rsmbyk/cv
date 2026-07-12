@@ -104,6 +104,7 @@
     }
 
     .page {
+      position: relative;
       width: var(--page-w);
       height: var(--page-h);
       background: var(--bg-main);
@@ -1515,6 +1516,16 @@
       .page-continued.cv-focus-highlight {
         border-radius: 0;
       }
+      /* Gap/padding cues: thin strips along the actual spacing (not whole blocks). */
+      .cv-gap-highlight {
+        position: absolute;
+        z-index: 30;
+        pointer-events: none;
+        box-sizing: border-box;
+        border-radius: 2px;
+        background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+      }
     }
 
     @media screen and (max-width: 900px) {
@@ -1571,6 +1582,9 @@
       .cv-focus-highlight {
         outline: none !important;
         background-color: transparent !important;
+      }
+      .cv-gap-highlight {
+        display: none !important;
       }
     }
   </style>
@@ -4410,6 +4424,311 @@
         root.querySelectorAll(".cv-focus-highlight").forEach((el) => {
           el.classList.remove("cv-focus-highlight");
         });
+        root.querySelectorAll(".cv-gap-highlight").forEach((el) => el.remove());
+      }
+
+      function isGapOrPaddingTypeKey(key) {
+        return typeof key === "string" && (key.startsWith("gap-") || key.startsWith("pad-"));
+      }
+
+      function layoutRectInPage(el, page) {
+        const z = zoom || 1;
+        const pr = page.getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        return {
+          left: (er.left - pr.left) / z,
+          top: (er.top - pr.top) / z,
+          width: er.width / z,
+          height: er.height / z,
+        };
+      }
+
+      function appendGapOverlay(page, rect) {
+        if (!page || !rect) return;
+        const w = rect.width;
+        const h = rect.height;
+        if (!(w > 0.75 && h > 0.75)) return;
+        const strip = document.createElement("div");
+        strip.className = "cv-gap-highlight";
+        strip.setAttribute("aria-hidden", "true");
+        strip.style.left = `${rect.left}px`;
+        strip.style.top = `${rect.top}px`;
+        strip.style.width = `${w}px`;
+        strip.style.height = `${h}px`;
+        page.appendChild(strip);
+      }
+
+      function visibleLayoutChildren(parent) {
+        return [...parent.children].filter((el) => {
+          if (el.classList.contains("cv-gap-highlight")) return false;
+          if (el.classList.contains("is-hidden") || el.style.display === "none") return false;
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && r.height > 0;
+        });
+      }
+
+      function vGapBetween(a, b, page) {
+        const ra = layoutRectInPage(a, page);
+        const rb = layoutRectInPage(b, page);
+        const top = ra.top + ra.height;
+        const left = Math.min(ra.left, rb.left);
+        const right = Math.max(ra.left + ra.width, rb.left + rb.width);
+        return { left, top, width: right - left, height: rb.top - top };
+      }
+
+      function hGapBetween(a, b, page) {
+        const ra = layoutRectInPage(a, page);
+        const rb = layoutRectInPage(b, page);
+        const left = ra.left + ra.width;
+        const top = Math.min(ra.top, rb.top);
+        const bottom = Math.max(ra.top + ra.height, rb.top + rb.height);
+        return { left, top, width: rb.left - left, height: bottom - top };
+      }
+
+      function padEdgeRect(el, page, side) {
+        const r = layoutRectInPage(el, page);
+        const cs = getComputedStyle(el);
+        const pt = parseFloat(cs.paddingTop) || 0;
+        const pr = parseFloat(cs.paddingRight) || 0;
+        const pb = parseFloat(cs.paddingBottom) || 0;
+        const pl = parseFloat(cs.paddingLeft) || 0;
+        switch (side) {
+          case "top":
+            return { left: r.left, top: r.top, width: r.width, height: pt };
+          case "right":
+            return { left: r.left + r.width - pr, top: r.top, width: pr, height: r.height };
+          case "bottom":
+            return { left: r.left, top: r.top + r.height - pb, width: r.width, height: pb };
+          case "left":
+            return { left: r.left, top: r.top, width: pl, height: r.height };
+          default:
+            return null;
+        }
+      }
+
+      function marginStrip(el, page, side) {
+        const r = layoutRectInPage(el, page);
+        const cs = getComputedStyle(el);
+        if (side === "top") {
+          const mt = parseFloat(cs.marginTop) || 0;
+          return { left: r.left, top: r.top - mt, width: r.width, height: mt };
+        }
+        if (side === "bottom") {
+          const mb = parseFloat(cs.marginBottom) || 0;
+          return { left: r.left, top: r.top + r.height, width: r.width, height: mb };
+        }
+        return null;
+      }
+
+      function headingTitleLineStrip(heading, page) {
+        const r = layoutRectInPage(heading, page);
+        const cs = getComputedStyle(heading);
+        const pb = parseFloat(cs.paddingBottom) || 0;
+        const bb = parseFloat(cs.borderBottomWidth) || 0;
+        return {
+          left: r.left,
+          top: r.top + r.height - bb - pb,
+          width: r.width,
+          height: pb,
+        };
+      }
+
+      function paintGapsBetweenSiblings(nodes, page) {
+        for (let i = 0; i < nodes.length - 1; i++) {
+          appendGapOverlay(page, vGapBetween(nodes[i], nodes[i + 1], page));
+        }
+      }
+
+      function paintFlexChildGaps(containers, pageFor) {
+        containers.forEach((container) => {
+          const page = pageFor(container);
+          if (!page) return;
+          paintGapsBetweenSiblings(visibleLayoutChildren(container), page);
+        });
+      }
+
+      /**
+       * Gap/padding controls: thin accent strips along the actual spacing.
+       * Size/color (and other non-gap) controls keep whole-element highlights.
+       */
+      function paintGapPadHighlights(typeKey, root) {
+        const pageOf = (el) => el.closest(".page");
+        const each = (selector, paint) => {
+          queryCvFocus(root, selector).forEach((el) => {
+            const page = pageOf(el);
+            if (page) paint(el, page);
+          });
+        };
+
+        switch (typeKey) {
+          case "pad-sidebar-top":
+            each(".sidebar", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "top")));
+            break;
+          case "pad-sidebar-right":
+            each(".sidebar", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "right")));
+            break;
+          case "pad-sidebar-bottom":
+            each(".sidebar", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "bottom")));
+            break;
+          case "pad-sidebar-left":
+            each(".sidebar", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "left")));
+            break;
+          case "pad-main-top":
+            each(".page:not(.page-continued) .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "top"))
+            );
+            break;
+          case "pad-main-right":
+            each(".page:not(.page-continued) .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "right"))
+            );
+            break;
+          case "pad-main-bottom":
+            each(".page:not(.page-continued) .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "bottom"))
+            );
+            break;
+          case "pad-main-left":
+            each(".page:not(.page-continued) .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "left"))
+            );
+            break;
+          case "pad-cont-main-top":
+            each(".page-continued .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "top"))
+            );
+            break;
+          case "pad-cont-main-right":
+            each(".page-continued .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "right"))
+            );
+            break;
+          case "pad-cont-main-bottom":
+            each(".page-continued .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "bottom"))
+            );
+            break;
+          case "pad-cont-main-left":
+            each(".page-continued .main", (el, page) =>
+              appendGapOverlay(page, padEdgeRect(el, page, "left"))
+            );
+            break;
+          case "pad-profile-top":
+            each(".profile", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "top")));
+            break;
+          case "pad-profile-bottom":
+            each(".profile", (el, page) => appendGapOverlay(page, padEdgeRect(el, page, "bottom")));
+            break;
+          case "gap-photo-name":
+            each(".profile", (profile, page) => {
+              const photo = profile.querySelector("[data-photo], .avatar");
+              const name = profile.querySelector(".name, [data-edit='name']");
+              if (photo && name) appendGapOverlay(page, vGapBetween(photo, name, page));
+            });
+            break;
+          case "gap-side-section":
+            queryCvFocus(root, ".sidebar").forEach((sidebar) => {
+              const page = pageOf(sidebar);
+              if (!page) return;
+              paintGapsBetweenSiblings(
+                visibleLayoutChildren(sidebar).filter((el) => el.classList.contains("side-section")),
+                page
+              );
+            });
+            break;
+          case "gap-main-section":
+            queryCvFocus(root, ".main").forEach((main) => {
+              const page = pageOf(main);
+              if (!page) return;
+              paintGapsBetweenSiblings(
+                visibleLayoutChildren(main).filter((el) => el.matches("section, [data-section]")),
+                page
+              );
+            });
+            break;
+          case "gap-list-items":
+            paintFlexChildGaps(
+              queryCvFocus(root, ".contact-list, .skills-list, .projects-list"),
+              pageOf
+            );
+            break;
+          case "gap-timeline-items":
+            paintFlexChildGaps(queryCvFocus(root, ".timeline"), pageOf);
+            break;
+          case "gap-icon-title":
+            each(".side-heading, .main-section-heading", (heading, page) => {
+              const icon = heading.querySelector(":scope > .icon-pair, :scope > .ico");
+              if (!icon) return;
+              const gapPx =
+                parseFloat(getComputedStyle(heading).columnGap) ||
+                parseFloat(getComputedStyle(heading).gap) ||
+                0;
+              if (gapPx <= 0) return;
+              const r = layoutRectInPage(icon, page);
+              appendGapOverlay(page, {
+                left: r.left + r.width,
+                top: r.top,
+                width: gapPx,
+                height: r.height,
+              });
+            });
+            break;
+          case "gap-icon-contact":
+            each("[data-contact]", (row, page) => {
+              const icon = row.querySelector(":scope > .ico");
+              const text = row.querySelector(":scope > a, :scope > span, :scope > [data-edit]");
+              if (icon && text) appendGapOverlay(page, hGapBetween(icon, text, page));
+            });
+            break;
+          case "gap-title-line":
+            each(".side-heading, .main-section-heading", (heading, page) =>
+              appendGapOverlay(page, headingTitleLineStrip(heading, page))
+            );
+            break;
+          case "gap-underline-content":
+            each(".side-heading, .main-section-heading", (heading, page) =>
+              appendGapOverlay(page, marginStrip(heading, page, "bottom"))
+            );
+            break;
+          case "gap-title-subtitle":
+            each(".entry .entry-meta, [data-entry='references'] .entry-meta", (meta, page) =>
+              appendGapOverlay(page, marginStrip(meta, page, "top"))
+            );
+            break;
+          case "gap-subtitle-content":
+            each(".entry .entry-meta, [data-entry='references'] .entry-meta", (meta, page) =>
+              appendGapOverlay(page, marginStrip(meta, page, "bottom"))
+            );
+            break;
+          case "gap-title-content":
+            each(".entry.no-subtitle", (entry, page) => {
+              const content = entry.querySelector(".entry-desc, .entry-bullets");
+              if (content) appendGapOverlay(page, marginStrip(content, page, "top"));
+            });
+            break;
+          default:
+            break;
+        }
+      }
+
+      function applyCvFocusForSource(source) {
+        if (!source) return;
+        const typeKey = source.getAttribute?.("data-type");
+        if (isGapOrPaddingTypeKey(typeKey)) {
+          const root = pagesEl || pageEl;
+          if (root) paintGapPadHighlights(typeKey, root);
+          return;
+        }
+        resolveCvFocusTargets(source).forEach((el) => {
+          el.classList.add("cv-focus-highlight");
+        });
+      }
+
+      function controlHasCvFocusMapping(el) {
+        if (!el) return false;
+        const typeKey = el.getAttribute?.("data-type");
+        if (isGapOrPaddingTypeKey(typeKey)) return true;
+        return resolveCvFocusTargets(el).length > 0;
       }
 
       function isCvFocusTargetVisible(el) {
@@ -4662,9 +4981,8 @@
         if (activeInPanel && isDrawerEditableControl(active)) {
           source = active;
         } else if (activeInPanel) {
-          const focusTargets = resolveCvFocusTargets(active);
-          if (focusTargets.length) {
-            focusTargets.forEach((el) => el.classList.add("cv-focus-highlight"));
+          if (controlHasCvFocusMapping(active)) {
+            applyCvFocusForSource(active);
             return;
           }
         }
@@ -4674,9 +4992,7 @@
         }
 
         if (!source) return;
-        resolveCvFocusTargets(source).forEach((el) => {
-          el.classList.add("cv-focus-highlight");
-        });
+        applyCvFocusForSource(source);
       }
 
       /**
@@ -4693,7 +5009,7 @@
             byFor &&
             field.contains(byFor) &&
             isInCvFocusPanel(byFor) &&
-            resolveCvFocusTargets(byFor).length
+            controlHasCvFocusMapping(byFor)
           ) {
             return byFor;
           }
@@ -4701,13 +5017,13 @@
 
         for (const control of field.querySelectorAll("input, select, textarea, button")) {
           if (control.classList.contains("field-reset")) continue;
-          if (isInCvFocusPanel(control) && resolveCvFocusTargets(control).length) {
+          if (isInCvFocusPanel(control) && controlHasCvFocusMapping(control)) {
             return control;
           }
         }
 
         const photoRow = field.querySelector(".photo-row");
-        if (photoRow && resolveCvFocusTargets(photoRow).length) return photoRow;
+        if (photoRow && controlHasCvFocusMapping(photoRow)) return photoRow;
 
         return null;
       }
@@ -4729,7 +5045,7 @@
           const control =
             label.control ||
             (label.htmlFor ? document.getElementById(label.htmlFor) : null);
-          if (control && isInCvFocusPanel(control) && resolveCvFocusTargets(control).length) {
+          if (control && isInCvFocusPanel(control) && controlHasCvFocusMapping(control)) {
             return control;
           }
         }
@@ -4738,7 +5054,7 @@
         if (
           formControl &&
           isInCvFocusPanel(formControl) &&
-          resolveCvFocusTargets(formControl).length
+          controlHasCvFocusMapping(formControl)
         ) {
           return formControl;
         }
@@ -4746,7 +5062,7 @@
         let el = fromEl;
         while (el && el !== document.body) {
           if (!isInCvFocusPanel(el)) break;
-          if (resolveCvFocusTargets(el).length) return el;
+          if (controlHasCvFocusMapping(el)) return el;
           el = el.parentElement;
         }
         return null;
@@ -4954,6 +5270,7 @@
 
       function pushTypeLive() {
         applyType(readType());
+        syncCvFocusHighlight();
         schedulePaginate();
         scheduleSave();
       }
