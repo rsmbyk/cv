@@ -1489,7 +1489,7 @@
     }
     .photo-row button:hover { background: #f3f5f7; }
 
-    /* Drawer focus (Content / Type / Spacing) → CV region (screen only; never print/PDF) */
+    /* Drawer focus (Content / Type / Spacing / Sections) → CV region (screen only; never print/PDF) */
     @media screen {
       .cv-focus-highlight {
         outline: 1.5px solid color-mix(in srgb, var(--accent) 50%, transparent);
@@ -4921,6 +4921,19 @@
         }
       }
 
+      /** Map Sections-tab row / visibility control → CV `[data-section]` region(s). */
+      function resolveSectionsCvFocusTargets(focusEl, root) {
+        if (!focusEl) return [];
+        const row = focusEl.closest?.(".section-order-item");
+        const id =
+          focusEl.getAttribute?.("data-section-focus") ||
+          focusEl.getAttribute?.("data-section-visible") ||
+          row?.getAttribute("data-section-focus") ||
+          row?.querySelector("[data-section-visible]")?.getAttribute("data-section-visible");
+        if (!id) return [];
+        return queryCvFocus(root, `[data-section="${id}"]`);
+      }
+
       function resolveCvFocusTargets(focusEl) {
         if (!focusEl) return [];
         const root = pagesEl || pageEl;
@@ -4929,6 +4942,7 @@
         const panelContent = document.getElementById("panel-content");
         const panelType = document.getElementById("panel-type");
         const panelSpacing = document.getElementById("panel-spacing");
+        const panelSections = document.getElementById("panel-sections");
 
         if (
           panelContent &&
@@ -4955,10 +4969,18 @@
           return resolveTypeSpacingCvFocusTargets(focusEl, root);
         }
 
+        if (
+          panelSections &&
+          panelSections.classList.contains("is-active") &&
+          panelSections.contains(focusEl)
+        ) {
+          return resolveSectionsCvFocusTargets(focusEl, root);
+        }
+
         return [];
       }
 
-      /** Drawer control under the pointer (Content / Type / Spacing); focus wins over this. */
+      /** Drawer control under the pointer (Content / Type / Spacing / Sections); focus wins over this. */
       let hoverCvFocusEl = null;
 
       function isDrawerEditableControl(el) {
@@ -5032,6 +5054,16 @@
       function findHoverCvFocusSource(fromEl) {
         if (!fromEl || !fromEl.closest || !isInCvFocusPanel(fromEl)) return null;
 
+        // Whole Sections row (label + show + move) shares one hover source.
+        const sectionItem = fromEl.closest(".section-order-item");
+        if (
+          sectionItem &&
+          isInCvFocusPanel(sectionItem) &&
+          controlHasCvFocusMapping(sectionItem)
+        ) {
+          return sectionItem;
+        }
+
         // Whole `.field` row (label + control + gap) shares one hover source so
         // moving within the row never clears the CV highlight.
         const field = fromEl.closest(".field");
@@ -5073,7 +5105,8 @@
         return !!(
           el.closest("#panel-content") ||
           el.closest("#panel-type") ||
-          el.closest("#panel-spacing")
+          el.closest("#panel-spacing") ||
+          el.closest("#panel-sections")
         );
       }
 
@@ -5092,7 +5125,7 @@
                   <button type="button" data-section-move="${side}" data-index="${index}" data-dir="1" ${atEnd ? "disabled" : ""} title="Move down">↓</button>`
                 : "";
               return `
-                <div class="section-order-item${shown ? "" : " is-section-hidden"}">
+                <div class="section-order-item${shown ? "" : " is-section-hidden"}" data-section-focus="${id}">
                   <span>${SECTION_LABELS[id] || id}</span>
                   <div class="visibility-toggle">
                     <label for="sv-${id}">Show</label>
@@ -5963,7 +5996,8 @@
       const panelContent = document.getElementById("panel-content");
       const panelType = document.getElementById("panel-type");
       const panelSpacing = document.getElementById("panel-spacing");
-      [panelContent, panelType, panelSpacing].forEach((panel) => {
+      const panelSections = document.getElementById("panel-sections");
+      [panelContent, panelType, panelSpacing, panelSections].forEach((panel) => {
         if (!panel) return;
         panel.addEventListener("focusin", () => {
           syncCvFocusHighlight();
