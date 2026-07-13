@@ -2775,9 +2775,9 @@
   <article class="page" id="cv-page-1">
     <aside class="sidebar">
       <header class="profile">
-        <img class="avatar" src="photo.jpg" alt="Portrait of Lorna Alvarado" width="188" height="188" data-photo />
-        <h1 class="name" data-edit="name" data-edit-html="true">Lorna<br />Alvarado</h1>
-        <p class="title" data-edit="title">Marketing Manager</p>
+        <img class="avatar" src="photo.jpg" alt="Portrait photo" width="188" height="188" data-photo />
+        <h1 class="name" data-edit="name" data-edit-html="true"></h1>
+        <p class="title" data-edit="title"></p>
       </header>
 
       <section class="side-section contact" data-section="contact" aria-labelledby="contact-heading">
@@ -2839,12 +2839,7 @@
           </svg>
           About Me
         </h2>
-        <p class="about-text" data-edit="about">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
+        <p class="about-text" data-edit="about"></p>
       </section>
 
       <section class="side-section languages" data-section="languages" aria-labelledby="languages-heading">
@@ -2950,8 +2945,6 @@
       const ZOOM_MAX = ZOOM_STEPS[ZOOM_STEPS.length - 1];
       const DEFAULT_ZOOM = 1;
       const FIT_PAD = 16;
-      const LOREM =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet sem nec risus egestas accumsan. In enim nunc, tincidunt ut quam eget, luctus sollicitudin neque.";
 
       const TYPE_DEFAULTS = {
         font: "Nunito Sans",
@@ -3120,115 +3113,14 @@
         ["12", "Dec"],
       ];
 
+      /** Empty list scaffold when samples.js is unavailable. Real demos live in CV_CONTENT_SAMPLES. */
       const SAMPLE_LISTS = {
-        skills: [
-          {
-            name: "",
-            skills: [
-              "Management Skills",
-              "Creativity",
-              "Digital Marketing",
-              "Negotiation",
-              "Critical Thinking",
-              "Leadership",
-            ],
-          },
-        ],
-        languages: ["English", "Spanish", "French"],
-        education: [
-          {
-            title: "Bachelor of Business Management",
-            org: "Borcelle University",
-            location: "Any City, ST",
-            startYear: "2016",
-            startMonth: "",
-            endYear: "2020",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM + " Sed leo nisl, semper ac hendrerit a, sollicitudin in arcu.",
-          },
-          {
-            title: "Bachelor of Business Management",
-            org: "Borcelle University",
-            location: "Any City, ST",
-            startYear: "2020",
-            startMonth: "",
-            endYear: "2023",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM + " Sed leo nisl, semper ac hendrerit a, sollicitudin in arcu.",
-          },
-        ],
-        experience: [
-          {
-            title: "Product Design Manager",
-            org: "Arowwai Industries",
-            location: "Any City, ST",
-            startYear: "2016",
-            startMonth: "",
-            endYear: "2020",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM,
-          },
-          {
-            title: "Marketing Manager",
-            org: "Arowwai Industries",
-            location: "Any City, ST",
-            startYear: "2019",
-            startMonth: "",
-            endYear: "2020",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM,
-          },
-          {
-            title: "Marketing Manager",
-            org: "Arowwai Industries",
-            location: "Any City, ST",
-            startYear: "2017",
-            startMonth: "",
-            endYear: "2019",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM,
-          },
-          {
-            title: "Marketing Manager",
-            org: "Arowwai Industries",
-            location: "Any City, ST",
-            startYear: "2016",
-            startMonth: "",
-            endYear: "2017",
-            endMonth: "",
-            endPresent: false,
-            desc: LOREM,
-          },
-        ],
-        projects: [
-          {
-            title: "Brand Campaign Hub",
-            reference: "github.com/username/brand-hub",
-            referenceLink: true,
-            year: "2023",
-            desc: LOREM,
-            bullets: false,
-          },
-        ],
-        references: [
-          {
-            name: "Harumi Kobayashi",
-            role: "Wardiere Inc. / CEO",
-            phone: "123-456-7890",
-            email: "hello@reallygreatsite.com",
-          },
-          {
-            name: "Bailey Dupont",
-            role: "Wardiere Inc. / CEO",
-            phone: "123-456-7890",
-            email: "hello@reallygreatsite.com",
-          },
-        ],
+        skills: [],
+        languages: [],
+        education: [],
+        experience: [],
+        projects: [],
+        references: [],
       };
 
       const LIST_LABELS = {
@@ -7077,8 +6969,8 @@
         if ("github" in fields) fields.github = normalizeGitHubUsername(fields.github);
 
         // phoneDial / phoneCountry: keep saved values. Legacy drafts without
-        // either field migrate to Indonesia (+62). Locale default is applied
-        // only via snapshotDefaults() on first visit (no localStorage draft).
+        // either field migrate to Indonesia (+62). Locale dial seeding lives in
+        // snapshotDefaults() for the samples.js-missing fallback only.
         const hasSavedPhoneCountry =
           ("phoneCountry" in fields && String(fields.phoneCountry || "").trim() !== "") ||
           ("phoneDial" in fields && String(fields.phoneDial || "").trim() !== "");
@@ -7546,7 +7438,9 @@
           lists = normalizeListsData(d.lists);
           applyScalars({ ...(d.fields || {}) });
           fillContactVisibility(d.contactVisibility);
-          setPhoto(d.photo || DEFAULT_PHOTO, { alt: "Portrait of Lorna Alvarado" });
+          setPhoto(d.photo || DEFAULT_PHOTO, {
+            alt: portraitAltFromName((d.fields && d.fields.name) || ""),
+          });
           renderLists();
           schedulePaginate();
         }
@@ -7712,19 +7606,36 @@
         const localeIso = detectCountryIsoFromLocale();
         const phoneCountry = localeIso || "ID";
         const phoneDial = dialForCountryIso(phoneCountry) || PHONE_DIAL_FALLBACK;
+        const pack = getContentSamples()[0];
+        if (pack) {
+          return {
+            fields: {
+              ...(pack.fields || {}),
+              phoneDial: pack.fields?.phoneDial || phoneDial,
+              phoneCountry: pack.fields?.phoneCountry || phoneCountry,
+            },
+            photo: pack.photo || DEFAULT_PHOTO,
+            type: { ...TYPE_DEFAULTS },
+            lists: cloneLists(pack.lists || SAMPLE_LISTS),
+            contactVisibility: {
+              ...(pack.contactVisibility || CONTACT_VISIBILITY_DEFAULTS),
+            },
+            sectionVisibility: { ...SECTION_VISIBILITY_DEFAULTS },
+            sectionOrder: cloneOrder(SECTION_ORDER_DEFAULTS),
+          };
+        }
         return {
           fields: {
-            name: "Lorna<br />Alvarado",
-            title: "Marketing Manager",
-            phone: "81234567890",
+            name: "",
+            title: "",
+            phone: "",
             phoneDial,
             phoneCountry,
-            email: "hello@reallygreatsite.com",
-            address: "123 Anywhere St., Any City, ST 12345",
-            linkedin: "username",
-            github: "username",
-            about:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            email: "",
+            address: "",
+            linkedin: "",
+            github: "",
+            about: "",
           },
           photo: DEFAULT_PHOTO,
           type: { ...TYPE_DEFAULTS },
@@ -7738,7 +7649,16 @@
       populatePhoneDialSelect();
       defaults = snapshotDefaults();
       if (!loadSaved()) {
-        applyData(defaults);
+        // First visit (no cv-live-edit-v5 / legacy draft): random sample pack.
+        const sample = pickNextContentSample();
+        if (sample) {
+          applyData(defaults);
+          applyContentSample(sample);
+          pushSampleHistory(sample.id);
+          persist();
+        } else {
+          applyData(defaults);
+        }
       }
       loadZoom();
       loadActiveTab();

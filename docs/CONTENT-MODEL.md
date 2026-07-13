@@ -19,7 +19,7 @@ Bound via `data-bind` on form controls (plus two name lines).
 | `github` | username | `[data-edit="github"]` | Display `github.com/{user}`; href `https://github.com/…`. |
 | `about` | textarea | `[data-edit="about"]` / `.about-text` | Full draft always; see [PAGINATION.md](PAGINATION.md). |
 
-Photo is separate: `photo` string (`photo.jpg` or `data:` URL), not inside `fields`.
+Photo is separate: `photo` string (`samples/photos/{id}.jpg`, fallback `photo.jpg`, or `data:` URL), not inside `fields`.
 
 ### Empty job title collapse
 
@@ -124,19 +124,27 @@ Rendered in `.ref-grid` with Phone/Email labels. Reference phones are **not** ru
 
 ## Sample defaults
 
-`snapshotDefaults()` / `SAMPLE_LISTS` seed the **first visit** (Marketing-style Lorna Alvarado placeholder) when no draft exists.
+### First visit (no draft)
+
+When `loadSaved()` finds no `cv-live-edit-v5` (or legacy v4/v3) draft:
+
+1. Build type/spacing/section defaults via `snapshotDefaults()`
+2. `pickNextContentSample()` — uniform among packs **not** in the last 10 of `cv-sample-history-v1` (all 20 if history empty)
+3. `applyContentSample` + `pushSampleHistory` + `persist()` so the chosen pack is the live draft
+
+`snapshotDefaults()` / `SAMPLE_LISTS` remain only as a **fallback** when `samples.js` fails to load (Content reset or first visit).
 
 ### Content sample packs (`samples.js`)
 
-`samples.js` exposes `window.CV_CONTENT_SAMPLES` — **20** full Content drafts (one per field). Each pack includes:
+`samples.js` exposes `window.CV_CONTENT_SAMPLES` — **20** full Content drafts. Each pack includes:
 
 - `id`, `label`
 - `fields` (name, title, phone + `phoneDial` / `phoneCountry`, email, address, linkedin, github, about)
 - `lists` (skills categories, languages, education, experience, projects, references)
-- `photo` (shared `photo.jpg` by default)
+- `photo` — per-pack file `samples/photos/{id}.jpg` (relative path works on GitHub Pages `/cv/`)
 - `contactVisibility` (e.g. hide GitHub for non-tech packs)
 
-Packs are fictional but realistic, with distinct voices per profession.
+Packs are fictional but realistic, with distinct voices per profession. Portrait licensing: [`samples/photos/ATTRIBUTION.md`](../samples/photos/ATTRIBUTION.md) (Pexels License).
 
 ### Content reset shuffle
 
@@ -147,7 +155,7 @@ On **Reset to default** (after confirm modal):
 3. Apply that pack to Content only (fields, lists, photo, contact visibility) — not type/spacing or section order
 4. Append the chosen `id` to history (trim to 10)
 
-Initial load keeps the classic `snapshotDefaults()` sample until the first Content reset. If `samples.js` fails to load, reset falls back to `defaults`.
+Same pick rules as first visit. If `samples.js` fails to load, reset falls back to `defaults`.
 
 ### Content Save / Load snapshot
 
@@ -159,22 +167,6 @@ Separate from the live draft and sample history:
 | **Load** (`#load-content`) | same | After confirm modal, applies that snapshot to Content only; then `persist()`, paginate, sync UI. Disabled when no snapshot exists. |
 
 Does **not** store or restore type, spacing, or section order/visibility.
-
-| Area | First-visit sample (`snapshotDefaults`) |
-| --- | --- |
-| Name | Lorna / Alvarado |
-| Title | Marketing Manager |
-| Phone | `81234567890` + locale (or `62`/`ID`) dial → displays `+{dial} 81234567890` |
-| Email / address | reallygreatsite placeholders |
-| LinkedIn / GitHub | `username` |
-| About | short Lorem paragraph |
-| Skills | one unnamed category with six soft skills |
-| Languages | English, Spanish, French |
-| Education | two Borcelle University entries |
-| Experience | four Arowwai roles (paragraph `desc`) |
-| Projects | Brand Campaign Hub + GitHub-style reference + year `2023` |
-| References | two people with placeholder phone/email |
-| Photo | `photo.jpg` |
 
 Section order defaults: sidebar `contact → about → languages`; main `skills → education → experience → projects → references`. Skills stay on main; languages on sidebar (`normalizeSectionOrder` enforces this).
 

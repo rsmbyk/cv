@@ -6,7 +6,6 @@
 (function (global) {
   "use strict";
 
-  const PHOTO = "photo.jpg";
   const VIS_ALL = {
     phone: true,
     email: true,
@@ -27,7 +26,7 @@
     {
       id: "software-mobile",
       label: "Software Engineer / Mobile Engineer",
-      photo: PHOTO,
+      photo: "samples/photos/software-mobile.jpg",
       contactVisibility: { ...VIS_ALL },
       fields: {
         name: "Maya<br />Chen",
@@ -134,7 +133,7 @@
     {
       id: "devops-platform",
       label: "DevOps / Platform Engineering",
-      photo: PHOTO,
+      photo: "samples/photos/devops-platform.jpg",
       contactVisibility: { ...VIS_ALL },
       fields: {
         name: "Owen<br />Brooks",
@@ -229,7 +228,7 @@
     {
       id: "ai-ml",
       label: "AI / Machine Learning",
-      photo: PHOTO,
+      photo: "samples/photos/ai-ml.jpg",
       contactVisibility: { ...VIS_ALL },
       fields: {
         name: "Aisha<br />Rahman",
@@ -335,7 +334,7 @@
     {
       id: "data-analytics",
       label: "Data / Analytics",
-      photo: PHOTO,
+      photo: "samples/photos/data-analytics.jpg",
       contactVisibility: { ...VIS_ALL },
       fields: {
         name: "Noah<br />Patel",
@@ -430,7 +429,7 @@
     {
       id: "product-design-ux",
       label: "Product Design / UX",
-      photo: PHOTO,
+      photo: "samples/photos/product-design-ux.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Elena<br />Vargas",
@@ -525,7 +524,7 @@
     {
       id: "marketing-brand",
       label: "Marketing / Brand",
-      photo: PHOTO,
+      photo: "samples/photos/marketing-brand.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Lorna<br />Alvarado",
@@ -626,7 +625,7 @@
     {
       id: "sales-bd",
       label: "Sales / Business Development",
-      photo: PHOTO,
+      photo: "samples/photos/sales-bd.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Marcus<br />Whitfield",
@@ -727,7 +726,7 @@
     {
       id: "customer-success",
       label: "Customer Success / Support",
-      photo: PHOTO,
+      photo: "samples/photos/customer-success.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Sofia<br />Martinez",
@@ -828,7 +827,7 @@
     {
       id: "pr-comms",
       label: "Public Relations / Communications",
-      photo: PHOTO,
+      photo: "samples/photos/pr-comms.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Claire<br />Nguyen",
@@ -929,7 +928,7 @@
     {
       id: "ops-pm",
       label: "Operations / Project Management",
-      photo: PHOTO,
+      photo: "samples/photos/ops-pm.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Jonas<br />Keller",
@@ -1030,7 +1029,7 @@
     {
       id: "finance-accounting",
       label: "Finance / Accounting",
-      photo: PHOTO,
+      photo: "samples/photos/finance-accounting.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Amelia<br />Foster",
@@ -1142,7 +1141,7 @@
     {
       id: "hr-people-ops",
       label: "Human Resource / People Ops",
-      photo: PHOTO,
+      photo: "samples/photos/hr-people-ops.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Priya<br />Desai",
@@ -1243,7 +1242,7 @@
     {
       id: "legal-compliance",
       label: "Legal / Compliance",
-      photo: PHOTO,
+      photo: "samples/photos/legal-compliance.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Daniel<br />Okoro",
@@ -1355,7 +1354,7 @@
     {
       id: "real-estate",
       label: "Real Estate / Property",
-      photo: PHOTO,
+      photo: "samples/photos/real-estate.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Harper<br />Quinn",
@@ -1456,7 +1455,7 @@
     {
       id: "supply-chain",
       label: "Supply Chain / Logistics",
-      photo: PHOTO,
+      photo: "samples/photos/supply-chain.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Kenji<br />Sato",
@@ -1557,7 +1556,7 @@
     {
       id: "maritime-shipping",
       label: "Maritime / Shipping Operations",
-      photo: PHOTO,
+      photo: "samples/photos/maritime-shipping.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Erik<br />Nilsen",
@@ -1658,7 +1657,7 @@
     {
       id: "agriculture",
       label: "Agriculture / Agribusiness",
-      photo: PHOTO,
+      photo: "samples/photos/agriculture.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Lucia<br />Fernandez",
@@ -1759,7 +1758,7 @@
     {
       id: "healthcare-clinical",
       label: "Healthcare / Clinical",
-      photo: PHOTO,
+      photo: "samples/photos/healthcare-clinical.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Dr. Nadia<br />Hassan",
@@ -1871,7 +1870,7 @@
     {
       id: "psychology-counseling",
       label: "Psychology / Counseling",
-      photo: PHOTO,
+      photo: "samples/photos/psychology-counseling.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Samira<br />Bloom",
@@ -1977,7 +1976,7 @@
     {
       id: "photography-videography",
       label: "Photography / Videography",
-      photo: PHOTO,
+      photo: "samples/photos/photography-videography.jpg",
       contactVisibility: { ...VIS_NO_GITHUB },
       fields: {
         name: "Leo<br />Moreau",

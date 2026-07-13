@@ -17,8 +17,10 @@ Typography tokens and layout are tuned to match an A4 Canva PDF reference (210mm
 | Path | Role |
 | --- | --- |
 | `index.html` | Entire product: styles, DOM, script |
-| `samples.js` | 20 Content sample packs (`CV_CONTENT_SAMPLES`) for Content-reset shuffle |
-| `photo.jpg` | Default sample portrait (`DEFAULT_PHOTO`) |
+| `samples.js` | 20 Content sample packs (`CV_CONTENT_SAMPLES`) for first visit + Content-reset shuffle |
+| `samples/photos/{id}.jpg` | Per-pack photoreal portraits (+ `ATTRIBUTION.md`) |
+| `photo.jpg` | Fallback portrait (`DEFAULT_PHOTO`) when a pack photo is missing |
+| `LICENSE` / `NOTICE` | MIT for app code; third-party photo terms in NOTICE |
 | `README.md` | User-facing product description |
 | `CONTRIBUTING.md` / `docs/*` | Contributor docs |
 
@@ -86,7 +88,7 @@ Entry points:
 | `cv-zoom-v1` | `ZOOM_KEY` | Numeric zoom |
 | `cv-zoom-mode-v1` | `ZOOM_MODE_KEY` | `manual` \| `height` \| `width` |
 | `cv-drawer-tab-v1` | `TAB_KEY` | `content` \| `type` \| `spacing` \| `sections` |
-| `cv-sample-history-v1` | `SAMPLE_HISTORY_KEY` | JSON array of recent Content sample pack IDs (max 10) for reset shuffle |
+| `cv-sample-history-v1` | `SAMPLE_HISTORY_KEY` | JSON array of recent Content sample pack IDs (max 10) for first-visit + reset shuffle |
 | `cv-content-snapshot-v1` | `CONTENT_SNAPSHOT_KEY` | One user Content snapshot (fields, lists, photo, contact visibility — not type/spacing/sections) |
 
 ### Draft schema (`readForm` / `persist`)
@@ -94,7 +96,7 @@ Entry points:
 ```json
 {
   "fields": { "name": "…", "title": "…", "phone": "…", "phoneDial": "62", "phoneCountry": "ID", "email": "…", "address": "…", "linkedin": "…", "github": "…", "about": "…" },
-  "photo": "photo.jpg | data:…",
+  "photo": "samples/photos/{id}.jpg | photo.jpg | data:…",
   "type": { /* keys from TYPE_DEFAULTS / data-type controls */ },
   "lists": { "skills": [], "languages": [], "education": [], "experience": [], "projects": [], "references": [] },
   "contactVisibility": { "phone": true, "email": true, "address": true, "linkedin": true, "github": true },
