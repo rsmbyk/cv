@@ -60,5 +60,5 @@ Full index: [`docs/README.md`](docs/README.md).
 ## Pull requests
 
 - Prefer Conventional Commits (`type(scope): subject`) on the branch; squash merge will fold them into one commit on `main` for normal PRs. See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md).
-- Do **not** commit local exploration assets (`reference-*`, `*-showcase.html`, icon compare pages, etc.).
+- Do **not** commit local exploration assets — keep them under gitignored `exploration/`.
 - Describe what you changed and how you verified pagination / print when those paths are involved.

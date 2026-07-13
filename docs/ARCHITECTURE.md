@@ -19,19 +19,14 @@ Typography tokens and layout are tuned to match an A4 Canva PDF reference (210mm
 | `index.html` | Entire product: styles, DOM, script |
 | `samples.js` | 20 Content sample packs (`CV_CONTENT_SAMPLES`) for first visit + Content-reset shuffle |
 | `samples/photos/{id}.jpg` | Per-pack photoreal portraits (+ `ATTRIBUTION.md`) |
-| `photo.jpg` | Fallback portrait (`DEFAULT_PHOTO`) when a pack photo is missing |
+| `assets/default-avatar.svg` | Fallback portrait (`DEFAULT_PHOTO`) when a pack photo is missing |
 | `LICENSE` / `NOTICE` | MIT for app code; third-party photo terms in NOTICE |
 | `README.md` | User-facing product description |
 | `CONTRIBUTING.md` / `docs/*` | Contributor docs |
 
 ### Leave untracked (local exploration)
 
-Do **not** commit these when they appear in the working tree:
-
-- `reference.pdf`, `reference-*.png`, `reference-cv.jpg`, and similar mocks
-- Showcase / compare pages: `continuation-icon-showcase.html`, `icon-compare.html`, `tabler-*.html`, etc.
-
-They are design references, not runtime dependencies.
+Keep local sketches under gitignored **`exploration/`** (see [`CONVENTIONS.md`](CONVENTIONS.md)). Do not commit that directory.
 
 ## Main DOM regions
 
@@ -96,7 +91,7 @@ Entry points:
 ```json
 {
   "fields": { "name": "…", "title": "…", "phone": "…", "phoneDial": "62", "phoneCountry": "ID", "email": "…", "address": "…", "linkedin": "…", "github": "…", "about": "…" },
-  "photo": "samples/photos/{id}.jpg | photo.jpg | data:…",
+  "photo": "samples/photos/{id}.jpg | assets/default-avatar.svg | data:…",
   "type": { /* keys from TYPE_DEFAULTS / data-type controls */ },
   "lists": { "skills": [], "languages": [], "education": [], "experience": [], "projects": [], "references": [] },
   "contactVisibility": { "phone": true, "email": true, "address": true, "linkedin": true, "github": true },
