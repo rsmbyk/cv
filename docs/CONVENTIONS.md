@@ -75,10 +75,7 @@ If unsure, make a separate commit.
 
 ## What not to commit
 
-Leave untracked (local design exploration):
-
-- `reference.pdf`, `reference-*.png`, `reference-cv.jpg`, and similar
-- `continuation-icon-showcase.html`, `icon-compare.html`, `tabler-*.html`, and other one-off compare pages
+Put local design sketches and reference assets under **`exploration/`** (gitignored as a whole directory). Add new experiments there freely — no need to update `.gitignore` per file.
 
 Tracked product assets stay limited to what the app needs at runtime (`index.html`, `samples.js`, `samples/photos/`, `photo.jpg`, user README, contributor docs, `LICENSE` / `NOTICE`).
 
