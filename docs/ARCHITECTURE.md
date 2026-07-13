@@ -5,7 +5,7 @@
 The CV Live Editor is a **static single-page app** in one HTML file. There is no framework, bundler, or server API. Opening `index.html` loads:
 
 - A4 page preview(s) in `#cv-pages`
-- Screen-only chrome (Edit/Hide, zoom, PDF)
+- Screen-only chrome (Edit/Hide, zoom, PDF, Image)
 - A settings drawer that drives live updates and persists a draft in `localStorage`
 
 Typography tokens and layout are tuned to match an A4 Canva PDF reference (210mm × 297mm). Numeric size/padding/gap tokens are stored as numbers and applied in CSS as `calc(var(--token) * 1pt)`.
@@ -36,7 +36,7 @@ They are design references, not runtime dependencies.
 ```
 body
 ├── .screen-chrome          # fixed Edit / Hide (#drawer-toggle)
-├── .zoom-controls          # zoom + fit + PDF
+├── .zoom-controls          # zoom + fit + PDF + Image
 ├── #drawer-backdrop
 ├── #content-reset-modal    # Content tab reset confirm
 ├── #settings-drawer        # form #settings-form + tabs

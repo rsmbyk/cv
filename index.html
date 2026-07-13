@@ -1921,6 +1921,18 @@
         display: none !important;
       }
     }
+
+    /* Image export: capture target is each .page only; strip screen overlays */
+    body.capturing-cv .cv-focus-highlight {
+      outline: none !important;
+      background-color: transparent !important;
+    }
+    body.capturing-cv .cv-gap-highlight {
+      display: none !important;
+    }
+    body.capturing-cv .page {
+      box-shadow: none !important;
+    }
   </style>
 </head>
 <body>
@@ -1952,6 +1964,7 @@
     <button type="button" id="zoom-fit-width" title="Fit width" aria-label="Fit width" aria-pressed="false">↔</button>
     <span class="zoom-sep" aria-hidden="true"></span>
     <button type="button" id="export-pdf" title="Export PDF" aria-label="Export PDF">PDF</button>
+    <button type="button" id="export-image" title="Export PNG images (one per page)" aria-label="Export PNG images">Image</button>
   </div>
   <button type="button" class="drawer-backdrop" id="drawer-backdrop" aria-label="Close settings" tabindex="-1" hidden></button>
 
@@ -2917,6 +2930,7 @@
   </article>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
   <script src="samples.js"></script>
   <script>
     (function () {
@@ -3601,6 +3615,7 @@
       const zoomFitHeightBtn = document.getElementById("zoom-fit-height");
       const zoomFitWidthBtn = document.getElementById("zoom-fit-width");
       const exportPdfBtn = document.getElementById("export-pdf");
+      const exportImageBtn = document.getElementById("export-image");
       const zoomLabel = document.getElementById("zoom-label");
       const pagesEl = document.getElementById("cv-pages");
       const pageEl = document.getElementById("cv-page-1");
@@ -7783,6 +7798,78 @@
       zoomFitWidthBtn.addEventListener("click", () => applyFitMode("width"));
       if (exportPdfBtn) {
         exportPdfBtn.addEventListener("click", () => window.print());
+      }
+
+      function sanitizeExportFilename(name) {
+        const cleaned = String(name || "")
+          .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 80);
+        return cleaned || "CV";
+      }
+
+      function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      function triggerDataUrlDownload(dataUrl, filename) {
+        const link = document.createElement("a");
+        link.download = filename;
+        link.href = dataUrl;
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
+      async function exportPagesAsImages() {
+        const api = window.modernScreenshot;
+        if (!api || typeof api.domToPng !== "function") {
+          window.alert("Image export library failed to load. Check your network and try again.");
+          return;
+        }
+        const pages = [...pagesEl.querySelectorAll(".page")];
+        if (!pages.length) return;
+
+        const prevLabel = exportImageBtn.textContent;
+        exportImageBtn.disabled = true;
+        exportImageBtn.setAttribute("aria-busy", "true");
+        exportImageBtn.textContent = "…";
+        document.body.classList.add("capturing-cv");
+        // Capture at 1× so parent --cv-zoom scale does not shrink pixel output.
+        document.body.style.setProperty("--cv-zoom", "1");
+
+        try {
+          const base = sanitizeExportFilename(document.title);
+          for (let i = 0; i < pages.length; i++) {
+            const dataUrl = await api.domToPng(pages[i], {
+              scale: 2,
+              // Keep page fills / accents; null lets the page's own backgrounds show.
+              backgroundColor: null,
+            });
+            const filename =
+              pages.length === 1 ? `${base}.png` : `${base}-page-${i + 1}.png`;
+            triggerDataUrlDownload(dataUrl, filename);
+            // Browsers often throttle rapid multi-file downloads.
+            if (i < pages.length - 1) await delay(350);
+          }
+        } catch (err) {
+          console.error("Image export failed", err);
+          window.alert("Image export failed. See the console for details.");
+        } finally {
+          document.body.style.setProperty("--cv-zoom", String(zoom));
+          document.body.classList.remove("capturing-cv");
+          exportImageBtn.disabled = false;
+          exportImageBtn.removeAttribute("aria-busy");
+          exportImageBtn.textContent = prevLabel;
+        }
+      }
+
+      if (exportImageBtn) {
+        exportImageBtn.addEventListener("click", () => {
+          void exportPagesAsImages();
+        });
       }
 
       window.addEventListener("resize", scheduleFitZoom);

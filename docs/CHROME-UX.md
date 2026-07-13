@@ -47,6 +47,16 @@ Print CSS sets `print-color-adjust: exact` / `-webkit-print-color-adjust: exact`
 
 Chrome, drawer, modal, and highlight overlays are `display: none`. Zoom transform is cleared.
 
+## Image (PNG) export
+
+`#export-image` (next to PDF) exports **one PNG per** `.page` under `#cv-pages` via [modern-screenshot](https://github.com/qq15725/modern-screenshot) (`4.7.0` from jsDelivr CDN).
+
+- Capture target is each `.page` only — drawer, zoom bar, and Edit/Hide are outside `#cv-pages`, so they never enter the bitmap
+- While capturing: `body.capturing-cv` clears focus/gap highlights and page box-shadow; `--cv-zoom` is forced to `1` so the parent scale does not shrink pixels; restored afterward
+- `domToPng` with `scale: 2` and `backgroundColor: null` to keep sidebar/main fills and accents as far as the library allows
+- Downloads fire sequentially (short delay between pages); filenames use sanitized `document.title` (`Name.png` or `Name-page-N.png`)
+- No zip bundling — keeps the stack dependency-free beyond the one screenshot CDN script
+
 ## Breakpoints (~900px)
 
 `@media screen and (max-width: 900px)`:

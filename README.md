@@ -16,7 +16,7 @@ I only meant to edit my CV with an AI tool. By the end of the day, I’d built m
 
 **Pages** — real multi-page A4. Long content flows onto the next page without drama; continued sections get a quiet dots mark; the triangle stays on page one.
 
-**Zoom & PDF** — fit the page to your screen, then export through print — colors and backgrounds included.
+**Zoom, PDF & Image** — fit the page to your screen, print to PDF, or download a PNG per A4 page — colors and backgrounds included.
 
 **Resets** — shuffle in a fresh sample content pack (with a clear warning; always available), restore section layout, or reset one setting at a time. Nothing nukes the whole editor in one click.
 
