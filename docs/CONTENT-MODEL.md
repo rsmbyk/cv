@@ -149,6 +149,17 @@ On **Reset to default** (after confirm modal):
 
 Initial load keeps the classic `snapshotDefaults()` sample until the first Content reset. If `samples.js` fails to load, reset falls back to `defaults`.
 
+### Content Save / Load snapshot
+
+Separate from the live draft and sample history:
+
+| Action | Key | Behavior |
+| --- | --- | --- |
+| **Save** (`#save-content`) | `cv-content-snapshot-v1` | Overwrites one snapshot: `fields`, `lists`, `photo`, `contactVisibility` |
+| **Load** (`#load-content`) | same | After confirm modal, applies that snapshot to Content only; then `persist()`, paginate, sync UI. Disabled when no snapshot exists. |
+
+Does **not** store or restore type, spacing, or section order/visibility.
+
 | Area | First-visit sample (`snapshotDefaults`) |
 | --- | --- |
 | Name | Lorna / Alvarado |

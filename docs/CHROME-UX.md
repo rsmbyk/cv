@@ -17,6 +17,7 @@ Screen-only UI around the A4 preview. Hidden in `@media print`.
 | `#drawer-backdrop` | **1040** |
 | `#settings-drawer` | **1050** |
 | Content reset modal | **1200** |
+| Content load modal | **1200** |
 
 **Invariant:** Edit/Hide stays **under** the drawer and backdrop for the whole open/collapse animation (commented in CSS). Do not raise chrome above 1040 or the button will poke through the drawer.
 

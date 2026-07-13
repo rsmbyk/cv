@@ -6,7 +6,7 @@ The settings UI is `#settings-drawer` / `#settings-form`. Tabs: `content`, `type
 
 | Tab | Panel | Owns |
 | --- | --- | --- |
-| Content | `#panel-content` | Photo, scalars, contact visibility, list editors, Content reset |
+| Content | `#panel-content` | Photo, scalars, contact visibility, list editors, Content Save / Load / reset |
 | Type | `#panel-type` | Fonts, sizes, colors, icons, photo ring, triangle, timeline chrome, body align/line-height, **skill category weight** |
 | Spacing | `#panel-spacing` | Pads and gaps (including L/R and continuation main pads) |
 | Sections | `#panel-sections` | Section show/hide; main-column reorder; Sections reset |
@@ -45,13 +45,15 @@ There is **no** single “reset everything” control.
 
 | Scope | UI | Behavior |
 | --- | --- | --- |
-| Content | `#reset-content` | Modal confirm → pick a Content sample pack (uniform among packs not in the last 10 shown; history in `cv-sample-history-v1`) and apply fields, lists, photo, contact visibility. **Always enabled** (not gated on `isContentAtDefaults()`). |
+| Content save | `#save-content` | Writes one Content snapshot to `cv-content-snapshot-v1` (fields, lists, photo, contact visibility). Enables Load; brief “Saved” feedback. |
+| Content load | `#load-content` | Modal confirm → replace Content from that snapshot; persist live draft, paginate, sync UI. **Disabled** until a snapshot exists. Does not touch type/spacing/sections. |
+| Content reset | `#reset-content` | Modal confirm → pick a Content sample pack (uniform among packs not in the last 10 shown; history in `cv-sample-history-v1`) and apply fields, lists, photo, contact visibility. **Always enabled** (not gated on `isContentAtDefaults()`). |
 | Sections | `#reset-sections` | `confirm()` → visibility + order defaults. Disabled when `isSectionsAtDefaults()`. |
 | Per type/spacing control | `.field-reset[data-reset-type]` | Sets that key to `TYPE_DEFAULTS[key]`, then `pushTypeLive()`. **Disabled when already at default** (`isTypeControlAtDefault`). |
 
-Content reset does **not** touch type/spacing or section order. Sections reset does **not** touch content or type.
+Content save / load / reset do **not** touch type/spacing or section order. Sections reset does **not** touch content or type.
 
-`syncResetButtons()` keeps type/spacing and Sections disabled states honest after edits and persist. Content reset is forced enabled.
+`syncResetButtons()` keeps type/spacing and Sections disabled states honest after edits and persist. Content reset is forced enabled. `syncContentSnapshotButtons()` disables Load when no snapshot is stored.
 
 ## Focus / hover highlights
 

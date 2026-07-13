@@ -6,7 +6,7 @@ This repo is a **static single-page CV live editor**. Almost all product behavio
 
 1. Clone the repo and open `index.html` in a modern browser (double-click, or serve the folder with any static server).
 2. Google Fonts load from the network (`#cv-fonts`). Offline, fallbacks still render, but font picks in the Type tab need connectivity.
-3. Drafts persist in `localStorage` under `cv-live-edit-v5` (plus small keys for drawer/zoom/tab). Clear site data for that origin to start fresh.
+3. Drafts persist in `localStorage` under `cv-live-edit-v5` (plus small keys for drawer/zoom/tab, sample history, and optional Content snapshot). Clear site data for that origin to start fresh.
 
 No build step, package manager, or backend.
 

@@ -6,7 +6,7 @@ I only meant to edit my CV with an AI tool. By the end of the day, I’d built m
 
 **Edit live** — a side drawer for content, look, spacing, and sections. Change something and the page follows. Hover or focus a control and the matching spot on the CV lights up. Your name and role even show in the browser tab.
 
-**Content** — photo, name, and job title (skip the title and it vanishes). Contacts for WhatsApp, email, LinkedIn, and GitHub. About Me, languages, skills in categories, education, experience with optional bullets, projects with a reference and year, plus references. Twenty sample packs across careers; Content reset shuffles to another pack (skips the last ten you saw).
+**Content** — photo, name, and job title (skip the title and it vanishes). Contacts for WhatsApp, email, LinkedIn, and GitHub. About Me, languages, skills in categories, education, experience with optional bullets, projects with a reference and year, plus references. Save one Content snapshot in the browser and load it later (replaces Content only). Twenty sample packs across careers; Content reset shuffles to another pack (skips the last ten you saw).
 
 **Look** — fonts, sizes, and colors for the bits that matter; icons, photo frame, accent, and the corner triangle. Body text can sit left or justified, with line height you control.
 
