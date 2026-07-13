@@ -19,7 +19,7 @@ Bound via `data-bind` on form controls (plus two name lines).
 | `github` | username | `[data-edit="github"]` | Display `github.com/{user}`; href `https://github.com/…`. |
 | `about` | textarea | `[data-edit="about"]` / `.about-text` | Full draft always; see [PAGINATION.md](PAGINATION.md). |
 
-Photo is separate: `photo` string (`samples/photos/{id}.jpg`, fallback `photo.jpg`, or `data:` URL), not inside `fields`.
+Photo is separate: `photo` string (`samples/photos/{id}.jpg`, fallback `assets/default-avatar.svg`, or `data:` URL), not inside `fields`.
 
 ### Empty job title collapse
 
