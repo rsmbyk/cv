@@ -9,6 +9,6 @@ Specs for the CV Live Editor. Source of truth for behavior is [`../index.html`](
 | [CONTENT-MODEL.md](CONTENT-MODEL.md) | Scalars, contacts (dial codes / WhatsApp), list shapes, first-visit sample pick, reset shuffle, Content Save/Load snapshot, migrations, empty job title |
 | [SETTINGS.md](SETTINGS.md) | Drawer tabs, `TYPE_DEFAULTS` / `CSS_VAR_MAP`, spacing, skill weight, resets, focus/hover highlights |
 | [CHROME-UX.md](CHROME-UX.md) | Edit/Hide edge control, zoom fit, PDF/print, PNG image export, breakpoints, wheel block, select cursor, `document.title` |
-| [CONVENTIONS.md](CONVENTIONS.md) | Commit style, folding caution, Co-authored-by, assets to leave untracked |
+| [CONVENTIONS.md](CONVENTIONS.md) | GitHub Flow, merge strategy (squash vs hotfix merge), commits, Co-authored-by, assets to leave untracked |
 
 Start here if new: **ARCHITECTURE → PAGINATION → CONTENT-MODEL**. Settings and chrome are safer to skim until you edit those surfaces.
