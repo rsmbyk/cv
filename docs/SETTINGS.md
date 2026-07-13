@@ -45,13 +45,13 @@ There is **no** single “reset everything” control.
 
 | Scope | UI | Behavior |
 | --- | --- | --- |
-| Content | `#reset-content` | Modal confirm → restore `defaults` fields, lists, photo, contact visibility. Disabled when `isContentAtDefaults()`. |
+| Content | `#reset-content` | Modal confirm → pick a Content sample pack (uniform among packs not in the last 10 shown; history in `cv-sample-history-v1`) and apply fields, lists, photo, contact visibility. **Always enabled** (not gated on `isContentAtDefaults()`). |
 | Sections | `#reset-sections` | `confirm()` → visibility + order defaults. Disabled when `isSectionsAtDefaults()`. |
 | Per type/spacing control | `.field-reset[data-reset-type]` | Sets that key to `TYPE_DEFAULTS[key]`, then `pushTypeLive()`. **Disabled when already at default** (`isTypeControlAtDefault`). |
 
 Content reset does **not** touch type/spacing or section order. Sections reset does **not** touch content or type.
 
-`syncResetButtons()` keeps disabled states honest after edits and persist.
+`syncResetButtons()` keeps type/spacing and Sections disabled states honest after edits and persist. Content reset is forced enabled.
 
 ## Focus / hover highlights
 

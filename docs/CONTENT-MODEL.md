@@ -124,9 +124,32 @@ Rendered in `.ref-grid` with Phone/Email labels. Reference phones are **not** ru
 
 ## Sample defaults
 
-`snapshotDefaults()` / `SAMPLE_LISTS` (used for first load and Content reset):
+`snapshotDefaults()` / `SAMPLE_LISTS` seed the **first visit** (Marketing-style Lorna Alvarado placeholder) when no draft exists.
 
-| Area | Sample |
+### Content sample packs (`samples.js`)
+
+`samples.js` exposes `window.CV_CONTENT_SAMPLES` — **20** full Content drafts (one per field). Each pack includes:
+
+- `id`, `label`
+- `fields` (name, title, phone + `phoneDial` / `phoneCountry`, email, address, linkedin, github, about)
+- `lists` (skills categories, languages, education, experience, projects, references)
+- `photo` (shared `photo.jpg` by default)
+- `contactVisibility` (e.g. hide GitHub for non-tech packs)
+
+Packs are fictional but realistic, with distinct voices per profession.
+
+### Content reset shuffle
+
+On **Reset to default** (after confirm modal):
+
+1. Read recent IDs from `localStorage` key `cv-sample-history-v1` (last 10)
+2. Among the **eligible** packs (`20 − last 10`; all 20 when history is empty), pick **uniformly at random**
+3. Apply that pack to Content only (fields, lists, photo, contact visibility) — not type/spacing or section order
+4. Append the chosen `id` to history (trim to 10)
+
+Initial load keeps the classic `snapshotDefaults()` sample until the first Content reset. If `samples.js` fails to load, reset falls back to `defaults`.
+
+| Area | First-visit sample (`snapshotDefaults`) |
 | --- | --- |
 | Name | Lorna / Alvarado |
 | Title | Marketing Manager |

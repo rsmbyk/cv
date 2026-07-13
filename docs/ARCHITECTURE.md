@@ -17,6 +17,7 @@ Typography tokens and layout are tuned to match an A4 Canva PDF reference (210mm
 | Path | Role |
 | --- | --- |
 | `index.html` | Entire product: styles, DOM, script |
+| `samples.js` | 20 Content sample packs (`CV_CONTENT_SAMPLES`) for Content-reset shuffle |
 | `photo.jpg` | Default sample portrait (`DEFAULT_PHOTO`) |
 | `README.md` | User-facing product description |
 | `CONTRIBUTING.md` / `docs/*` | Contributor docs |
@@ -85,6 +86,7 @@ Entry points:
 | `cv-zoom-v1` | `ZOOM_KEY` | Numeric zoom |
 | `cv-zoom-mode-v1` | `ZOOM_MODE_KEY` | `manual` \| `height` \| `width` |
 | `cv-drawer-tab-v1` | `TAB_KEY` | `content` \| `type` \| `spacing` \| `sections` |
+| `cv-sample-history-v1` | `SAMPLE_HISTORY_KEY` | JSON array of recent Content sample pack IDs (max 10) for reset shuffle |
 
 ### Draft schema (`readForm` / `persist`)
 

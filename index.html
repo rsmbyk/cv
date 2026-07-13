@@ -1944,7 +1944,7 @@
     >
       <h2 id="content-reset-title">Reset all content?</h2>
       <p id="content-reset-body">
-        This restores every Content field to the sample CV (name, contacts, about, lists, photo, and contact visibility). Your current content will be lost. This can’t be undone.
+        This replaces every Content field with a random sample CV pack (name, contacts, about, lists, photo, and contact visibility). Your current content will be lost. This can’t be undone.
       </p>
       <div class="confirm-modal-actions">
         <button type="button" id="content-reset-cancel">Cancel</button>
@@ -2856,6 +2856,7 @@
   </article>
   </div>
 
+  <script src="samples.js"></script>
   <script>
     (function () {
       const STORAGE_KEY = "cv-live-edit-v5";
@@ -2863,6 +2864,9 @@
       const ZOOM_KEY = "cv-zoom-v1";
       const ZOOM_MODE_KEY = "cv-zoom-mode-v1";
       const TAB_KEY = "cv-drawer-tab-v1";
+      /** Recent Content sample pack IDs (last 10) for reset shuffle exclusion. */
+      const SAMPLE_HISTORY_KEY = "cv-sample-history-v1";
+      const SAMPLE_HISTORY_MAX = 10;
       const DEFAULT_PHOTO = "photo.jpg";
       const ZOOM_STEPS = [0.5, 0.6, 0.75, 0.85, 1, 1.15, 1.25, 1.5, 1.75, 2];
       const ZOOM_MIN = ZOOM_STEPS[0];
@@ -7116,8 +7120,87 @@
           const key = btn.getAttribute("data-reset-type");
           btn.disabled = isTypeControlAtDefault(key);
         });
-        if (resetContentBtn) resetContentBtn.disabled = isContentAtDefaults();
+        // Content reset stays enabled so users can shuffle to another sample pack.
+        if (resetContentBtn) resetContentBtn.disabled = false;
         if (resetSectionsBtn) resetSectionsBtn.disabled = isSectionsAtDefaults();
+      }
+
+      function getContentSamples() {
+        const samples = typeof window !== "undefined" ? window.CV_CONTENT_SAMPLES : null;
+        return Array.isArray(samples) ? samples : [];
+      }
+
+      function readSampleHistory() {
+        try {
+          const raw = localStorage.getItem(SAMPLE_HISTORY_KEY);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) return [];
+          return parsed.map((id) => String(id || "").trim()).filter(Boolean);
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function writeSampleHistory(ids) {
+        try {
+          localStorage.setItem(SAMPLE_HISTORY_KEY, JSON.stringify(ids.slice(-SAMPLE_HISTORY_MAX)));
+        } catch (_) {}
+      }
+
+      function pushSampleHistory(id) {
+        if (!id) return;
+        const next = readSampleHistory().filter((x) => x !== id);
+        next.push(id);
+        writeSampleHistory(next);
+      }
+
+      /**
+       * Uniform pick among packs not in the last 10 shown.
+       * When history is empty, all packs are eligible.
+       */
+      function pickNextContentSample() {
+        const samples = getContentSamples();
+        if (!samples.length) return null;
+        const recent = new Set(readSampleHistory().slice(-SAMPLE_HISTORY_MAX));
+        const eligible = samples.filter((s) => s && s.id && !recent.has(s.id));
+        const pool = eligible.length ? eligible : samples;
+        return pool[Math.floor(Math.random() * pool.length)] || null;
+      }
+
+      function portraitAltFromName(nameHtml) {
+        const plain = String(nameHtml || "")
+          .replace(/<br\s*\/?>/gi, " ")
+          .replace(/<[^>]+>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        return plain ? `Portrait of ${plain}` : "Portrait photo";
+      }
+
+      /** Apply a sample pack to Content only (fields, lists, photo, contact visibility). */
+      function applyContentSample(sample) {
+        if (!sample) return false;
+        const fields = { ...(sample.fields || {}) };
+        if ("linkedin" in fields) fields.linkedin = normalizeLinkedInUsername(fields.linkedin);
+        if ("github" in fields) fields.github = normalizeGitHubUsername(fields.github);
+        if ("phone" in fields) {
+          fields.phone = normalizePhoneLocal(fields.phone, fields.phoneDial);
+        }
+        lists = normalizeListsData(sample.lists || SAMPLE_LISTS);
+        applyScalars(fields);
+        fillContactVisibility(sample.contactVisibility || CONTACT_VISIBILITY_DEFAULTS);
+        setPhoto(sample.photo || DEFAULT_PHOTO, { alt: portraitAltFromName(fields.name) });
+        if (defaults) {
+          defaults.fields = { ...(fields || {}) };
+          defaults.lists = cloneLists(lists);
+          defaults.photo = sample.photo || DEFAULT_PHOTO;
+          defaults.contactVisibility = {
+            ...(sample.contactVisibility || CONTACT_VISIBILITY_DEFAULTS),
+          };
+        }
+        renderLists();
+        schedulePaginate();
+        return true;
       }
 
       function setPhoto(src, { alt } = {}) {
@@ -7227,17 +7310,24 @@
       }
 
       async function resetContentToDefaults() {
-        if (isContentAtDefaults()) return;
         const ok = await openContentResetModal();
         if (!ok) return;
-        const d = defaults;
-        lists = normalizeListsData(d.lists);
-        applyScalars({ ...(d.fields || {}) });
-        fillContactVisibility(d.contactVisibility);
-        setPhoto(d.photo || DEFAULT_PHOTO, { alt: "Portrait of Lorna Alvarado" });
-        renderLists();
-        schedulePaginate();
+        const sample = pickNextContentSample();
+        if (sample) {
+          applyContentSample(sample);
+          pushSampleHistory(sample.id);
+        } else {
+          // Fallback when samples.js failed to load: restore snapshot defaults.
+          const d = defaults;
+          lists = normalizeListsData(d.lists);
+          applyScalars({ ...(d.fields || {}) });
+          fillContactVisibility(d.contactVisibility);
+          setPhoto(d.photo || DEFAULT_PHOTO, { alt: "Portrait of Lorna Alvarado" });
+          renderLists();
+          schedulePaginate();
+        }
         persist();
+        syncResetButtons();
       }
 
       /** Sections tab only: visibility + order. */
