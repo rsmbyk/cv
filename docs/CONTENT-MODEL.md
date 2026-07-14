@@ -19,7 +19,10 @@ Bound via `data-bind` on form controls (plus two name lines).
 | `github` | username | `[data-edit="github"]` | Display `github.com/{user}`; href `https://github.com/…`. |
 | `about` | textarea | `[data-edit="about"]` / `.about-text` | Full draft always; see [PAGINATION.md](PAGINATION.md). |
 
-Photo is separate: `photo` string (`samples/photos/{id}.jpg`, fallback `assets/default-avatar.svg`, or `data:` URL), not inside `fields`.
+Photo is separate from `fields`:
+
+- `photo` — string (`samples/photos/{id}.jpg`, fallback `assets/default-avatar.svg`, or `data:` URL)
+- `photoPos` — optional `{ x, y }` percentages (0–100) for `object-position` inside the fixed circular frame. Default **50 / 15** (same look as the old `center 15%`). Samples may omit it; missing or invalid values fall back to that default. Persisted in the live draft and the Content Save/Load snapshot alongside `photo`. Applied via CSS vars `--photo-pos-x` / `--photo-pos-y` on `:root` (print/PDF/PNG inherit).
 
 ### Empty job title collapse
 
@@ -152,7 +155,7 @@ On **Reset to default** (after confirm modal):
 
 1. Read recent IDs from `localStorage` key `cv-sample-history-v1` (last 10)
 2. Among the **eligible** packs (`20 − last 10`; all 20 when history is empty), pick **uniformly at random**
-3. Apply that pack to Content only (fields, lists, photo, contact visibility) — not type/spacing or section order
+3. Apply that pack to Content only (fields, lists, photo, photoPos if present else default, contact visibility) — not type/spacing or section order
 4. Append the chosen `id` to history (trim to 10)
 
 Same pick rules as first visit. If `samples.js` fails to load, reset falls back to `defaults`.
@@ -163,7 +166,7 @@ Separate from the live draft and sample history:
 
 | Action | Key | Behavior |
 | --- | --- | --- |
-| **Save** (`#save-content`) | `cv-content-snapshot-v1` | Overwrites one snapshot: `fields`, `lists`, `photo`, `contactVisibility` |
+| **Save** (`#save-content`) | `cv-content-snapshot-v1` | Overwrites one snapshot: `fields`, `lists`, `photo`, `photoPos`, `contactVisibility` |
 | **Load** (`#load-content`) | same | After confirm modal, applies that snapshot to Content only; then `persist()`, paginate, sync UI. Disabled when no snapshot exists. |
 
 Does **not** store or restore type, spacing, or section order/visibility.

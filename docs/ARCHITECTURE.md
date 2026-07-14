@@ -84,7 +84,7 @@ Entry points:
 | `cv-zoom-mode-v1` | `ZOOM_MODE_KEY` | `manual` \| `height` \| `width` |
 | `cv-drawer-tab-v1` | `TAB_KEY` | `content` \| `type` \| `spacing` \| `sections` |
 | `cv-sample-history-v1` | `SAMPLE_HISTORY_KEY` | JSON array of recent Content sample pack IDs (max 10) for first-visit + reset shuffle |
-| `cv-content-snapshot-v1` | `CONTENT_SNAPSHOT_KEY` | One user Content snapshot (fields, lists, photo, contact visibility — not type/spacing/sections) |
+| `cv-content-snapshot-v1` | `CONTENT_SNAPSHOT_KEY` | One user Content snapshot (fields, lists, photo, photoPos, contact visibility — not type/spacing/sections) |
 
 ### Draft schema (`readForm` / `persist`)
 
@@ -92,6 +92,7 @@ Entry points:
 {
   "fields": { "name": "…", "title": "…", "phone": "…", "phoneDial": "62", "phoneCountry": "ID", "email": "…", "address": "…", "linkedin": "…", "github": "…", "about": "…" },
   "photo": "samples/photos/{id}.jpg | assets/default-avatar.svg | data:…",
+  "photoPos": { "x": 50, "y": 15 },
   "type": { /* keys from TYPE_DEFAULTS / data-type controls */ },
   "lists": { "skills": [], "languages": [], "education": [], "experience": [], "projects": [], "references": [] },
   "contactVisibility": { "phone": true, "email": true, "address": true, "linkedin": true, "github": true },
