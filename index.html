@@ -7407,14 +7407,23 @@
         else scheduleSave();
       }
 
+      /**
+       * Set portrait source on avatar + drawer preview. When the URL actually
+       * changes, reset framing to 50%/15% (same as Reset position). Pan/slider
+       * paths do not call this, so they keep the current crop. Callers that
+       * load a saved/sample photoPos should applyPhotoPosition afterward.
+       */
       function setPhoto(src, { alt } = {}) {
-        photoSrc = src || DEFAULT_PHOTO;
+        const next = src || DEFAULT_PHOTO;
+        const sourceChanged = next !== photoSrc;
+        photoSrc = next;
         if (avatar) {
           avatar.src = photoSrc;
           if (alt) avatar.alt = alt;
           else if (photoSrc.startsWith("data:")) avatar.alt = "Portrait photo";
         }
         if (photoPreview) photoPreview.src = photoSrc;
+        if (sourceChanged) applyPhotoPosition(DEFAULT_PHOTO_POS);
       }
 
       /**
