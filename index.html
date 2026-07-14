@@ -1821,6 +1821,11 @@
       justify-content: center;
       padding: 0.35rem 0;
     }
+    .photo-preview-frame {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+    }
     .photo-preview-wrap img,
     #photo-preview {
       width: 132px;
@@ -1832,6 +1837,48 @@
       box-shadow: 0 0 0 1px #d0d5db;
       background: #ddd;
       display: block;
+    }
+    /* Drawer preview only: rule-of-thirds aid on hover / while panning */
+    .photo-thirds-grid {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      background:
+        linear-gradient(
+          to right,
+          transparent calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% + 0.5px),
+          transparent calc(33.333% + 0.5px)
+        ),
+        linear-gradient(
+          to right,
+          transparent calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% + 0.5px),
+          transparent calc(66.666% + 0.5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% + 0.5px),
+          transparent calc(33.333% + 0.5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% + 0.5px),
+          transparent calc(66.666% + 0.5px)
+        );
+    }
+    .photo-preview-frame:hover .photo-thirds-grid,
+    .photo-preview-frame:has(#photo-preview.is-panning) .photo-thirds-grid {
+      opacity: 1;
     }
     .photo-actions {
       display: flex;
@@ -2253,7 +2300,10 @@
             <label>Photo</label>
             <div class="photo-controls">
               <div class="photo-preview-wrap">
-                <img id="photo-preview" class="photo-pan-target" src="assets/default-avatar.svg" alt="" draggable="false" />
+                <div class="photo-preview-frame">
+                  <img id="photo-preview" class="photo-pan-target" src="assets/default-avatar.svg" alt="" draggable="false" />
+                  <div class="photo-thirds-grid" aria-hidden="true"></div>
+                </div>
               </div>
               <div class="photo-actions">
                 <button type="button" id="photo-pick">Change photo</button>
