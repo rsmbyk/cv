@@ -45,7 +45,7 @@ There is **no** single “reset everything” control.
 
 | Scope | UI | Behavior |
 | --- | --- | --- |
-| Content save | `#save-content` | Writes one Content snapshot to `cv-content-snapshot-v1` (fields, lists, photo, contact visibility). Enables Load; brief “Saved” feedback. |
+| Content save | `#save-content` | Writes one Content snapshot to `cv-content-snapshot-v1` (fields, lists, photo, photoPos, contact visibility). Enables Load; brief “Saved” feedback. |
 | Content load | `#load-content` | Modal confirm → replace Content from that snapshot; persist live draft, paginate, sync UI. **Disabled** until a snapshot exists. Does not touch type/spacing/sections. |
 | Content reset | `#reset-content` | Modal confirm → pick a Content sample pack (uniform among packs not in the last 10 shown; history in `cv-sample-history-v1`) and apply fields, lists, photo, contact visibility. **Always enabled** (not gated on `isContentAtDefaults()`). |
 | Sections | `#reset-sections` | `confirm()` → visibility + order defaults. Disabled when `isSectionsAtDefaults()`. |

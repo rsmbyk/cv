@@ -66,6 +66,8 @@
       --triangle-deg: 41;
       --photo-size: 139;
       --photo-ring: 5;
+      --photo-pos-x: 50%;
+      --photo-pos-y: 15%;
       --timeline-dot: 7;
       --timeline-line: 1.75;
       --pad-cont-main-top: 60;
@@ -199,9 +201,22 @@
       border-radius: 50%;
       border: calc(var(--photo-ring) * 1pt) solid var(--photo-ring-color);
       object-fit: cover;
-      object-position: center 15%;
+      object-position: var(--photo-pos-x) var(--photo-pos-y);
       background: #ddd;
       display: block;
+    }
+    @media screen {
+      .avatar,
+      .photo-pan-target {
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .avatar.is-panning,
+      .photo-pan-target.is-panning {
+        cursor: grabbing;
+      }
     }
 
     .name {
@@ -1796,20 +1811,81 @@
     .section-order-item.is-section-hidden span {
       opacity: 0.45;
     }
-    .photo-row {
+    .photo-controls {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 0.65rem;
     }
-    .photo-row img {
-      width: 48px;
-      height: 48px;
+    .photo-preview-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 0.35rem 0;
+    }
+    .photo-preview-frame {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+    }
+    .photo-preview-wrap img,
+    #photo-preview {
+      width: 132px;
+      height: 132px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #fff;
+      object-position: var(--photo-pos-x) var(--photo-pos-y);
+      border: 3px solid #fff;
       box-shadow: 0 0 0 1px #d0d5db;
+      background: #ddd;
+      display: block;
     }
-    .photo-row button {
+    /* Drawer preview only: rule-of-thirds aid on hover / while panning */
+    .photo-thirds-grid {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      background:
+        linear-gradient(
+          to right,
+          transparent calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% + 0.5px),
+          transparent calc(33.333% + 0.5px)
+        ),
+        linear-gradient(
+          to right,
+          transparent calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% + 0.5px),
+          transparent calc(66.666% + 0.5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(33.333% + 0.5px),
+          transparent calc(33.333% + 0.5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% - 0.5px),
+          rgba(255, 255, 255, 0.5) calc(66.666% + 0.5px),
+          transparent calc(66.666% + 0.5px)
+        );
+    }
+    .photo-preview-frame:hover .photo-thirds-grid,
+    .photo-preview-frame:has(#photo-preview.is-panning) .photo-thirds-grid {
+      opacity: 1;
+    }
+    .photo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .photo-actions button {
       appearance: none;
       border: 1px solid #c5ccd4;
       background: #fff;
@@ -1820,7 +1896,34 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .photo-row button:hover { background: #f3f5f7; }
+    .photo-actions button:hover { background: #f3f5f7; }
+    .photo-pos-sliders {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .photo-pos-sliders .field {
+      margin-bottom: 0;
+    }
+    .photo-pos-sliders input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .photo-pos-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    .photo-pos-row .photo-pos-value {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: #6b7076;
+      font-variant-numeric: tabular-nums;
+      min-width: 2.2rem;
+      text-align: right;
+    }
 
     /* Drawer focus (Content / Type / Spacing / Sections) → CV region (screen only; never print/PDF) */
     @media screen {
@@ -2195,9 +2298,35 @@
           </div>
           <div class="field">
             <label>Photo</label>
-            <div class="photo-row">
-              <img id="photo-preview" src="assets/default-avatar.svg" alt="" />
-              <button type="button" id="photo-pick">Change photo</button>
+            <div class="photo-controls">
+              <div class="photo-preview-wrap">
+                <div class="photo-preview-frame">
+                  <img id="photo-preview" class="photo-pan-target" src="assets/default-avatar.svg" alt="" draggable="false" />
+                  <div class="photo-thirds-grid" aria-hidden="true"></div>
+                </div>
+              </div>
+              <div class="photo-actions">
+                <button type="button" id="photo-pick">Change photo</button>
+                <button type="button" id="photo-pos-reset" title="Reset to default framing (50% / 15%)">
+                  Reset position
+                </button>
+              </div>
+              <div class="photo-pos-sliders">
+                <div class="field">
+                  <label for="photo-pos-x">Horizontal (X)</label>
+                  <div class="photo-pos-row">
+                    <input id="photo-pos-x" type="range" min="0" max="100" step="1" value="50" />
+                    <span id="photo-pos-x-value" class="photo-pos-value" aria-hidden="true">50%</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="photo-pos-y">Vertical (Y)</label>
+                  <div class="photo-pos-row">
+                    <input id="photo-pos-y" type="range" min="0" max="100" step="1" value="15" />
+                    <span id="photo-pos-y-value" class="photo-pos-value" aria-hidden="true">15%</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </fieldset>
@@ -2775,7 +2904,7 @@
   <article class="page" id="cv-page-1">
     <aside class="sidebar">
       <header class="profile">
-        <img class="avatar" src="assets/default-avatar.svg" alt="Portrait photo" width="188" height="188" data-photo />
+        <img class="avatar" src="assets/default-avatar.svg" alt="Portrait photo" width="188" height="188" data-photo draggable="false" />
         <h1 class="name" data-edit="name" data-edit-html="true"></h1>
         <p class="title" data-edit="title"></p>
       </header>
@@ -3496,6 +3625,11 @@
       const photoInput = document.getElementById("photo-input");
       const photoPick = document.getElementById("photo-pick");
       const photoPreview = document.getElementById("photo-preview");
+      const photoPosReset = document.getElementById("photo-pos-reset");
+      const photoPosXInput = document.getElementById("photo-pos-x");
+      const photoPosYInput = document.getElementById("photo-pos-y");
+      const photoPosXValue = document.getElementById("photo-pos-x-value");
+      const photoPosYValue = document.getElementById("photo-pos-y-value");
       const avatar = document.querySelector("[data-photo]");
       const nameEl = document.querySelector('[data-edit="name"]');
       const nameLine1 = document.getElementById("f-name-line1");
@@ -3537,6 +3671,9 @@
       let defaults = null;
       let saveTimer = null;
       let photoSrc = DEFAULT_PHOTO;
+      /** Framing inside the circular crop (object-position percentages). */
+      const DEFAULT_PHOTO_POS = Object.freeze({ x: 50, y: 15 });
+      let photoPos = { x: DEFAULT_PHOTO_POS.x, y: DEFAULT_PHOTO_POS.y };
       let lists = cloneLists(SAMPLE_LISTS);
       let contactVisibility = { ...CONTACT_VISIBILITY_DEFAULTS };
       let sectionVisibility = { ...SECTION_VISIBILITY_DEFAULTS };
@@ -4743,6 +4880,7 @@
         return {
           fields: readScalarFields(),
           photo: photoSrc,
+          photoPos: { x: photoPos.x, y: photoPos.y },
           type: readType(),
           lists: cloneLists(lists),
           contactVisibility: { ...contactVisibility },
@@ -6471,7 +6609,7 @@
         if (
           focusEl.id === "photo-pick" ||
           focusEl.id === "photo-input" ||
-          focusEl.closest(".photo-row")
+          focusEl.closest(".photo-controls")
         ) {
           return pickVisibleCvFocusTarget(root.querySelectorAll("[data-photo]"));
         }
@@ -6748,8 +6886,8 @@
           }
         }
 
-        const photoRow = field.querySelector(".photo-row");
-        if (photoRow && controlHasCvFocusMapping(photoRow)) return photoRow;
+        const photoControls = field.querySelector(".photo-controls");
+        if (photoControls && controlHasCvFocusMapping(photoControls)) return photoControls;
 
         return null;
       }
@@ -6999,6 +7137,7 @@
           if (photoSrc.startsWith("data:")) avatar.alt = "Portrait photo";
         }
         if (photoPreview) photoPreview.src = photoSrc;
+        applyPhotoPosition(data.photoPos);
         fillTypeForm(data.type || TYPE_DEFAULTS);
         applyType(data.type || TYPE_DEFAULTS);
         fillContactVisibility(data.contactVisibility);
@@ -7072,6 +7211,8 @@
           if (String(fields[key] ?? "") !== String(expectedFields[key] ?? "")) return false;
         }
         if ((photoSrc || DEFAULT_PHOTO) !== (defaults.photo || DEFAULT_PHOTO)) return false;
+        const expectedPos = normalizePhotoPos(defaults.photoPos);
+        if (photoPos.x !== expectedPos.x || photoPos.y !== expectedPos.y) return false;
         const expectedVis = defaults.contactVisibility || CONTACT_VISIBILITY_DEFAULTS;
         for (const key of CONTACT_KEYS) {
           if (!!contactVisibility[key] !== !!expectedVis[key]) return false;
@@ -7167,10 +7308,12 @@
         applyScalars(fields);
         fillContactVisibility(sample.contactVisibility || CONTACT_VISIBILITY_DEFAULTS);
         setPhoto(sample.photo || DEFAULT_PHOTO, { alt: portraitAltFromName(fields.name) });
+        applyPhotoPosition(sample.photoPos);
         if (defaults) {
           defaults.fields = { ...(fields || {}) };
           defaults.lists = cloneLists(lists);
           defaults.photo = sample.photo || DEFAULT_PHOTO;
+          defaults.photoPos = { x: photoPos.x, y: photoPos.y };
           defaults.contactVisibility = {
             ...(sample.contactVisibility || CONTACT_VISIBILITY_DEFAULTS),
           };
@@ -7185,6 +7328,7 @@
           fields: readScalarFields(),
           lists: cloneLists(lists),
           photo: photoSrc || DEFAULT_PHOTO,
+          photoPos: { x: photoPos.x, y: photoPos.y },
           contactVisibility: { ...contactVisibility },
         };
       }
@@ -7267,19 +7411,121 @@
         applyScalars(fields);
         fillContactVisibility(snapshot.contactVisibility || CONTACT_VISIBILITY_DEFAULTS);
         setPhoto(snapshot.photo || DEFAULT_PHOTO, { alt: portraitAltFromName(fields.name) });
+        applyPhotoPosition(snapshot.photoPos);
         renderLists();
         schedulePaginate();
         return true;
       }
 
+      function clampPhotoCoord(value, fallback) {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return fallback;
+        return Math.min(100, Math.max(0, Math.round(n)));
+      }
+
+      /** Normalize optional photoPos; missing/invalid → default 50/15. */
+      function normalizePhotoPos(raw) {
+        if (!raw || typeof raw !== "object") {
+          return { x: DEFAULT_PHOTO_POS.x, y: DEFAULT_PHOTO_POS.y };
+        }
+        return {
+          x: clampPhotoCoord(raw.x, DEFAULT_PHOTO_POS.x),
+          y: clampPhotoCoord(raw.y, DEFAULT_PHOTO_POS.y),
+        };
+      }
+
+      /**
+       * Apply object-position percentages to :root (print/PDF/PNG inherit).
+       * Syncs drawer sliders. Pass null/undefined to restore the default framing.
+       */
+      function applyPhotoPosition(next) {
+        photoPos = normalizePhotoPos(next);
+        root.style.setProperty("--photo-pos-x", `${photoPos.x}%`);
+        root.style.setProperty("--photo-pos-y", `${photoPos.y}%`);
+        if (photoPosXInput) photoPosXInput.value = String(photoPos.x);
+        if (photoPosYInput) photoPosYInput.value = String(photoPos.y);
+        if (photoPosXValue) photoPosXValue.textContent = `${photoPos.x}%`;
+        if (photoPosYValue) photoPosYValue.textContent = `${photoPos.y}%`;
+      }
+
+      function setPhotoPosFromSliders({ persistNow = false } = {}) {
+        applyPhotoPosition({
+          x: photoPosXInput ? photoPosXInput.value : photoPos.x,
+          y: photoPosYInput ? photoPosYInput.value : photoPos.y,
+        });
+        if (persistNow) persist();
+        else scheduleSave();
+      }
+
+      /**
+       * Set portrait source on avatar + drawer preview. When the URL actually
+       * changes, reset framing to 50%/15% (same as Reset position). Pan/slider
+       * paths do not call this, so they keep the current crop. Callers that
+       * load a saved/sample photoPos should applyPhotoPosition afterward.
+       */
       function setPhoto(src, { alt } = {}) {
-        photoSrc = src || DEFAULT_PHOTO;
+        const next = src || DEFAULT_PHOTO;
+        const sourceChanged = next !== photoSrc;
+        photoSrc = next;
         if (avatar) {
           avatar.src = photoSrc;
           if (alt) avatar.alt = alt;
           else if (photoSrc.startsWith("data:")) avatar.alt = "Portrait photo";
         }
         if (photoPreview) photoPreview.src = photoSrc;
+        if (sourceChanged) applyPhotoPosition(DEFAULT_PHOTO_POS);
+      }
+
+      /**
+       * Pan photo inside its frame: pointer move shifts object-position opposite
+       * to the drag so the image tracks the finger (pos -= delta%).
+       */
+      function wirePhotoPan(el) {
+        if (!el) return;
+        let pan = null;
+
+        const onMove = (e) => {
+          if (!pan || e.pointerId !== pan.pointerId) return;
+          const dxPct = ((e.clientX - pan.startX) / pan.width) * 100;
+          const dyPct = ((e.clientY - pan.startY) / pan.height) * 100;
+          applyPhotoPosition({
+            x: pan.originX - dxPct,
+            y: pan.originY - dyPct,
+          });
+        };
+
+        const endPan = (e) => {
+          if (!pan || (e && e.pointerId != null && e.pointerId !== pan.pointerId)) return;
+          pan = null;
+          el.classList.remove("is-panning");
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("pointerup", endPan);
+          window.removeEventListener("pointercancel", endPan);
+          persist();
+        };
+
+        el.addEventListener("pointerdown", (e) => {
+          if (e.button != null && e.button !== 0) return;
+          e.preventDefault();
+          const rect = el.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          pan = {
+            pointerId: e.pointerId,
+            startX: e.clientX,
+            startY: e.clientY,
+            originX: photoPos.x,
+            originY: photoPos.y,
+            width: rect.width,
+            height: rect.height,
+          };
+          el.classList.add("is-panning");
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", endPan);
+          window.addEventListener("pointercancel", endPan);
+          try {
+            el.setPointerCapture(e.pointerId);
+          } catch (_) {}
+        });
       }
 
       /** Tabler refresh icon for icon-only reset controls. */
@@ -7441,6 +7687,7 @@
           setPhoto(d.photo || DEFAULT_PHOTO, {
             alt: portraitAltFromName((d.fields && d.fields.name) || ""),
           });
+          applyPhotoPosition(d.photoPos);
           renderLists();
           schedulePaginate();
         }
@@ -7615,6 +7862,7 @@
               phoneCountry: pack.fields?.phoneCountry || phoneCountry,
             },
             photo: pack.photo || DEFAULT_PHOTO,
+            photoPos: { x: DEFAULT_PHOTO_POS.x, y: DEFAULT_PHOTO_POS.y },
             type: { ...TYPE_DEFAULTS },
             lists: cloneLists(pack.lists || SAMPLE_LISTS),
             contactVisibility: {
@@ -7638,6 +7886,7 @@
             about: "",
           },
           photo: DEFAULT_PHOTO,
+          photoPos: { x: DEFAULT_PHOTO_POS.x, y: DEFAULT_PHOTO_POS.y },
           type: { ...TYPE_DEFAULTS },
           lists: cloneLists(SAMPLE_LISTS),
           contactVisibility: { ...CONTACT_VISIBILITY_DEFAULTS },
@@ -8195,6 +8444,25 @@
         reader.readAsDataURL(file);
         photoInput.value = "";
       });
+
+      if (photoPosXInput) {
+        photoPosXInput.addEventListener("input", () => setPhotoPosFromSliders());
+        photoPosXInput.addEventListener("change", () => setPhotoPosFromSliders({ persistNow: true }));
+      }
+      if (photoPosYInput) {
+        photoPosYInput.addEventListener("input", () => setPhotoPosFromSliders());
+        photoPosYInput.addEventListener("change", () => setPhotoPosFromSliders({ persistNow: true }));
+      }
+      if (photoPosReset) {
+        photoPosReset.addEventListener("click", () => {
+          applyPhotoPosition(DEFAULT_PHOTO_POS);
+          persist();
+        });
+      }
+      wirePhotoPan(photoPreview);
+      wirePhotoPan(avatar);
+      // Ensure CSS vars + slider labels match in-memory defaults on first paint.
+      applyPhotoPosition(photoPos);
     })();
   </script>
 
