@@ -43,6 +43,8 @@ Controls: `#zoom-out`, `#zoom-label`, `#zoom-in`, `#zoom-reset`, `#zoom-fit-heig
 
 `#export-pdf` calls `window.print()`.
 
+Suggested Save-as-PDF filename uses `exportBasename()` (name/job with spaces → `_`, dash between name and title). That value is applied to `document.title` **only for the print session**, then restored so the tab title stays human-readable (`Name — Job Title`).
+
 Print CSS sets `print-color-adjust: exact` / `-webkit-print-color-adjust: exact` on `html`, `body`, and `.page` so sidebar background, accent triangle, and colored type survive “Save as PDF.”
 
 Chrome, drawer, modal, and highlight overlays are `display: none`. Zoom transform is cleared.
@@ -54,7 +56,7 @@ Chrome, drawer, modal, and highlight overlays are `display: none`. Zoom transfor
 - Capture target is each `.page` only — drawer, zoom bar, and Edit/Hide are outside `#cv-pages`, so they never enter the bitmap
 - While capturing: `body.capturing-cv` clears focus/gap highlights and page box-shadow; `--cv-zoom` is forced to `1` so the parent scale does not shrink pixels; restored afterward
 - `domToPng` with `scale: 2` and `backgroundColor: null` to keep sidebar/main fills and accents as far as the library allows
-- Downloads fire sequentially (short delay between pages); filenames use sanitized `document.title` (`Name.png` or `Name-page-N.png`)
+- Downloads fire sequentially (short delay between pages); filenames use `exportBasename()` (`Name_Here-Job_Title.png` or `…-page-N.png`) — spaces become underscores; a dash separates name from job title
 - No zip bundling — keeps the stack dependency-free beyond the one screenshot CDN script
 
 ## Breakpoints (~900px)
